@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://bekufrozen.com/sitemap.xml
