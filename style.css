@@ -48,3 +48,5 @@ dialog{border:0;padding:0;border-radius:32px;max-width:520px;width:calc(100% - 3
 .pb{padding:22px 26px 26px;display:flex;flex-direction:column;gap:10px}.ptag{align-self:flex-start;padding:4px 12px;border-radius:999px;color:#fff;font-size:12px;font-weight:700}.ptag:empty{display:none}.pb h3{font-size:32px}.psp{font-size:13px;font-weight:700;color:#6b5e6e}.pb p{margin:0}
 @media (max-width:640px){.hv .dr{display:none}.xh h2,.sh h2{font-size:42px}.ft{font-size:34px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.sn{display:none}}
+.seo{padding:10px 20px 40px;max-width:860px}.seo h2{font-family:Fredoka,sans-serif;color:#17558c;font-size:28px;margin:0 0 12px}.seo p{line-height:1.65;color:#2b3a4a}.seo b{color:#17558c}
+.chips{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:8px}.chips li{background:#cbe9f8;color:#17558c;border-radius:999px;padding:7px 14px;font:600 14px Fredoka,sans-serif}
