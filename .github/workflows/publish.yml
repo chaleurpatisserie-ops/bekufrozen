@@ -1,0 +1,43 @@
+name: Publish website from admin
+
+# Rebuilds bekufrozen.com from the settings Alfred saves in the
+# "beku° Website admin" page (settings file in Google Drive).
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['build/**']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pillow
+      - name: Build pages from the admin settings
+        env:
+          SETTINGS_FILE_ID: 1N_XayscGXU2vUe94Qh03pomhXUxXMeVJ
+        run: python3 build/build.py
+      - name: Publish if anything changed
+        run: |
+          git config user.name "beku-website-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Website update from admin"
+            git push
+          fi
