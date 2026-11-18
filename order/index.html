@@ -206,7 +206,7 @@ function suggest(q){clearTimeout(sugT);q=q.trim();if(q.length<3){closeSug();retu
       inp.parentNode.appendChild(box)})},450)}
 document.addEventListener('click',function(e){if(!e.target.closest('#sug')&&e.target.id!=='f_addr')closeSug()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSug()});
-document.addEventListener('change',function(ev){var d=ev.target.dataset;if(d.t){st[d.t]=ev.target.checked;refreshDetails()}if(d.pay){st.pay=d.pay;render()}});
+document.addEventListener('change',function(ev){var d=ev.target.dataset;if(d.f){st.f[d.f]=ev.target.value;refreshDetails()}if(d.t){st[d.t]=ev.target.checked;refreshDetails()}if(d.pay){st.pay=d.pay;render()}});
 function submit(){if(!ready()||st.busy)return;var c=calc();st.busy=true;st.err='';render();
   if(st.remember){var keep=Object.assign({},st.f);delete keep.date;delete keep.note;ls('beku_details',JSON.stringify(keep))}else ls('beku_details',null);
   var body={type:'web_order',lang:st.lang,mode:c.sample?'sample':'cartons',pay:st.pay,company:v('company'),ssm:v('ssm'),email:v('email'),regAddr:v('regAddr'),contact:v('contact'),phone:v('phone'),addr:v('addr'),postcode:v('postcode'),city:v('city'),date:v('date'),note:v('note'),
@@ -223,6 +223,7 @@ function submit(){if(!ready()||st.busy)return;var c=calc();st.busy=true;st.err='
     st.busy=false;st.step='done';st.paidBy='duitnow';render();scrollTo(0,0)
   }).catch(function(){st.busy=false;st.err=L('loadErr');if(waWin)waWin.close();render()})}
 render();
+setInterval(function(){if(st.step!=='details')return;document.querySelectorAll('[data-f]').forEach(function(e){if(e.value!==String(st.f[e.dataset.f]||''))st.f[e.dataset.f]=e.value});refreshDetails()},800);
 fetch(API+'?type=web_menu').then(function(r){return r.json()}).then(function(r){st.menu=r.ok?r.items:null;st.menuErr=!r.ok;if(r.ok&&r.min){MIN=r.min;FEE=r.fee}render()}).catch(function(){st.menuErr=true;render()});
 </script>
 </body>
