@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Order online · beku° frozen desserts</title>
+<meta name="description" content="Order beku° frozen desserts online for your café or restaurant in Johor Bahru. Pay by FPX, card, GrabPay or DuitNow.">
+<link rel="canonical" href="https://bekufrozen.com/order/">
+<link rel="icon" href="/img/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fffdfa;color:#2a1e2e;font-family:'DM Sans',system-ui,sans-serif}
+a{color:#17558c}
+h1,h2,.fd{font-family:'Fredoka',sans-serif;color:#17558c;margin:0}
+h1{font-size:clamp(32px,6vw,44px);line-height:1}
+h2{font-size:26px}
+.hd{border-bottom:1px solid #e8dfe3}
+.hdi,.main{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.main{padding:28px 20px 64px;align-items:flex-start;gap:28px}
+.col{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:18px}
+aside{flex:1 1 320px;min-width:0;border:1px solid #e8dfe3;border-radius:24px;padding:22px;display:flex;flex-direction:column;gap:14px;position:sticky;top:12px;background:#fffdfa}
+.pill{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:#cbe9f8;flex-wrap:wrap}
+.pill button{min-height:42px;padding:0 16px;border:0;border-radius:999px;background:transparent;color:#17558c;font:inherit;font-weight:700;font-size:14px;cursor:pointer}
+.pill button[aria-pressed=true]{background:#17558c;color:#fffdfa}
+.steps{display:flex;gap:6px;font-size:13px;font-weight:700}
+.steps span{padding:6px 12px;border-radius:999px;background:#e8dfe3;color:#6b5e6e}
+.steps span.on{background:#17558c;color:#fffdfa}
+.note{padding:12px 16px;border-radius:14px;background:#fff0a0;color:#7a5a00;font-size:14px;font-weight:700}
+.cats{display:flex;flex-wrap:wrap;gap:8px}
+.cats button{min-height:42px;padding:0 16px;border-radius:999px;border:1.5px solid #17558c;background:#fffdfa;color:#17558c;font:inherit;font-weight:700;font-size:14px;cursor:pointer}
+.cats button[aria-pressed=true]{background:#17558c;color:#fffdfa}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:12px;border:1px solid #e8dfe3;border-radius:20px}
+.ph{flex:none;width:84px;height:84px;border-radius:16px;display:flex;align-items:center;justify-content:center}
+.ph img{width:74px;height:74px;object-fit:contain}
+.nm{font-family:'Fredoka',sans-serif;font-weight:600;font-size:19px;line-height:1.15}
+.sp{font-size:12px;font-weight:700;letter-spacing:.04em;color:#6b5e6e}
+.pr{text-align:right}.pr b{font-family:'Fredoka',sans-serif;font-size:19px;color:#17558c;display:block}.pr span{font-size:12px;color:#6b5e6e}
+.qty{display:flex;align-items:center;gap:8px}
+.q{width:44px;height:44px;border-radius:999px;border:1.5px solid #17558c;background:#fffdfa;color:#17558c;font-size:22px;font-weight:700;cursor:pointer}
+.q:disabled{border-color:#d9cfd5;color:#b5a9b0;cursor:default}
+.qn{min-width:28px;text-align:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.card{border:1px solid #e8dfe3;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center}
+.card.on{background:#eef8fd}
+.card .ph{width:100%;height:104px}.card .ph img{width:92px;height:92px}
+.ln{display:flex;justify-content:space-between;gap:12px;font-size:15px;line-height:1.4}
+.tot{border-top:1px solid #e8dfe3;padding-top:12px;display:flex;flex-direction:column;gap:8px;font-size:15px}
+.big{display:flex;justify-content:space-between;font-family:'Fredoka',sans-serif;font-weight:700;font-size:24px;color:#17558c}
+.bar{height:10px;border-radius:999px;background:#e8dfe3;overflow:hidden}.bar div{height:100%;border-radius:999px;transition:width .3s}
+.go{min-height:52px;width:100%;border:0;border-radius:999px;background:#17558c;color:#fffdfa;font:inherit;font-weight:700;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.go:disabled{background:#c9c0c5;cursor:default}
+.go.green{background:#1f8f4e}
+.sm{font-size:12px;line-height:1.5;color:#6b5e6e;margin:0}
+fieldset{margin:0;padding:18px;border:1px solid #e8dfe3;border-radius:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+legend{padding:0 8px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:20px;color:#17558c}
+.f{display:flex;flex-direction:column;gap:6px}.f.w{grid-column:1/-1}
+label{font-size:14px;font-weight:700}
+input,textarea{width:100%;min-height:46px;padding:10px 14px;border:1.5px solid #d9cfd5;border-radius:12px;font:inherit;font-size:15px;color:#2a1e2e;background:#fff}
+input:focus,textarea:focus{outline:none;border-color:#17558c;box-shadow:0 0 0 3px #cbe9f8}
+.help{font-size:12px;color:#6b5e6e}.bad{color:#a30f47}
+.chk{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5;cursor:pointer;font-weight:400}
+.chk input{width:22px;height:22px;min-height:0;margin:0;flex:none;accent-color:#17558c}
+.po{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:16px;border:2px solid #e8dfe3;cursor:pointer;font-weight:400}
+.po.on{border-color:#17558c;background:#eef8fd}
+.po input{width:20px;height:20px;min-height:0;margin:2px 0 0;flex:none;accent-color:#17558c}
+.po b{display:block;color:#17558c;font-size:15px}.po span span{font-size:13px;line-height:1.45;color:#4a3f4c}
+.err{padding:12px 16px;border-radius:14px;background:#ffd2a8;color:#943800;font-size:14px;font-weight:700}
+.done{max-width:640px;margin:0 auto;padding:56px 20px;display:flex;flex-direction:column;gap:18px;align-items:center;text-align:center}
+.tick{width:80px;height:80px;border-radius:999px;background:#d5f0b4;color:#2f6b12;display:flex;align-items:center;justify-content:center}
+.back{align-self:flex-start;min-height:44px;padding:0;border:0;background:none;color:#17558c;font:inherit;font-weight:700;cursor:pointer}
+[hidden]{display:none!important}
+@media (max-width:700px){aside{position:static}}
+</style>
+</head>
+<body>
+<header class="hd"><div class="hdi"><a href="/" aria-label="beku° home"><img src="/img/beku-logo-256.webp" alt="beku°" width="44" height="44"></a>
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><div class="pill" role="group" aria-label="Language" id="langs"></div><div class="steps" id="steps"></div></div></div></header>
+<div id="app"></div>
+<script>
+var API='https://script.google.com/macros/s/AKfycbyP-I4ZnGnmXWoq_G9zt2LxT1ODJofcG3PzC0UBKKM-jhrZzDNo8NB-9WgekMwWY7asoA/exec';
+var WA='60143490928';
+var SITE_PRODUCTS=[{"id": "p0", "name": "Pistachio Kunafa", "cat": "pg", "spec": "12 PCS / CTN · 120 G ±", "img": "/img/BK-PG-102.webp", "bg": "#d5f0b4", "ink": "#2f6b12"}, {"id": "p1", "name": "Oolong Pear", "cat": "pg", "spec": "12 PCS / CTN · 120 G ±", "img": "/img/BK-PG-101.webp", "bg": "#d5f0b4", "ink": "#2f6b12"}, {"id": "p2", "name": "Chocolate Hazelnut", "cat": "pg", "spec": "12 PCS / CTN · 110 G ±", "img": "/img/BK-PG-105.webp", "bg": "#efd9c8", "ink": "#6a3416"}, {"id": "p3", "name": "Raspberry Rose Lychee", "cat": "pg", "spec": "12 PCS / CTN · 120 G ±", "img": "/img/BK-PG-103.webp", "bg": "#ffc6da", "ink": "#a30f47"}, {"id": "p4", "name": "Decadent Chocolate", "cat": "pg", "spec": "12 PCS / CTN · 120 G ±", "img": "/img/BK-PG-107.webp", "bg": "#efd9c8", "ink": "#6a3416"}, {"id": "p5", "name": "Pandan Gula Melaka", "cat": "pg", "spec": "12 PCS / CTN · 140 G ±", "img": "/img/BK-PG-104.webp", "bg": "#fff0a0", "ink": "#7a5a00"}, {"id": "p6", "name": "Chocolate Banana", "cat": "pg", "spec": "12 PCS / CTN · 140 G ±", "img": "/img/BK-PG-106.webp", "bg": "#ffd2a8", "ink": "#943800"}, {"id": "p7", "name": "Santa · Vanilla Strawberry", "cat": "xm", "spec": "12 PCS / CTN · 110 G ±", "img": "/img/BK-PG-108.webp", "bg": "#cbe9f8", "ink": "#17558c"}, {"id": "p8", "name": "Gingerbread Man · Black Forest", "cat": "xm", "spec": "12 PCS / CTN · 110 G ±", "img": "/img/BK-PG-109.webp", "bg": "#cbe9f8", "ink": "#17558c"}, {"id": "p9", "name": "Star · Blueberry Lavender", "cat": "xm", "spec": "12 PCS / CTN · 110 G ±", "img": "/img/BK-PG-110.webp", "bg": "#cbe9f8", "ink": "#17558c"}, {"id": "p10", "name": "Lemon Pound", "cat": "bk", "spec": "10 PCS / CTN · 350 G ± LOAF", "img": "/img/BK-SSB-201.webp", "bg": "#fff0a0", "ink": "#7a5a00"}, {"id": "p11", "name": "Sea-Salt Chocolate Almond Brownie", "cat": "bk", "spec": "45 PCS / CTN · 6×6 CM ±", "img": "/img/BK-SSB-202.webp", "bg": "#efd9c8", "ink": "#6a3416"}];
+var T={en:{s1:'1 Choose',s2:'2 Details',s3:'3 Pay',title:'wholesale order',intro:'Prices are per carton, straight from our price list. Every order is made and packed for you, usually ready in 3–5 working days.',per:'per carton',mine:'your order',empty:'No cartons yet. Tap + to add.',ctn:'Cartons',pcs:'Pieces',del:'Delivery (JB area)',free:'Free',total:'Total',next:'Continue to details',small:'Delivered frozen by car in the Johor Bahru area. Pork, lard and alcohol free. Made in a kitchen that handles nuts, eggs, dairy and gluten.',back:'← Back to desserts',det:'billing & delivery',detSub:'Your invoice is issued to the company below. All fields are required unless marked optional.',agree:'I agree to the beku° wholesale terms: full payment before dispatch, issues reported within 2 hours of delivery with a photo, cartons are not split.',sum:'order summary',all:'All',pg:'Petit gâteaux',xm:'Christmas',bk:'Bakes',add:'Add {r} more for free delivery. Below RM300, a RM20 delivery fee applies.',ok:'Minimum reached. Free delivery anywhere in the JB area.',gCo:'Company (for invoice)',gCt:'Contact',gDl:'Delivery',company:'Billing name (as registered with SSM)',companyPh:'e.g. Kopi Larkin Sdn. Bhd.',ssm:'SSM registration no.',ssmBad:'Please check the SSM number (12 digits, or old format like 1234567-X).',ssmHelp:'New 12-digit number or old format.',regAddr:'Registered address (as in SSM, optional if same as delivery)',email:'Email for invoice (optional)',contact:'Contact person',contactPh:'Full name',phone:'WhatsApp number',phoneBad:'Please check the number.',phoneHelp:'We send the invoice and delivery updates here.',addr:'Outlet address',addrPh:'Unit, building, street, area',postcode:'Postcode',city:'City',pcOut:'This postcode is outside our Johor Bahru delivery area. Please WhatsApp us and we will check.',date:'Preferred delivery date',dateHelp:'We deliver once your order is ready, usually 3–5 working days, and confirm the date on WhatsApp. Earliest {d}.',noteF:'Note for us (optional)',pay:'Pay {r} now',paying:'Opening secure payment…',pmTitle:'How would you like to pay?',pmStripe:'Pay online now',pmStripeSub:'FPX online banking, card, GrabPay, Google Pay, Apple Pay',pmWa:'DuitNow QR on WhatsApp',pmWaSub:'Send your order to WhatsApp. We reply with our DuitNow QR; pay from any banking or e-wallet app and send the receipt.',waBtn:'Send order on WhatsApp',saving:'Saving your order…',remember:'Remember my details on this device',mCtn:'Order cartons',mSmp:'Sample box · RM50',smpTitle:'build your sample box',smpSub:'Pick any 4 pieces to taste. RM50, free delivery, paid first. Order within 1 month after delivery and get RM50 off your first order above RM350.',smpLeft:'{n} of 4 pieces chosen',smpFull:'4 of 4 chosen. Your sample box is ready.',smpLine:'Sample box (4 pcs)',credit:'Sample box credit',creditHint:'Bought a sample box? Your RM50 credit comes off your first order above RM350 within 1 month, at payment.',loading:'Loading today\'s prices…',loadErr:'Prices could not load. Please refresh, or order on WhatsApp.',doneT:'order received!',doneStripe:'Thank you! Payment received for order {o}. We send your confirmation and invoice to WhatsApp, and confirm the delivery date once your order is ready.',doneWa:'Thanks! Order {o} is saved. Please send the WhatsApp message that just opened — we reply with our DuitNow QR. Once your payment is verified we confirm the order and send your invoice.',cancelT:'payment not completed',cancelS:'Your order {o} is saved but not paid. You can try again below, or WhatsApp us.',track:'Track this order',again:'Start a new order',waHead:'WEB ORDER {o}',waTot:'Total',waPay:'Payment: DuitNow QR, please send me the QR.',inc:'Add one {n}',dec:'Remove one {n}',errPick:'Please pick exactly 4 pieces.'},
+zh:{s1:'1 选购',s2:'2 资料',s3:'3 付款',title:'批发订单',intro:'价格以箱计，按我们的价目表。每张订单都为您现做现包装，一般 3–5 个工作日内备好。',per:'每箱',mine:'您的订单',empty:'还没有选购。点 + 添加。',ctn:'箱数',pcs:'个数',del:'配送（新山地区）',free:'免费',total:'总计',next:'下一步：填写资料',small:'以汽车冷冻配送至新山地区。不含猪肉、猪油和酒精。生产厨房同时处理坚果、鸡蛋、乳制品和麸质。',back:'← 返回甜点',det:'账单与配送',detSub:'发票将开给以下公司。除注明“选填”外，所有栏位必填。',agree:'我同意 beku° 批发条款：出货前全额付款；收货后 2 小时内附照片反映问题；不拆箱出售。',sum:'订单摘要',all:'全部',pg:'法式小蛋糕',xm:'圣诞限定',bk:'烘焙点心',add:'再加 {r} 即可免运费。未满 RM300 收取 RM20 运费。',ok:'已达最低消费。新山地区免费配送。',gCo:'公司（开发票用）',gCt:'联系人',gDl:'配送',company:'账单名称（与 SSM 注册一致）',companyPh:'例：Kopi Larkin Sdn. Bhd.',ssm:'SSM 注册号码',ssmBad:'请检查 SSM 号码（12 位数字，或旧格式如 1234567-X）。',ssmHelp:'新的 12 位号码或旧格式。',regAddr:'注册地址（与 SSM 一致；与配送地址相同可不填）',email:'发票电邮（选填）',contact:'联系人',contactPh:'全名',phone:'WhatsApp 号码',phoneBad:'请检查号码。',phoneHelp:'发票和配送通知会发到这里。',addr:'店铺地址',addrPh:'单位、大楼、街道、地区',postcode:'邮编',city:'城市',pcOut:'此邮编不在新山配送范围内，请 WhatsApp 我们确认。',date:'希望配送日期',dateHelp:'订单备好后即安排配送，一般 3–5 个工作日，我们会通过 WhatsApp 确认日期。最早 {d}。',noteF:'备注（选填）',pay:'立即付款 {r}',paying:'正在打开安全付款页面…',pmTitle:'您想如何付款？',pmStripe:'立即在线付款',pmStripeSub:'FPX 网上银行、信用卡、GrabPay、Google Pay、Apple Pay',pmWa:'WhatsApp DuitNow QR 付款',pmWaSub:'把订单发到 WhatsApp，我们会回复 DuitNow QR；用任何银行或电子钱包 App 付款后发送收据即可。',waBtn:'通过 WhatsApp 发送订单',saving:'正在保存订单…',remember:'在此设备记住我的资料',mCtn:'整箱订购',mSmp:'样品盒 · RM50',smpTitle:'挑选您的样品盒',smpSub:'任选 4 个口味试吃。RM50，免运费，需先付款。收货后 1 个月内首次订单满 RM350 以上可减 RM50。',smpLeft:'已选 {n} / 4 个',smpFull:'已选 4 / 4 个，样品盒准备好了。',smpLine:'样品盒（4 个）',credit:'样品盒抵扣',creditHint:'买过样品盒？1 个月内首次订单满 RM350 以上，付款时自动减 RM50。',loading:'正在载入今日价格…',loadErr:'价格载入失败，请刷新页面或通过 WhatsApp 下单。',doneT:'订单已收到！',doneStripe:'谢谢！订单 {o} 已付款。确认信息和发票会发到您的 WhatsApp，订单备好后我们会确认配送日期。',doneWa:'谢谢！订单 {o} 已保存。请发送刚打开的 WhatsApp 信息，我们会回复 DuitNow QR；确认收款后即确认订单并发送发票。',cancelT:'付款未完成',cancelS:'订单 {o} 已保存但未付款。您可以在下方重试，或 WhatsApp 我们。',track:'查看订单进度',again:'开始新订单',waHead:'网站订单 {o}',waTot:'总计',waPay:'付款方式：DuitNow QR，请发 QR 给我。',inc:'加一个 {n}',dec:'减一个 {n}',errPick:'请刚好选 4 个。'},
+ms:{s1:'1 Pilih',s2:'2 Butiran',s3:'3 Bayar',title:'order borong',intro:'Harga mengikut karton, terus dari senarai harga kami. Setiap order dibuat dan dibungkus untuk anda, biasanya siap dalam 3–5 hari bekerja.',per:'setiap karton',mine:'order anda',empty:'Belum ada karton. Tekan + untuk tambah.',ctn:'Karton',pcs:'Biji',del:'Penghantaran (kawasan JB)',free:'Percuma',total:'Jumlah',next:'Teruskan ke butiran',small:'Dihantar beku dengan kereta di kawasan Johor Bahru. Tanpa khinzir, lemak khinzir dan alkohol. Dibuat di dapur yang mengendalikan kacang, telur, tenusu dan gluten.',back:'← Kembali ke pencuci mulut',det:'bil & penghantaran',detSub:'Invois dikeluarkan kepada syarikat di bawah. Semua ruangan wajib diisi kecuali yang bertanda pilihan.',agree:'Saya setuju dengan terma borong beku°: bayaran penuh sebelum penghantaran, masalah dilaporkan dalam 2 jam selepas terima dengan gambar, karton tidak dipecahkan.',sum:'ringkasan order',all:'Semua',pg:'Petit gâteaux',xm:'Krismas',bk:'Kek',add:'Tambah {r} lagi untuk penghantaran percuma. Bawah RM300, caj penghantaran RM20 dikenakan.',ok:'Minimum dicapai. Penghantaran percuma ke seluruh kawasan JB.',gCo:'Syarikat (untuk invois)',gCt:'Hubungan',gDl:'Penghantaran',company:'Nama bil (seperti didaftar dengan SSM)',companyPh:'cth. Kopi Larkin Sdn. Bhd.',ssm:'No. pendaftaran SSM',ssmBad:'Sila semak nombor SSM (12 digit, atau format lama seperti 1234567-X).',ssmHelp:'Nombor baru 12 digit atau format lama.',regAddr:'Alamat berdaftar (seperti SSM, pilihan jika sama dengan alamat penghantaran)',email:'E-mel untuk invois (pilihan)',contact:'Orang untuk dihubungi',contactPh:'Nama penuh',phone:'Nombor WhatsApp',phoneBad:'Sila semak nombor.',phoneHelp:'Kami hantar invois dan maklumat penghantaran ke sini.',addr:'Alamat outlet',addrPh:'Unit, bangunan, jalan, kawasan',postcode:'Poskod',city:'Bandar',pcOut:'Poskod ini di luar kawasan penghantaran Johor Bahru. Sila WhatsApp kami untuk semakan.',date:'Tarikh penghantaran pilihan',dateHelp:'Kami hantar sebaik order siap, biasanya 3–5 hari bekerja, dan sahkan tarikh di WhatsApp. Paling awal {d}.',noteF:'Nota untuk kami (pilihan)',pay:'Bayar {r} sekarang',paying:'Membuka pembayaran selamat…',pmTitle:'Bagaimana anda mahu bayar?',pmStripe:'Bayar dalam talian sekarang',pmStripeSub:'FPX perbankan dalam talian, kad, GrabPay, Google Pay, Apple Pay',pmWa:'DuitNow QR di WhatsApp',pmWaSub:'Hantar order anda ke WhatsApp. Kami balas dengan DuitNow QR; bayar dari mana-mana app bank atau e-wallet dan hantar resit.',waBtn:'Hantar order di WhatsApp',saving:'Menyimpan order…',remember:'Ingat butiran saya pada peranti ini',mCtn:'Order karton',mSmp:'Kotak sampel · RM50',smpTitle:'pilih kotak sampel anda',smpSub:'Pilih mana-mana 4 biji untuk dirasa. RM50, penghantaran percuma, bayar dahulu. Order dalam 1 bulan selepas terima dan dapat RM50 diskaun untuk order pertama melebihi RM350.',smpLeft:'{n} daripada 4 biji dipilih',smpFull:'4 daripada 4 dipilih. Kotak sampel anda sedia.',smpLine:'Kotak sampel (4 biji)',credit:'Kredit kotak sampel',creditHint:'Pernah beli kotak sampel? Kredit RM50 ditolak untuk order pertama melebihi RM350 dalam 1 bulan, semasa bayaran.',loading:'Memuatkan harga hari ini…',loadErr:'Harga tidak dapat dimuatkan. Sila muat semula, atau order di WhatsApp.',doneT:'order diterima!',doneStripe:'Terima kasih! Bayaran untuk order {o} diterima. Pengesahan dan invois dihantar ke WhatsApp anda, dan kami sahkan tarikh penghantaran sebaik order siap.',doneWa:'Terima kasih! Order {o} disimpan. Sila hantar mesej WhatsApp yang baru dibuka — kami balas dengan DuitNow QR. Selepas bayaran disahkan kami sahkan order dan hantar invois.',cancelT:'pembayaran tidak selesai',cancelS:'Order {o} anda disimpan tetapi belum dibayar. Cuba lagi di bawah, atau WhatsApp kami.',track:'Jejak order ini',again:'Mula order baru',waHead:'ORDER WEB {o}',waTot:'Jumlah',waPay:'Bayaran: DuitNow QR, sila hantar QR kepada saya.',inc:'Tambah satu {n}',dec:'Kurang satu {n}',errPick:'Sila pilih tepat 4 biji.'}};
+var CATS=['all','pg','xm','bk'];
+var MIN=300,FEE=20;
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v);}catch(e){return null}}
+var qs=new URLSearchParams(location.search);
+var st={lang:(qs.get('lang')||ls('beku_lang')||(navigator.language||'').slice(0,2)),step:'pick',mode:qs.get('mode')==='sample'?'sample':'cartons',cat:'all',qty:{},sq:{},f:{},agree:false,remember:true,pay:'stripe',menu:null,menuErr:false,busy:false,err:'',order:''};
+if(!T[st.lang])st.lang='en';
+try{st.f=JSON.parse(ls('beku_details')||'{}')}catch(e){}
+if(qs.get('paid')){st.step='done';st.order=qs.get('paid');st.paidBy='stripe'}
+if(qs.get('cancel')){st.step='cancel';st.order=qs.get('cancel')}
+function L(k,o){var x=T[st.lang][k]||T.en[k]||k;for(var q in(o||{}))x=x.split('{'+q+'}').join(o[q]);return x}
+function rm(n){return 'RM'+Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function norm(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,'')}
+function plusWorkDays(n){var d=new Date();while(n>0){d.setDate(d.getDate()+1);var w=d.getDay();if(w!==0&&w!==6)n--}return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function jb(pc){var d=String(pc).replace(/\D/g,'');if(d.length!==5)return null;var n=+d;return(n>=79000&&n<=80999)||(n>=81000&&n<=81499)||(n>=81550&&n<=81599)||(n>=81700&&n<=81899)}
+function items(){ // site products that have a live carton price
+  if(!st.menu)return[];var by={};st.menu.forEach(function(m){by[norm(m.name)]=m});
+  return SITE_PRODUCTS.map(function(p){var m=by[norm(p.name)];return m?Object.assign({},p,{sku:m.sku,price:m.price}):null}).filter(Boolean)}
+function sampleItems(){return SITE_PRODUCTS.filter(function(p){return p.cat!=='bk'})}
+function calc(){
+  if(st.mode==='sample'){var n=0,lines=[];sampleItems().forEach(function(p){var q=st.sq[p.id]||0;if(q){n+=q;lines.push({name:p.name,qty:q,amt:''})}});
+    return{sample:true,count:n,lines:[{name:L('smpLine'),qty:1,amt:rm(50)}].concat(lines),sub:50,fee:0,total:50}}
+  var sub=0,ctn=0,lines=[];items().forEach(function(p){var q=st.qty[p.sku]||0;if(q){sub+=q*p.price;ctn+=q;lines.push({name:p.name,qty:q,amt:rm(q*p.price)})}});
+  sub=Math.round(sub*100)/100;var fee=sub>0&&sub<MIN?FEE:0;return{sample:false,count:ctn,lines:lines,sub:sub,fee:fee,total:sub+fee}}
+function v(k){return String(st.f[k]||'').trim()}
+function valid(){var ssm=v('ssm'),ph=v('phone').replace(/\D/g,'');
+  return{ssm:!ssm||/^\d{12}$/.test(ssm.replace(/\D/g,''))||/^[A-Z]{0,3}\d{5,8}-?[A-Z0-9]$/i.test(ssm.replace(/\s/g,'')),phone:!ph||ph.length>=9,pc:!v('postcode')||jb(v('postcode'))!==false}}
+function ready(){var c=calc(),ok=valid(),need=['company','ssm','contact','phone','addr','postcode','city','date'].every(function(k){return v(k)});
+  return need&&ok.ssm&&ok.phone&&jb(v('postcode'))&&v('date')>=plusWorkDays(3)&&st.agree&&(c.sample?c.count===4:c.count>0)}
+function header(){
+  document.documentElement.lang={en:'en',zh:'zh-Hans',ms:'ms'}[st.lang];
+  document.getElementById('langs').innerHTML=[['en','EN'],['zh','中文'],['ms','BM']].map(function(a){return '<button type="button" data-lang="'+a[0]+'" aria-pressed="'+(a[0]===st.lang)+'">'+a[1]+'</button>'}).join('');
+  var s=st.step==='pick'?0:st.step==='details'?1:2;document.getElementById('steps').innerHTML=['s1','s2','s3'].map(function(k,i){return '<span class="'+(i===s?'on':'')+'">'+L(k)+'</span>'}).join('')}
+function summary(c,pick){
+  var h='<h2>'+L(pick?'mine':'sum')+'</h2>';
+  if(!c.lines.length)h+='<p class="sm" style="font-size:15px">'+L('empty')+'</p>';
+  c.lines.forEach(function(l){h+='<div class="ln"><span>'+l.qty+' × '+esc(l.name)+'</span><b>'+l.amt+'</b></div>'});
+  h+='<div class="tot"><div class="ln"><span>'+L(c.sample?'pcs':'ctn')+'</span><b>'+c.count+'</b></div><div class="ln"><span>'+L('del')+'</span><b>'+(c.fee?rm(c.fee):L('free'))+'</b></div><div class="big"><span>'+L('total')+'</span><span>'+rm(c.total)+'</span></div></div>';
+  return h}
+function render(){
+  header();var app=document.getElementById('app'),c=calc(),h='';
+  if(st.step==='pick'){
+    h+='<main class="main"><div class="col"><h1>'+L('title')+'</h1><p style="margin:0;font-size:16px;line-height:1.5">'+L('intro')+'</p>';
+    h+='<div class="pill" role="group" aria-label="Order type">'+[['cartons','mCtn'],['sample','mSmp']].map(function(a){return '<button type="button" data-mode="'+a[0]+'" aria-pressed="'+(st.mode===a[0])+'">'+L(a[1])+'</button>'}).join('')+'</div>';
+    if(st.mode==='cartons'){
+      h+='<div class="note">'+L('creditHint')+'</div>';
+      if(!st.menu)h+='<p>'+(st.menuErr?'<span class="err">'+L('loadErr')+'</span>':L('loading'))+'</p>';
+      else{h+='<div class="cats">'+CATS.filter(function(k){return k==='all'||items().some(function(p){return p.cat===k})}).map(function(k){return '<button type="button" data-cat="'+k+'" aria-pressed="'+(st.cat===k)+'">'+L(k)+'</button>'}).join('')+'</div>';
+        items().filter(function(p){return st.cat==='all'||p.cat===st.cat}).forEach(function(p){var q=st.qty[p.sku]||0;
+          h+='<div class="row"><div class="ph" style="background:'+esc(p.bg)+'"><img src="'+esc(p.img)+'" alt="" loading="lazy"></div><div style="flex:999 1 200px;min-width:0"><div class="nm" style="color:'+esc(p.ink)+'">'+esc(p.name)+'</div><div class="sp">'+esc(p.spec)+'</div></div>'+
+          '<div style="flex:1 0 auto;display:flex;align-items:center;justify-content:flex-end;gap:14px"><div class="pr"><b>'+rm(p.price)+'</b><span>'+L('per')+'</span></div><div class="qty"><button class="q" type="button" data-dec="'+esc(p.sku)+'" aria-label="'+esc(L('dec',{n:p.name}))+'"'+(q?'':' disabled')+'>−</button><span class="qn">'+q+'</span><button class="q" type="button" data-inc="'+esc(p.sku)+'" aria-label="'+esc(L('inc',{n:p.name}))+'">+</button></div></div></div>'})}
+    }else{
+      h+='<h2 style="font-size:28px">'+L('smpTitle')+'</h2><p style="margin:0;line-height:1.5">'+L('smpSub')+'</p><div class="grid">';
+      sampleItems().forEach(function(p){var q=st.sq[p.id]||0;h+='<div class="card'+(q?' on':'')+'"><div class="ph" style="background:'+esc(p.bg)+'"><img src="'+esc(p.img)+'" alt="" loading="lazy"></div><div class="nm" style="font-size:17px;color:'+esc(p.ink)+'">'+esc(p.name)+'</div><div class="qty"><button class="q" type="button" data-sdec="'+esc(p.id)+'" aria-label="'+esc(L('dec',{n:p.name}))+'"'+(q?'':' disabled')+'>−</button><span class="qn">'+q+'</span><button class="q" type="button" data-sinc="'+esc(p.id)+'" aria-label="'+esc(L('inc',{n:p.name}))+'"'+(c.count>=4?' disabled':'')+'>+</button></div></div>'});
+      h+='</div>'}
+    var below=!c.sample&&c.sub<MIN,pct=c.sample?c.count*25:Math.min(100,Math.round(c.sub/MIN*100)),warn=c.sample?c.count<4:below;
+    h+='</div><aside>'+summary(c,true)+'<div class="bar"><div style="width:'+pct+'%;background:'+(warn?'#ffb07a':'#7cc24a')+'"></div></div><div style="font-size:13px;font-weight:700;color:'+(warn?'#943800':'#2f6b12')+'">'+(c.sample?(c.count<4?L('smpLeft',{n:c.count}):L('smpFull')):below?L('add',{r:rm(MIN-c.sub)}):L('ok'))+'</div>';
+    h+='<button class="go" type="button" data-go="details"'+((c.sample?c.count!==4:!c.count)?' disabled':'')+'>'+L('next')+'</button><p class="sm">'+L('small')+'</p></aside></main>';
+  }else if(st.step==='details'){
+    var ok=valid(),minD=plusWorkDays(3),fld=function(id,type,lab,ph,ac,wide,help,bad){return '<div class="f'+(wide?' w':'')+'"><label for="f_'+id+'">'+esc(lab)+'</label>'+(type==='textarea'?'<textarea id="f_'+id+'" data-f="'+id+'" rows="2" placeholder="'+esc(ph||'')+'">'+esc(st.f[id]||'')+'</textarea>':'<input id="f_'+id+'" data-f="'+id+'" type="'+type+'" value="'+esc(st.f[id]||'')+'" placeholder="'+esc(ph||'')+'" autocomplete="'+(ac||'off')+'"'+(type==='date'?' min="'+minD+'"':'')+'>')+(help?'<span class="help'+(bad?' bad':'')+'" id="h_'+id+'">'+esc(help)+'</span>':'')+'</div>'};
+    h+='<main class="main"><form class="col" novalidate><button type="button" class="back" data-go="pick">'+L('back')+'</button><h1>'+L('det')+'</h1><p style="margin:0;color:#6b5e6e">'+L('detSub')+'</p>';
+    h+='<fieldset><legend>'+L('gCo')+'</legend>'+fld('company','text',L('company'),L('companyPh'),'organization',1)+fld('ssm','text',L('ssm'),'202501012345','off',0,ok.ssm?L('ssmHelp'):L('ssmBad'),!ok.ssm)+fld('email','email',L('email'),'name@company.com','email')+fld('regAddr','textarea',L('regAddr'),'','',1)+'</fieldset>';
+    h+='<fieldset><legend>'+L('gCt')+'</legend>'+fld('contact','text',L('contact'),L('contactPh'),'name')+fld('phone','tel',L('phone'),'012 345 6789','tel',0,ok.phone?L('phoneHelp'):L('phoneBad'),!ok.phone)+'</fieldset>';
+    h+='<fieldset><legend>'+L('gDl')+'</legend>'+fld('addr','text',L('addr'),L('addrPh'),'street-address',1)+fld('postcode','text',L('postcode'),'80250','postal-code',0,ok.pc?'':L('pcOut'),!ok.pc)+fld('city','text',L('city'),'Johor Bahru','address-level2')+fld('date','date',L('date'),'','off',1,L('dateHelp',{d:minD.split('-').reverse().join('/')}))+fld('note','textarea',L('noteF'),'','',1)+'</fieldset>';
+    h+='<label class="chk"><input type="checkbox" data-t="remember"'+(st.remember?' checked':'')+'><span>'+L('remember')+'</span></label><label class="chk"><input type="checkbox" data-t="agree"'+(st.agree?' checked':'')+'><span>'+L('agree')+'</span></label></form>';
+    h+='<aside>'+summary(c,false)+'<fieldset style="border:0;padding:0;display:flex;flex-direction:column;gap:10px"><legend style="font-family:inherit;font-size:15px;font-weight:700;color:#2a1e2e;padding:0 0 8px">'+L('pmTitle')+'</legend>'+[['stripe','pmStripe','pmStripeSub'],['duitnow','pmWa','pmWaSub']].map(function(a){return '<label class="po'+(st.pay===a[0]?' on':'')+'"><input type="radio" name="pm" data-pay="'+a[0]+'"'+(st.pay===a[0]?' checked':'')+'><span><b>'+L(a[1])+'</b><span>'+L(a[2])+'</span></span></label>'}).join('')+'</fieldset>';
+    if(st.err)h+='<div class="err" role="alert">'+esc(st.err)+'</div>';
+    h+='<button class="go'+(st.pay==='duitnow'?' green':'')+'" type="button" id="submit"'+(ready()&&!st.busy?'':' disabled')+'>'+(st.busy?L(st.pay==='stripe'?'paying':'saving'):st.pay==='stripe'?L('pay',{r:rm(c.total)}):L('waBtn'))+'</button><p class="sm">'+L('small')+'</p></aside></main>';
+  }else{
+    var cancel=st.step==='cancel';
+    h+='<main class="done"><div class="tick" style="'+(cancel?'background:#ffd2a8;color:#943800':'')+'"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(cancel?'<path d="M12 7v6M12 17h.01"/>':'<path d="M5 12l5 5 9-10"/>')+'</svg></div><h1>'+L(cancel?'cancelT':'doneT')+'</h1><p style="margin:0;font-size:16px;line-height:1.6">'+esc(L(cancel?'cancelS':st.paidBy==='duitnow'?'doneWa':'doneStripe',{o:st.order}))+'</p>';
+    h+='<a class="go" style="width:auto;padding:0 22px" href="/track/?o='+encodeURIComponent(st.order)+'">'+L('track')+'</a><button type="button" class="back" style="align-self:center" data-go="restart">'+L('again')+'</button></main>'}
+  app.innerHTML=h}
+function refreshDetails(){ // update help texts + button without re-rendering inputs (keeps focus)
+  var ok=valid(),b=document.getElementById('submit');if(b)b.disabled=!(ready()&&!st.busy);
+  [['ssm',ok.ssm,L('ssmHelp'),L('ssmBad')],['phone',ok.phone,L('phoneHelp'),L('phoneBad')],['postcode',ok.pc,'',L('pcOut')]].forEach(function(a){var e=document.getElementById('h_'+a[0]);if(!e&&!a[1]){var inp=document.getElementById('f_'+a[0]);if(inp){e=document.createElement('span');e.id='h_'+a[0];inp.parentNode.appendChild(e)}}if(e){e.className='help'+(a[1]?'':' bad');e.textContent=a[1]?a[2]:a[3]}})}
+document.addEventListener('click',function(ev){var t=ev.target.closest('button,[data-go]');if(!t)return;var d=t.dataset;
+  if(d.lang){st.lang=d.lang;ls('beku_lang',d.lang);render();return}
+  if(d.mode){st.mode=d.mode;render();return}
+  if(d.cat){st.cat=d.cat;render();return}
+  if(d.inc){st.qty[d.inc]=(st.qty[d.inc]||0)+1;render();return}
+  if(d.dec){st.qty[d.dec]=Math.max(0,(st.qty[d.dec]||0)-1);render();return}
+  if(d.sinc){if(calc().count<4)st.sq[d.sinc]=(st.sq[d.sinc]||0)+1;render();return}
+  if(d.sdec){st.sq[d.sdec]=Math.max(0,(st.sq[d.sdec]||0)-1);render();return}
+  if(d.go==='details'||d.go==='pick'){st.step=d.go;st.err='';render();scrollTo(0,0);return}
+  if(d.go==='restart'){history.replaceState(null,'','/order/');st.step='pick';st.qty={};st.sq={};st.agree=false;render();return}
+  if(t.id==='submit')submit()});
+document.addEventListener('input',function(ev){var k=ev.target.dataset.f;if(k){st.f[k]=ev.target.value;refreshDetails()}});
+document.addEventListener('change',function(ev){var d=ev.target.dataset;if(d.t){st[d.t]=ev.target.checked;refreshDetails()}if(d.pay){st.pay=d.pay;render()}});
+function submit(){if(!ready()||st.busy)return;var c=calc();st.busy=true;st.err='';render();
+  if(st.remember){var keep=Object.assign({},st.f);delete keep.date;delete keep.note;ls('beku_details',JSON.stringify(keep))}else ls('beku_details',null);
+  var body={type:'web_order',lang:st.lang,mode:c.sample?'sample':'cartons',pay:st.pay,company:v('company'),ssm:v('ssm'),email:v('email'),regAddr:v('regAddr'),contact:v('contact'),phone:v('phone'),addr:v('addr'),postcode:v('postcode'),city:v('city'),date:v('date'),note:v('note'),
+    items:Object.keys(st.qty).filter(function(k){return st.qty[k]>0}).map(function(k){return{sku:k,qty:st.qty[k]}}),
+    sampleItems:sampleItems().filter(function(p){return st.sq[p.id]}).map(function(p){return{name:p.name,qty:st.sq[p.id]}})};
+  var waWin=st.pay==='duitnow'?window.open('about:blank','_blank'):null;
+  fetch(API,{method:'POST',body:JSON.stringify(body)}).then(function(r){return r.json()}).then(function(r){
+    if(!r.ok){st.busy=false;st.err=r.error==='outside_jb'?L('pcOut'):(r.error||L('loadErr'));if(waWin)waWin.close();render();return}
+    st.order=r.order;
+    if(st.pay==='stripe'&&r.url){location.href=r.url;return}
+    var txt=[L('waHead',{o:r.order}),''].concat(c.sample?[L('smpLine')+': '+c.lines.slice(1).map(function(l){return l.qty+'× '+l.name}).join(', ')]:c.lines.map(function(l){return l.qty+' ctn × '+l.name+' = '+l.amt}))
+      .concat([r.fee?L('del')+': '+rm(r.fee):'',L('waTot')+': '+rm(r.total),'',v('company')+' · SSM '+v('ssm'),v('contact')+' · '+v('phone'),[v('addr'),v('postcode'),v('city')].join(', '),L('date')+': '+v('date').split('-').reverse().join('/'),'',L('waPay')]).filter(function(x,i,a){return x!==''||a[i-1]!==''}).join('\n');
+    var href='https://wa.me/'+WA+'?text='+encodeURIComponent(txt);if(waWin)waWin.location.href=href;else location.href=href;
+    st.busy=false;st.step='done';st.paidBy='duitnow';render();scrollTo(0,0)
+  }).catch(function(){st.busy=false;st.err=L('loadErr');if(waWin)waWin.close();render()})}
+render();
+fetch(API+'?type=web_menu').then(function(r){return r.json()}).then(function(r){st.menu=r.ok?r.items:null;st.menuErr=!r.ok;if(r.ok&&r.min){MIN=r.min;FEE=r.fee}render()}).catch(function(){st.menuErr=true;render()});
+</script>
+</body>
+</html>

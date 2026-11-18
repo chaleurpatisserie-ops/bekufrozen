@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Track my order · beku°</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/img/favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fffdfa;color:#2a1e2e;font-family:'DM Sans',system-ui,sans-serif}
+h1{font-family:'Fredoka',sans-serif;color:#17558c;margin:0;font-size:clamp(32px,6vw,42px)}
+.hd{border-bottom:1px solid #e8dfe3}.hdi{max-width:760px;margin:0 auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.pill{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:#cbe9f8}.pill button{min-height:40px;padding:0 14px;border:0;border-radius:999px;background:transparent;color:#17558c;font:inherit;font-weight:700;cursor:pointer}.pill button[aria-pressed=true]{background:#17558c;color:#fffdfa}
+main{max-width:760px;margin:0 auto;padding:32px 20px 64px;display:flex;flex-direction:column;gap:20px}
+form{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}.f{display:flex;flex-direction:column;gap:6px;flex:1 1 200px}
+label{font-size:14px;font-weight:700}input{min-height:46px;padding:10px 14px;border:1.5px solid #d9cfd5;border-radius:12px;font:inherit;font-size:15px}input:focus{outline:none;border-color:#17558c;box-shadow:0 0 0 3px #cbe9f8}
+.go{min-height:48px;padding:0 24px;border:0;border-radius:999px;background:#17558c;color:#fffdfa;font:inherit;font-weight:700;cursor:pointer}
+.box{border:1px solid #e8dfe3;border-radius:24px;padding:22px;display:flex;flex-direction:column;gap:16px}
+ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
+li{display:flex;gap:14px;align-items:flex-start;padding-bottom:18px;position:relative}
+li:not(:last-child)::before{content:'';position:absolute;left:15px;top:32px;bottom:0;width:2px;background:#e8dfe3}
+li.done:not(:last-child)::before{background:#7cc24a}
+.dot{flex:none;width:32px;height:32px;border-radius:999px;border:2px solid #d9cfd5;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;color:#b5a9b0}
+li.done .dot{background:#7cc24a;border-color:#7cc24a;color:#fff}li.now .dot{background:#17558c;border-color:#17558c;color:#fff}
+li b{display:block;font-size:16px}li span{font-size:13px;color:#6b5e6e}li.now b{color:#17558c}
+.err{padding:12px 16px;border-radius:14px;background:#ffd2a8;color:#943800;font-weight:700}
+.sm{font-size:13px;color:#6b5e6e;line-height:1.5}
+a{color:#17558c}
+</style>
+</head>
+<body>
+<header class="hd"><div class="hdi"><a href="/" aria-label="beku° home"><img src="/img/beku-logo-256.webp" alt="beku°" width="44" height="44"></a><div class="pill" id="langs" role="group" aria-label="Language"></div></div></header>
+<main id="app"></main>
+<script>
+var API='https://script.google.com/macros/s/AKfycbyP-I4ZnGnmXWoq_G9zt2LxT1ODJofcG3PzC0UBKKM-jhrZzDNo8NB-9WgekMwWY7asoA/exec';
+var T={en:{t:'track my order',sub:'Enter your order number (BKW-…) and the last 4 digits of your WhatsApp number.',no:'Order number',ph:'Last 4 digits of WhatsApp',go:'Track',nf:'We could not find that order. Check the number, or WhatsApp us at 014-349 0928.',items:'Items',date:'Preferred delivery',inv:'Invoice',steps:[['Order received','We have your order.'],['Paid','Payment received.'],['Confirmed · preparing','We are making and packing your desserts.'],['Packed','Packed frozen and ready to go.'],['Out for delivery','On the way to you.'],['Delivered','Please check your cartons within 2 hours.']],cancel:'This order was not paid and is cancelled. You can place it again on our order page.',help:'Questions? WhatsApp us at 014-349 0928.',load:'Checking…'},
+zh:{t:'查看订单进度',sub:'输入订单号（BKW-…）和 WhatsApp 号码后 4 位。',no:'订单号',ph:'WhatsApp 后 4 位',go:'查询',nf:'找不到该订单。请检查号码，或 WhatsApp 我们：014-349 0928。',items:'商品',date:'希望配送日期',inv:'发票',steps:[['订单已收到','我们已收到您的订单。'],['已付款','已收到付款。'],['已确认 · 准备中','正在制作和包装您的甜点。'],['已包装','已冷冻包装，准备出发。'],['配送中','正在送往您的店。'],['已送达','请在 2 小时内检查箱子。']],cancel:'此订单未付款，已取消。您可以在订购页面重新下单。',help:'有疑问？WhatsApp 我们：014-349 0928。',load:'查询中…'},
+ms:{t:'jejak order saya',sub:'Masukkan nombor order (BKW-…) dan 4 digit akhir nombor WhatsApp anda.',no:'Nombor order',ph:'4 digit akhir WhatsApp',go:'Jejak',nf:'Order tidak dijumpai. Semak nombor, atau WhatsApp kami di 014-349 0928.',items:'Item',date:'Tarikh penghantaran pilihan',inv:'Invois',steps:[['Order diterima','Kami telah terima order anda.'],['Dibayar','Bayaran diterima.'],['Disahkan · disediakan','Kami sedang membuat dan membungkus pencuci mulut anda.'],['Dibungkus','Dibungkus beku dan sedia dihantar.'],['Dalam penghantaran','Dalam perjalanan ke anda.'],['Dihantar','Sila semak karton anda dalam 2 jam.']],cancel:'Order ini tidak dibayar dan dibatalkan. Anda boleh order semula di halaman order.',help:'Ada soalan? WhatsApp kami di 014-349 0928.',load:'Menyemak…'}};
+var KEYS=['order received','paid','confirmed','packed','out for delivery','delivered'];
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+var qs=new URLSearchParams(location.search),st={lang:ls('beku_lang')||'en',o:qs.get('o')||'',p:'',r:null,busy:false};if(!T[st.lang])st.lang='en';
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function render(){var t=T[st.lang];document.documentElement.lang={en:'en',zh:'zh-Hans',ms:'ms'}[st.lang];
+  document.getElementById('langs').innerHTML=[['en','EN'],['zh','中文'],['ms','BM']].map(function(a){return '<button type="button" data-lang="'+a[0]+'" aria-pressed="'+(a[0]===st.lang)+'">'+a[1]+'</button>'}).join('');
+  var h='<h1>'+t.t+'</h1><p class="sm" style="font-size:15px;margin:0">'+t.sub+'</p><form id="fm"><div class="f"><label for="o">'+t.no+'</label><input id="o" value="'+esc(st.o)+'" placeholder="BKW-261118-001" autocapitalize="characters"></div><div class="f"><label for="p">'+t.ph+'</label><input id="p" value="'+esc(st.p)+'" inputmode="numeric" maxlength="4" placeholder="1234"></div><button class="go" type="submit">'+(st.busy?t.load:t.go)+'</button></form>';
+  if(st.r&&!st.r.ok)h+='<div class="err" role="alert">'+t.nf+'</div>';
+  if(st.r&&st.r.ok){var s=String(st.r.status||'').toLowerCase(),i=-1;KEYS.forEach(function(k,j){if(s.indexOf(k)===0)i=j});if(i<0)i=0;if(st.r.paid&&i<1)i=1;
+    h+='<div class="box"><div style="font-family:Fredoka,sans-serif;font-weight:700;font-size:22px;color:#17558c">'+esc(st.r.order)+'</div>';
+    if(/cancel/.test(s))h+='<div class="err">'+t.cancel+'</div>';else h+='<ol>'+t.steps.map(function(x,j){return '<li class="'+(j<i||j===i&&i===5?'done':j===i?'now':'')+'"><span class="dot">'+(j<i||i===5?'✓':j+1)+'</span><div><b>'+x[0]+'</b><span>'+x[1]+'</span></div></li>'}).join('')+'</ol>';
+    h+='<p class="sm" style="margin:0"><b>'+t.items+':</b> '+esc(st.r.items)+'<br><b>'+t.date+':</b> '+esc(st.r.date)+(st.r.invoice?'<br><b>'+t.inv+':</b> '+esc(st.r.invoice):'')+'</p></div>'}
+  h+='<p class="sm">'+t.help+' · <a href="/">bekufrozen.com</a></p>';document.getElementById('app').innerHTML=h}
+document.addEventListener('click',function(e){var b=e.target.closest('[data-lang]');if(b){st.lang=b.dataset.lang;ls('beku_lang',st.lang);render()}});
+document.addEventListener('submit',function(e){e.preventDefault();st.o=document.getElementById('o').value.trim().toUpperCase();st.p=document.getElementById('p').value.replace(/\D/g,'');if(!st.o||st.p.length!==4)return;st.busy=true;render();
+  fetch(API+'?type=web_track&order='+encodeURIComponent(st.o)+'&phone='+st.p).then(function(r){return r.json()}).then(function(r){st.r=r;st.busy=false;render()}).catch(function(){st.r={ok:false};st.busy=false;render()})});
+render();
+</script>
+</body>
+</html>
