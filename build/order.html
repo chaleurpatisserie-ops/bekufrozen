@@ -184,20 +184,22 @@ var sugT=null,sugN=0;
 function closeSug(){var x=document.getElementById('sug');if(x)x.remove()}
 function suggest(q){clearTimeout(sugT);q=q.trim();if(q.length<3){closeSug();return}
   sugT=setTimeout(function(){var n=++sugN;
-    fetch('https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=6&lat=1.4927&lon=103.7414&bbox=103.35,1.25,104.25,1.75&lang=en').then(function(r){return r.json()}).then(function(j){
-      if(n!==sugN)return;var inp=document.getElementById('f_addr');if(!inp)return;closeSug();
-      var fs=(j.features||[]).filter(function(f){var p=f.properties||{};return p.countrycode==='MY'||p.country==='Malaysia'});if(!fs.length)return;
+    var g=fetch(API+'?type=web_geo&q='+encodeURIComponent(q)).then(function(r){return r.json()}).then(function(j){return(j.results||[]).map(function(x){
+      var parts=String(x.address).split(', ');var cut=parts.findIndex(function(p){return /^\d{5}\b/.test(p)});var street=(cut>0?parts.slice(0,cut):parts.slice(0,-2)).join(', ');
+      return{t1:x.place&&!/^\d/.test(q)?q:street,t2:x.address,addr:street,pc:x.postcode,city:x.city}})}).catch(function(){return[]});
+    var o=fetch('https://photon.komoot.io/api/?q='+encodeURIComponent(q)+'&limit=4&lat=1.4927&lon=103.7414&bbox=103.35,1.25,104.25,1.75&lang=en').then(function(r){return r.json()}).then(function(j){
+      return(j.features||[]).filter(function(f){var p=f.properties||{};return p.countrycode==='MY'||p.country==='Malaysia'}).map(function(f){var p=f.properties||{};var street=[p.housenumber,p.street].filter(Boolean).join(' ');
+        var t1=p.name||street||p.district||p.city||'';var t2=[p.name&&street?street:'',p.district||p.locality,p.postcode,p.city||p.county].filter(Boolean).filter(function(x,i,a){return a.indexOf(x)===i&&x!==t1}).join(', ');
+        return{t1:t1,t2:t2,addr:[p.name,street,p.district||p.locality].filter(Boolean).filter(function(x,i,a){return a.indexOf(x)===i}).join(', '),pc:p.postcode?String(p.postcode).replace(/\D/g,'').slice(0,5):'',city:p.city||p.county||''}})}).catch(function(){return[]});
+    Promise.all([g,o]).then(function(rs){if(n!==sugN)return;var inp=document.getElementById('f_addr');if(!inp)return;closeSug();
+      var seen={},all=rs[0].concat(rs[1]).filter(function(x){var k=(x.t1+'|'+x.t2).toLowerCase();if(!x.t1||seen[k])return false;seen[k]=1;return true}).slice(0,7);if(!all.length)return;
       var box=document.createElement('div');box.id='sug';box.className='sug';box.setAttribute('role','listbox');
-      fs.forEach(function(f){var p=f.properties||{};var street=[p.housenumber,p.street].filter(Boolean).join(' ');
-        var line1=p.name||street||p.district||p.city||'';var line2=[p.name&&street?street:'',p.district||p.locality,p.postcode,p.city||p.county,p.state].filter(Boolean).filter(function(x,i,a){return a.indexOf(x)===i&&x!==line1}).join(', ');
-        var b=document.createElement('button');b.type='button';b.setAttribute('role','option');b.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#17558c" stroke-width="2" aria-hidden="true" style="flex:none;margin-top:2px"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span><b>'+esc(line1)+'</b><span>'+esc(line2)+'</span></span>';
-        b.addEventListener('click',function(e){e.stopPropagation();
-          st.f.addr=[p.name,street,p.district||p.locality].filter(Boolean).filter(function(x,i,a){return a.indexOf(x)===i}).join(', ');
-          if(p.postcode)st.f.postcode=String(p.postcode).replace(/\D/g,'').slice(0,5);
-          st.f.city=p.city||p.county||st.f.city||'';closeSug();render();var a=document.getElementById('f_addr');if(a){a.focus();a.setSelectionRange(0,0)}});
+      all.forEach(function(x){var b=document.createElement('button');b.type='button';b.setAttribute('role','option');
+        b.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#17558c" stroke-width="2" aria-hidden="true" style="flex:none;margin-top:2px"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span><b>'+esc(x.t1)+'</b><span>'+esc(x.t2)+'</span></span>';
+        b.addEventListener('click',function(e){e.stopPropagation();st.f.addr=x.addr;if(x.pc)st.f.postcode=x.pc;if(x.city)st.f.city=x.city;closeSug();render();var a=document.getElementById('f_addr');if(a){a.focus();a.setSelectionRange(0,0)}});
         box.appendChild(b)});
-      var src=document.createElement('div');src.className='src';src.textContent='© OpenStreetMap';box.appendChild(src);
-      inp.parentNode.appendChild(box)}).catch(function(){})},350)}
+      if(rs[1].length){var src=document.createElement('div');src.className='src';src.textContent='Results from Google and © OpenStreetMap contributors';box.appendChild(src)}
+      inp.parentNode.appendChild(box)})},450)}
 document.addEventListener('click',function(e){if(!e.target.closest('#sug')&&e.target.id!=='f_addr')closeSug()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSug()});
 document.addEventListener('change',function(ev){var d=ev.target.dataset;if(d.t){st[d.t]=ev.target.checked;refreshDetails()}if(d.pay){st.pay=d.pay;render()}});
