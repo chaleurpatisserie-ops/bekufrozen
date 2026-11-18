@@ -75,6 +75,8 @@ input:focus,textarea:focus{outline:none;border-color:#17558c;box-shadow:0 0 0 3p
 .sug button:hover,.sug button:focus{background:#eef8fd}
 .sug b{display:block;font-size:14px}.sug span{font-size:12px;color:#6b5e6e}
 .sug .src{padding:6px 14px;font-size:11px;color:#6b5e6e;background:#faf7f8}
+label.req::after{content:' *';color:#c0262d}
+input.miss,textarea.miss{border-color:#e0626a;background:#fff6f6}
 [hidden]{display:none!important}
 @media (max-width:700px){aside{position:static}}
 </style>
@@ -121,6 +123,8 @@ function valid(){var ssm=v('ssm'),ph=v('phone').replace(/\D/g,'');
   return{ssm:!ssm||/^\d{12}$/.test(ssm.replace(/\D/g,''))||/^[A-Z]{0,3}\d{5,8}-?[A-Z0-9]$/i.test(ssm.replace(/\s/g,'')),phone:!ph||ph.length>=9,pc:!v('postcode')||jb(v('postcode'))!==false}}
 function ready(){var c=calc(),ok=valid(),need=['company','ssm','contact','phone','addr','postcode','city','date'].every(function(k){return v(k)});
   return need&&ok.ssm&&ok.phone&&jb(v('postcode'))&&v('date')>=plusWorkDays(3)&&st.agree&&(c.sample?c.count===4:c.count>0)}
+var REQ=['company','ssm','contact','phone','addr','postcode','city','date'];
+function isMiss(k){if(REQ.indexOf(k)<0)return false;var ok=valid();if(!v(k))return true;if(k==='ssm')return!ok.ssm;if(k==='phone')return!ok.phone;if(k==='postcode')return!jb(v('postcode'));if(k==='date')return v('date')<plusWorkDays(3);return false}
 function missing(){var m=[],ok=valid(),need={company:'company',ssm:'ssm',contact:'contact',phone:'phone',addr:'addr',postcode:'postcode',city:'city',date:'date'};
   Object.keys(need).forEach(function(k){if(!v(k))m.push(L(need[k]).replace(/\s*\(.*\)$/,''))});
   if(v('ssm')&&!ok.ssm)m.push(L('ssm'));if(v('phone')&&!ok.phone)m.push(L('phone'));if(v('postcode')&&!jb(v('postcode')))m.push(L('postcode'));
@@ -155,12 +159,12 @@ function render(){
     h+='</div><aside>'+summary(c,true)+'<div class="bar"><div style="width:'+pct+'%;background:'+(warn?'#ffb07a':'#7cc24a')+'"></div></div><div style="font-size:13px;font-weight:700;color:'+(warn?'#943800':'#2f6b12')+'">'+(c.sample?(c.count<4?L('smpLeft',{n:c.count}):L('smpFull')):below?L('add',{r:rm(MIN-c.sub)}):L('ok'))+'</div>';
     h+='<button class="go" type="button" data-go="details"'+((c.sample?c.count!==4:!c.count)?' disabled':'')+'>'+L('next')+'</button><p class="sm">'+L('small')+'</p></aside></main>';
   }else if(st.step==='details'){
-    var ok=valid(),minD=plusWorkDays(3),fld=function(id,type,lab,ph,ac,wide,help,bad){return '<div class="f'+(wide?' w':'')+'"'+(id==='addr'?' style="position:relative"':'')+'><label for="f_'+id+'">'+esc(lab)+'</label>'+(type==='textarea'?'<textarea id="f_'+id+'" data-f="'+id+'" rows="2" placeholder="'+esc(ph||'')+'">'+esc(st.f[id]||'')+'</textarea>':'<input id="f_'+id+'" data-f="'+id+'" type="'+type+'" value="'+esc(st.f[id]||'')+'" placeholder="'+esc(ph||'')+'" autocomplete="'+(ac||'off')+'"'+(type==='date'?' min="'+minD+'"':'')+'>')+(help?'<span class="help'+(bad?' bad':'')+'" id="h_'+id+'">'+esc(help)+'</span>':'')+'</div>'};
+    var ok=valid(),minD=plusWorkDays(3),fld=function(id,type,lab,ph,ac,wide,help,bad){return '<div class="f'+(wide?' w':'')+'"'+(id==='addr'?' style="position:relative"':'')+'><label for="f_'+id+'"'+(REQ.indexOf(id)>=0?' class="req"':'')+'>'+esc(lab)+'</label>'+(type==='textarea'?'<textarea id="f_'+id+'" data-f="'+id+'" rows="2" placeholder="'+esc(ph||'')+'">'+esc(st.f[id]||'')+'</textarea>':'<input id="f_'+id+'" data-f="'+id+'" type="'+type+'"'+(isMiss(id)?' class="miss"':'')+' value="'+esc(st.f[id]||'')+'" placeholder="'+esc(ph||'')+'" autocomplete="'+(ac||'off')+'"'+(type==='date'?' min="'+minD+'"':'')+'>')+(help?'<span class="help'+(bad?' bad':'')+'" id="h_'+id+'">'+esc(help)+'</span>':'')+'</div>'};
     h+='<main class="main"><form class="col" novalidate><button type="button" class="back" data-go="pick">'+L('back')+'</button><h1>'+L('det')+'</h1><p style="margin:0;color:#6b5e6e">'+L('detSub')+'</p>';
     h+='<fieldset><legend>'+L('gCo')+'</legend>'+fld('company','text',L('company'),L('companyPh'),'organization',1)+fld('ssm','text',L('ssm'),'202501012345','off',0,ok.ssm?L('ssmHelp'):L('ssmBad'),!ok.ssm)+fld('email','email',L('email'),'name@company.com','email')+fld('regAddr','textarea',L('regAddr'),'','',1)+'</fieldset>';
     h+='<fieldset><legend>'+L('gCt')+'</legend>'+fld('contact','text',L('contact'),L('contactPh'),'name')+fld('phone','tel',L('phone'),'012 345 6789','tel',0,ok.phone?L('phoneHelp'):L('phoneBad'),!ok.phone)+'</fieldset>';
     h+='<fieldset><legend>'+L('gDl')+'</legend>'+fld('addr','text',L('addr'),L('addrPh'),'street-address',1,L('addrHelp'))+fld('postcode','text',L('postcode'),'80250','postal-code',0,ok.pc?'':L('pcOut'),!ok.pc)+fld('city','text',L('city'),'Johor Bahru','address-level2')+fld('date','date',L('date'),'','off',1,L('dateHelp',{d:minD.split('-').reverse().join('/')}))+fld('note','textarea',L('noteF'),'','',1)+'</fieldset>';
-    h+='<label class="chk"><input type="checkbox" data-t="remember"'+(st.remember?' checked':'')+'><span>'+L('remember')+'</span></label><label class="chk"><input type="checkbox" data-t="agree"'+(st.agree?' checked':'')+'><span>'+L('agree')+'</span></label></form>';
+    h+='<label class="chk"><input type="checkbox" data-t="remember"'+(st.remember?' checked':'')+'><span>'+L('remember')+'</span></label><label class="chk" id="agreeL"'+(st.agree?'':' style="color:#c0262d"')+'><input type="checkbox" data-t="agree"'+(st.agree?' checked':'')+'><span>'+L('agree')+'</span></label></form>';
     h+='<aside>'+summary(c,false)+'<fieldset style="border:0;padding:0;display:flex;flex-direction:column;gap:10px"><legend style="font-family:inherit;font-size:15px;font-weight:700;color:#2a1e2e;padding:0 0 8px">'+L('pmTitle')+'</legend>'+[['stripe','pmStripe','pmStripeSub'],['duitnow','pmWa','pmWaSub']].map(function(a){return '<label class="po'+(st.pay===a[0]?' on':'')+'"><input type="radio" name="pm" data-pay="'+a[0]+'"'+(st.pay===a[0]?' checked':'')+'><span><b>'+L(a[1])+'</b><span>'+L(a[2])+'</span></span></label>'}).join('')+'</fieldset>';
     if(st.err)h+='<div class="err" role="alert">'+esc(st.err)+'</div>';
     h+='<button class="go'+(st.pay==='duitnow'?' green':'')+'" type="button" id="submit"'+(ready()&&!st.busy?'':' disabled')+'>'+(st.busy?L(st.pay==='stripe'?'paying':'saving'):st.pay==='stripe'?L('pay',{r:rm(c.total)}):L('waBtn'))+'</button><p class="sm" id="need" style="color:#943800;font-weight:700">'+(ready()?'':esc(L('needT')+missing().join(' · ')))+'</p><p class="sm">'+L('small')+'</p></aside></main>';
@@ -170,7 +174,7 @@ function render(){
     h+='<a class="go" style="width:auto;padding:0 22px" href="/track/?o='+encodeURIComponent(st.order)+'">'+L('track')+'</a><button type="button" class="back" style="align-self:center" data-go="restart">'+L('again')+'</button></main>'}
   app.innerHTML=h}
 function refreshDetails(){ // update help texts + button without re-rendering inputs (keeps focus)
-  var ok=valid(),b=document.getElementById('submit');if(b)b.disabled=!(ready()&&!st.busy);var nd=document.getElementById('need');if(nd)nd.textContent=ready()?'':L('needT')+missing().join(' · ');
+  var ok=valid(),b=document.getElementById('submit');if(b)b.disabled=!(ready()&&!st.busy);REQ.forEach(function(k){var e=document.getElementById('f_'+k);if(e)e.classList.toggle('miss',isMiss(k))});var nd=document.getElementById('need');if(nd)nd.textContent=ready()?'':L('needT')+missing().join(' · ');var ag=document.getElementById('agreeL');if(ag)ag.style.color=st.agree?'':'#c0262d';
   [['ssm',ok.ssm,L('ssmHelp'),L('ssmBad')],['phone',ok.phone,L('phoneHelp'),L('phoneBad')],['postcode',ok.pc,'',L('pcOut')]].forEach(function(a){var e=document.getElementById('h_'+a[0]);if(!e&&!a[1]){var inp=document.getElementById('f_'+a[0]);if(inp){e=document.createElement('span');e.id='h_'+a[0];inp.parentNode.appendChild(e)}}if(e){e.className='help'+(a[1]?'':' bad');e.textContent=a[1]?a[2]:a[3]}})}
 document.addEventListener('click',function(ev){var t=ev.target.closest('button,[data-go]');if(!t)return;var d=t.dataset;
   if(d.lang){st.lang=d.lang;ls('beku_lang',d.lang);render();return}
