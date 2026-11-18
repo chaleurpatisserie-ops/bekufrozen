@@ -98,3 +98,37 @@ function getOrders() {
   out.reverse();
   return { rows: out.slice(0, 500), at: new Date().toISOString() };
 }
+
+/* ---- Visitors tab (BEKU Website chat, 19 Nov 2026; Alfred: who visits, actions, location, where from, everything for analysis).
+   Reads the spreadsheet "beku° website visits" that the bot's web_hit endpoint fills (one row per page view / tap / page leave / order). Read only. ---- */
+function getVisits(days) {
+  days = Math.min(Math.max(Number(days) || 30, 1), 365);
+  var it = DriveApp.getFilesByName('beku° website visits'); if (!it.hasNext()) return { empty: true };
+  var sh = SpreadsheetApp.open(it.next()).getSheetByName('Visits'); var v = sh.getDataRange().getValues();
+  var tz = 'Asia/Kuala_Lumpur', since = Date.now() - days * 864e5;
+  var D = {}, pages = {}, src = {}, loc = {}, dev = {}, lang = {}, act = {}, hrs = [], wd = [0, 0, 0, 0, 0, 0, 0], V = {}, S = {}, tp = {}, recent = [];
+  for (var h = 0; h < 24; h++) hrs.push(0);
+  function inc(o, k, n) { k = k || '(none)'; o[k] = (o[k] || 0) + (n || 1); }
+  function top(o, n) { return Object.keys(o).map(function (k) { return [k, o[k]]; }).sort(function (a, b) { return b[1] - a[1]; }).slice(0, n || 15); }
+  for (var i = 1; i < v.length; i++) {
+    var r = v[i], t = r[0] instanceof Date ? r[0] : new Date(r[0]); if (!(t.getTime() >= since)) continue;
+    var day = Utilities.formatDate(t, tz, 'yyyy-MM-dd'), vid = String(r[1]), sid = String(r[2]), ev = String(r[3]), det = String(r[4]), pg = String(r[5]).split('?')[0] || '/';
+    var d = D[day] || (D[day] = { d: day, views: 0, vis: {}, ses: {}, nw: 0, wa: 0, oc: 0, orders: 0 });
+    var s = S[sid] || (S[sid] = { src: String(r[6]), order: false, orderTap: false, placed: false, wa: false });
+    d.vis[vid] = 1; d.ses[sid] = 1;
+    if (!V[vid]) { V[vid] = { loc: String(r[7]), dev: String(r[9]) }; inc(loc, String(r[7]) || 'unknown'); inc(dev, String(r[9])); inc(lang, String(r[8]).slice(0, 2) || '?'); }
+    if (ev === 'view') { d.views++; inc(pages, pg); hrs[Number(Utilities.formatDate(t, tz, 'H'))]++; wd[Number(Utilities.formatDate(t, tz, 'u')) % 7]++;
+      if (r[10] === 'new') d.nw++; if (/^\/order\//.test(pg)) s.order = true; }
+    if (ev === 'click') { inc(act, det.replace(/ \[.*\]$/, '')); if (/^WhatsApp/.test(det)) { d.wa++; s.wa = true; } if (/\/order\//.test(det)) d.oc++; if (/^\/order\//.test(pg) && !/^Language/.test(det)) s.orderTap = true; }
+    if (ev === 'order') { d.orders++; s.placed = true; inc(act, 'ORDER: ' + det); }
+    if (ev === 'leave') { var m = det.match(/^(\d+)s · scrolled (\d+)%/); if (m) { var x = tp[pg] || (tp[pg] = { n: 0, sec: 0, sc: 0 }); x.n++; x.sec += Math.min(Number(m[1]), 1800); x.sc += Number(m[2]); } }
+    recent.push([Utilities.formatDate(t, tz, 'd MMM HH:mm'), ev, det, pg, String(r[6]), String(r[7]), String(r[9]), vid.slice(0, 4), String(r[10])]);
+  }
+  Object.keys(S).forEach(function (k) { inc(src, S[k].src || 'direct'); });
+  var daysOut = Object.keys(D).sort().reverse().map(function (k) { var d = D[k]; return { d: k, views: d.views, visitors: Object.keys(d.vis).length, sessions: Object.keys(d.ses).length, nw: d.nw, wa: d.wa, oc: d.oc, orders: d.orders }; });
+  var ses = Object.keys(S).map(function (k) { return S[k]; });
+  var funnel = [['Visits (sessions)', ses.length], ['Opened the order page', ses.filter(function (s) { return s.order; }).length], ['Tapped something on the order page', ses.filter(function (s) { return s.orderTap; }).length], ['Placed an order (QR) / paid (card)', ses.filter(function (s) { return s.placed; }).length], ['Tapped a WhatsApp button', ses.filter(function (s) { return s.wa; }).length]];
+  var time = Object.keys(tp).map(function (k) { var x = tp[k]; return [k, Math.round(x.sec / x.n), Math.round(x.sc / x.n), x.n]; }).sort(function (a, b) { return b[3] - a[3]; });
+  return { days: days, visitors: Object.keys(V).length, sessions: ses.length, daily: daysOut, pages: top(pages), sources: top(src), locations: top(loc), devices: top(dev), langs: top(lang), actions: top(act, 25),
+    hours: hrs, weekdays: wd, funnel: funnel, time: time, recent: recent.reverse().slice(0, 80), at: new Date().toISOString() };
+}

@@ -98,6 +98,9 @@ textarea{min-height:80px;resize:vertical}
 .mtab th:first-child,.mtab td:first-child{text-align:left}
 .mtab th{color:var(--mute);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
 @media(max-width:640px){.otab thead{display:none}.otab tr{display:block;border-bottom:2px solid var(--line);padding:8px 0}.otab td{display:block;border:0;padding:2px 4px}.otab td.amt{text-align:left}.otab td:before{content:attr(data-l);color:var(--mute);font-size:12px;text-transform:uppercase;margin-right:6px}}
+.vt{width:100%;border-collapse:collapse;font-size:14px}.vt td{padding:5px 6px;border-bottom:1px solid #eef3f7;vertical-align:middle}.vt td:first-child{max-width:260px;word-break:break-word}
+.vb{width:40%}.vb i{display:block;height:10px;border-radius:6px;background:#17558c;min-width:2px}.vn{text-align:right;white-space:nowrap;font-weight:700;color:#17558c}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}.vgrid .card{margin:0}
 </style>
 </head>
 <body>
@@ -112,6 +115,7 @@ textarea{min-height:80px;resize:vertical}
       <button class="tab" data-tab="home">🏠 Homepage text</button>
       <button class="tab" data-tab="contact">📞 Contact</button>
       <button class="tab" data-tab="orders">📦 Orders &amp; sales</button>
+      <button class="tab" data-tab="visits">📈 Visitors</button>
     </div>
     <div class="langs" id="langs"><span>Language you are editing:</span>
       <button class="lg on" data-lang="en">English</button><button class="lg" data-lang="zh">中文</button><button class="lg" data-lang="ms">Bahasa Melayu</button>
@@ -217,6 +221,20 @@ textarea{min-height:80px;resize:vertical}
         <div id="o-sum" class="sum"></div>
         <div id="o-list" class="loading">Loading orders…</div>
       </div>
+    </section>
+
+    <!-- VISITORS -->
+    <section id="t-visits" class="hide">
+      <div class="card">
+        <h2>Who visits your website</h2>
+        <p class="why">Counted by the website itself: page views, taps, where visitors came from, rough location (from the phone's time zone), device and language. No names, no IP addresses. Your own visits are counted too. Started 19 Nov 2026.</p>
+        <div class="chips" id="v-chips">
+          <button class="chip" data-d="1">Today</button><button class="chip" data-d="7">7 days</button><button class="chip on" data-d="30">30 days</button><button class="chip" data-d="90">90 days</button><button class="chip" data-d="365">1 year</button>
+          <button class="btn ghost small" id="v-refresh">↻ Refresh</button>
+        </div>
+        <div id="v-sum" class="sum"></div>
+      </div>
+      <div id="v-body" class="loading">Loading visits…</div>
     </section>
   </div>
 </div>
@@ -327,9 +345,10 @@ $('padd').onclick=function(){
 };
 document.querySelectorAll('.tab').forEach(function(b){ b.onclick=function(){
   TAB=b.dataset.tab; document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===b)});
-  ['google','products','home','contact','orders'].forEach(function(t){ $('t-'+t).classList.toggle('hide',t!==TAB); });
-  $('langs').classList.toggle('hide',TAB==='contact'||TAB==='orders');
+  ['google','products','home','contact','orders','visits'].forEach(function(t){ $('t-'+t).classList.toggle('hide',t!==TAB); });
+  $('langs').classList.toggle('hide',TAB==='contact'||TAB==='orders'||TAB==='visits');
   if(TAB==='orders'&&!ORD) loadOrders();
+  if(TAB==='visits'&&!VIS) loadVisits();
 };});
 /* ---- Orders & sales (reads the bot sheet's Orders tab; nothing here is saved) ---- */
 var ORD=null, OF='all';
@@ -363,6 +382,43 @@ function renderOrders(){
       '<td data-l="Items">'+esc(o.items)+'</td><td data-l="Delivery">'+esc(o.del||'–')+'</td><td class="amt" data-l="Total">'+rm(o.total)+'</td>'+
       '<td data-l="Payment"><span class="pill '+pk+'">'+esc(o.pay||'Unpaid')+'</span></td><td data-l="Status">'+esc(o.st||'')+(o.packed?'<br><small style="color:var(--mute)">'+esc(o.packed)+'</small>':'')+'</td></tr>'; }).join('')+'</tbody></table>';
 }
+/* ---- Visitors (reads the "beku° website visits" sheet; nothing here is saved) ---- */
+var VIS=null, VD=30;
+function loadVisits(){
+  $('v-body').className='loading'; $('v-body').textContent='Loading visits…';
+  google.script.run.withSuccessHandler(function(r){ VIS=r; renderVisits(); })
+    .withFailureHandler(function(e){ $('v-body').className='hint'; $('v-body').textContent='Could not load the visits: '+e.message; }).getVisits(VD);
+}
+function vBars(rows,fmt){ var mx=Math.max.apply(null,rows.map(function(r){return r[1];}).concat([1]));
+  return '<table class="vt">'+rows.map(function(r){ return '<tr><td>'+esc(r[0])+'</td><td class="vb"><i style="width:'+Math.round(100*r[1]/mx)+'%"></i></td><td class="vn">'+(fmt?fmt(r):r[1])+'</td></tr>'; }).join('')+'</table>'; }
+function vCard(title,why,html){ return '<div class="card"><h2>'+title+'</h2>'+(why?'<p class="why">'+why+'</p>':'')+html+'</div>'; }
+function renderVisits(){
+  var r=VIS; if(!r) return;
+  if(r.empty){ $('v-sum').innerHTML=''; $('v-body').className='hint'; $('v-body').textContent='No visits recorded yet. They start appearing a few minutes after someone opens bekufrozen.com.'; return; }
+  var views=0,wa=0,ord=0,nw=0; r.daily.forEach(function(d){views+=d.views;wa+=d.wa;ord+=d.orders;nw+=d.nw;});
+  var tAll=0,tN=0; r.time.forEach(function(x){tAll+=x[1]*x[3];tN+=x[3];});
+  $('v-sum').innerHTML='<div><span>Visitors</span><b>'+r.visitors+'</b></div><div><span>Visits</span><b>'+r.sessions+'</b></div><div><span>Page views</span><b>'+views+'</b></div><div><span>First-time visits</span><b>'+nw+'</b></div><div><span>WhatsApp taps</span><b>'+wa+'</b></div><div><span>Orders from website</span><b>'+ord+'</b></div><div><span>Avg. time on a page</span><b>'+(tN?Math.round(tAll/tN)+'s':'–')+'</b></div>';
+  var h='';
+  h+=vCard('Day by day','Visitors = different people (browsers). Visits = separate sittings. Order taps = taps on an "Order online" button.',
+    r.daily.length?'<table class="mtab"><thead><tr><th>Day</th><th>Visitors</th><th>Visits</th><th>Page views</th><th>First-time</th><th>WhatsApp taps</th><th>Order taps</th><th>Orders</th></tr></thead><tbody>'+r.daily.map(function(d){ var x=new Date(d.d+'T00:00:00'); return '<tr><td>'+x.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})+'</td><td>'+d.visitors+'</td><td>'+d.sessions+'</td><td>'+d.views+'</td><td>'+d.nw+'</td><td>'+d.wa+'</td><td>'+d.oc+'</td><td>'+d.orders+'</td></tr>'; }).join('')+'</tbody></table>':'<p class="hint">No visits in this period.</p>');
+  h+=vCard('From visit to order','How many visits reached each step.',vBars(r.funnel));
+  h+='<div class="vgrid">';
+  h+=vCard('Where they came from','Google, Instagram, Facebook / Instagram ads, WhatsApp, links with utm_source, or "direct" (typed in / no link).',vBars(r.sources));
+  h+=vCard('Location','From the phone or computer time zone (country level).',vBars(r.locations));
+  h+=vCard('Pages viewed','',vBars(r.pages));
+  h+=vCard('Device','',vBars(r.devices));
+  h+=vCard('Language','Language of the page they read (en / zh / ms).',vBars(r.langs));
+  h+=vCard('Time on page','Average seconds and how far down they scrolled.',r.time.length?vBars(r.time.map(function(x){return [x[0],x[1],x[2],x[3]];}),function(x){return x[1]+'s · '+x[2]+'% · '+x[3]+'×';}):'<p class="hint">Not enough data yet.</p>');
+  h+='</div>';
+  h+=vCard('What they tapped','Most tapped buttons and links. WhatsApp taps show the button; ORDER lines are finished orders.',r.actions.length?vBars(r.actions):'<p class="hint">No taps yet.</p>');
+  var dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  h+='<div class="vgrid">'+vCard('Busy hours','Page views by hour (Malaysia time).',vBars(r.hours.map(function(n,i){return [(i<10?'0':'')+i+':00',n];}).filter(function(x){return x[1];})))+vCard('Busy days','Page views by weekday.',vBars(r.weekdays.map(function(n,i){return [dn[i],n];})))+'</div>';
+  h+=vCard('Latest activity','Newest first (last 80). Visitor = short id of one browser, so you can follow one person.',
+    '<table class="otab"><thead><tr><th>Time</th><th>What</th><th>Detail</th><th>Page</th><th>From</th><th>Where</th><th>Device</th><th>Visitor</th></tr></thead><tbody>'+r.recent.map(function(x){ return '<tr><td data-l="Time">'+esc(x[0])+'</td><td data-l="What">'+esc(x[1])+'</td><td data-l="Detail">'+esc(x[2])+'</td><td data-l="Page">'+esc(x[3])+'</td><td data-l="From">'+esc(x[4])+'</td><td data-l="Where">'+esc(x[5])+'</td><td data-l="Device">'+esc(x[6])+'</td><td data-l="Visitor">'+esc(x[7])+(x[8]==='new'?' <small>new</small>':'')+'</td></tr>'; }).join('')+'</tbody></table>');
+  $('v-body').className=''; $('v-body').innerHTML=h;
+}
+document.querySelectorAll('#v-chips .chip').forEach(function(b){ b.onclick=function(){ VD=Number(b.dataset.d); document.querySelectorAll('#v-chips .chip').forEach(function(x){x.classList.toggle('on',x===b)}); VIS=null; loadVisits(); };});
+$('v-refresh').onclick=function(){ VIS=null; loadVisits(); };
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 document.querySelectorAll('#o-chips .chip').forEach(function(b){ b.onclick=function(){ OF=b.dataset.f; document.querySelectorAll('#o-chips .chip').forEach(function(x){x.classList.toggle('on',x===b)}); renderOrders(); };});
 $('o-q').oninput=function(){ renderOrders(); };

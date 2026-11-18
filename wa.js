@@ -38,7 +38,7 @@
     fetch(u,{mode:'no-cors',keepalive:true}).catch(function(){})}catch(e){}}
   window.bkT=send;
   send('view',document.title);
-  var t0=Date.now(), maxS=0, left=false;
+  var t0=Date.now(), maxS=Math.min(100,Math.round(100*innerHeight/Math.max(document.documentElement.scrollHeight,1))), left=false;
   addEventListener('scroll',function(){var h=document.documentElement;var pc=Math.round(100*(scrollY+innerHeight)/Math.max(h.scrollHeight,1));if(pc>maxS)maxS=Math.min(pc,100)},{passive:true});
   function leave(){if(left)return;left=true;send('leave',Math.round((Date.now()-t0)/1000)+'s · scrolled '+maxS+'% · screen '+screen.width+'x'+screen.height)}
   addEventListener('pagehide',leave);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')leave()});
