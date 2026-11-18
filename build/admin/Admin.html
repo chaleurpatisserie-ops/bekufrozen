@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#cbe9f8;--navy:#17558c;--ink:#1d2b3a;--mute:#5f6f80;--line:#d9e6ef;--bg:#f4f9fc;--ok:#1f8a4c;--warn:#c0392b}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.5 'DM Sans',system-ui,sans-serif;color:var(--ink);background:var(--bg);padding-bottom:110px}
+h1,h2,h3{font-family:Fredoka,sans-serif;color:var(--navy);margin:0}
+.top{background:var(--blue);padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5;box-shadow:0 2px 8px #17558c22}
+.top img{width:44px;height:44px;border-radius:50%}
+.top h1{font-size:22px;flex:1}
+.top a{color:var(--navy);font-weight:700;text-decoration:none;background:#fff;border-radius:999px;padding:7px 14px;font-size:14px;white-space:nowrap}
+.wrap{max-width:900px;margin:0 auto;padding:16px}
+.intro{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:14px;color:var(--mute)}
+.intro b{color:var(--ink)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.tab{border:2px solid var(--navy);background:#fff;color:var(--navy);border-radius:999px;padding:9px 16px;font:600 16px Fredoka,sans-serif;cursor:pointer}
+.tab.on{background:var(--navy);color:#fff}
+.langs{display:flex;gap:6px;align-items:center;margin:0 0 14px;flex-wrap:wrap}
+.langs span{color:var(--mute);font-size:14px;margin-right:4px}
+.lg{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-weight:700;cursor:pointer;color:var(--ink)}
+.lg.on{background:var(--blue);border-color:var(--navy);color:var(--navy)}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px}
+.card h2{font-size:21px;margin-bottom:4px}
+.card .why{color:var(--mute);font-size:14px;margin:0 0 14px}
+label{display:block;font-weight:700;margin:14px 0 4px}
+label small{font-weight:400;color:var(--mute)}
+input[type=text],textarea,select{width:100%;font:16px 'DM Sans',sans-serif;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;color:var(--ink)}
+input[type=text]:focus,textarea:focus,select:focus{outline:none;border-color:var(--navy)}
+textarea{min-height:80px;resize:vertical}
+.count{font-size:13px;color:var(--mute);text-align:right;margin-top:2px}
+.count.bad{color:var(--warn);font-weight:700}
+.gprev{border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:16px;background:#fff;font-family:Arial,sans-serif}
+.gprev .site{display:flex;align-items:center;gap:8px;font-size:14px;color:#202124}
+.gprev .site img{width:26px;height:26px;border-radius:50%;background:#eef}
+.gprev .site small{display:block;color:#4d5156;font-size:12px}
+.gprev .t{color:#1a0dab;font-size:20px;line-height:1.3;margin:6px 0 3px}
+.gprev .d{color:#4d5156;font-size:14px}
+.ptitle{font-size:13px;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;margin-top:16px}
+.wa{background:#e5ddd5;border-radius:14px;padding:14px;margin-top:8px}
+.bubble{background:#dcf8c6;border-radius:10px;max-width:340px;margin-left:auto;padding:4px;box-shadow:0 1px 1px #0002}
+.bubble .lp{background:#cfe9ba;border-radius:8px;overflow:hidden}
+.bubble .lp img{width:100%;aspect-ratio:1200/630;object-fit:cover;display:block;background:#fff}
+.bubble .lp .tx{padding:6px 8px;font-family:Arial,sans-serif}
+.bubble .lp b{display:block;font-size:14px;color:#111}
+.bubble .lp p{margin:2px 0;font-size:12px;color:#555;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bubble .lp small{font-size:12px;color:#777}
+.bubble .msg{padding:6px 6px 2px;font-family:Arial,sans-serif;font-size:14px;color:#027eb5}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn{border:0;border-radius:999px;padding:10px 18px;font:600 16px Fredoka,sans-serif;cursor:pointer;background:var(--navy);color:#fff}
+.btn.light{background:var(--blue);color:var(--navy)}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+.btn.small{padding:6px 12px;font-size:14px}
+.btn:disabled{opacity:.5;cursor:default}
+.hint{font-size:14px;color:var(--mute);margin:6px 0 0}
+.prod{border:1.5px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px}
+.prod.off{opacity:.55}
+.prod .head{display:flex;gap:14px;align-items:center}
+.prod .ph{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden}
+.prod .ph img{max-width:84px;max-height:84px}
+.prod .nm{flex:1;min-width:0}
+.prod .nm h3{font-size:19px;word-break:break-word}
+.prod .nm small{color:var(--mute)}
+.prod details{margin-top:10px}
+.prod summary{cursor:pointer;color:var(--navy);font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}.top h1{font-size:18px}}
+.switch{display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer;margin-top:10px}
+.switch input{width:22px;height:22px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px;justify-content:center;z-index:6;box-shadow:0 -2px 10px #17558c18}
+.bar .st{color:var(--mute);font-size:14px;max-width:520px}
+.bar .st.dirty{color:var(--warn);font-weight:700}
+.bar .st.ok{color:var(--ok);font-weight:700}
+.bar .btn{font-size:18px;padding:12px 28px}
+.hide{display:none}
+.loading{text-align:center;padding:60px;color:var(--mute);font-size:18px}
+</style>
+</head>
+<body>
+<div class="top"><img src="https://bekufrozen.com/img/beku-logo-256.webp" alt=""><h1>beku° website admin</h1><a href="https://bekufrozen.com" target="_blank">Open my website ↗</a></div>
+<div class="wrap">
+  <div id="loading" class="loading">Loading your website settings…</div>
+  <div id="app" class="hide">
+    <div class="intro">Change anything below, then press <b>Save</b> at the bottom. Your website updates <b>by itself in about 10–15 minutes</b>. Nothing changes on the website until you save. Every save is kept, so mistakes can be undone.</div>
+    <div class="tabs">
+      <button class="tab on" data-tab="google">🔎 Google &amp; sharing</button>
+      <button class="tab" data-tab="products">🍰 Products</button>
+      <button class="tab" data-tab="home">🏠 Homepage text</button>
+      <button class="tab" data-tab="contact">📞 Contact</button>
+    </div>
+    <div class="langs" id="langs"><span>Language you are editing:</span>
+      <button class="lg on" data-lang="en">English</button><button class="lg" data-lang="zh">中文</button><button class="lg" data-lang="ms">Bahasa Melayu</button>
+    </div>
+
+    <!-- GOOGLE & SHARING -->
+    <section id="t-google">
+      <div class="card">
+        <h2>How you look on Google</h2>
+        <p class="why">This is what people see in Google search results. Keep the title short and put your most important words first.</p>
+        <label>Page title <small>(best under 60 letters)</small></label>
+        <input type="text" id="seo-title"><div class="count" id="c-title"></div>
+        <label>Description <small>(the grey text under the title, best under 160 letters)</small></label>
+        <textarea id="seo-desc"></textarea><div class="count" id="c-desc"></div>
+        <label>Search words <small>(what customers type in Google, separated by commas)</small></label>
+        <textarea id="seo-keywords"></textarea>
+        <p class="hint">Example: cake supplier JB, frozen dessert supplier, 蛋糕批发. Google mainly reads the title, description and the words on your page, so also use these words in the "keyword section" below.</p>
+        <div class="ptitle">Preview on Google</div>
+        <div class="gprev"><div class="site"><img src="https://bekufrozen.com/img/favicon.png" alt=""><div>beku°<small>https://bekufrozen.com</small></div></div><div class="t" id="g-t"></div><div class="d" id="g-d"></div></div>
+      </div>
+
+      <div class="card">
+        <h2>When someone shares your link</h2>
+        <p class="why">The picture and text that appear when bekufrozen.com is sent on WhatsApp, Facebook, Instagram or Telegram.</p>
+        <div class="row">
+          <button class="btn light" id="share-pick">📷 Change picture</button>
+          <button class="btn ghost small" id="share-default">Use the beku° default picture</button>
+          <input type="file" accept="image/*" id="share-file" class="hide">
+        </div>
+        <p class="hint">Use a wide (landscape) photo. We cut it to the right size (1200 × 630) for you; the middle part is kept.</p>
+        <label>Share title <small>(leave empty to use the Google title)</small></label>
+        <input type="text" id="seo-shareTitle">
+        <label>Share text <small>(leave empty to use the Google description)</small></label>
+        <textarea id="seo-shareText"></textarea>
+        <div class="ptitle">Preview in WhatsApp</div>
+        <div class="wa"><div class="bubble"><div class="lp"><img id="w-img" alt=""><div class="tx"><b id="w-t"></b><p id="w-d"></p><small>bekufrozen.com</small></div></div><div class="msg">https://bekufrozen.com</div></div></div>
+        <p class="hint">WhatsApp and Facebook remember old previews for a while. A new picture can take a day to show on links you already sent.</p>
+      </div>
+
+      <div class="card">
+        <h2>Keyword section on your page</h2>
+        <p class="why">A short paragraph on the website that tells Google what you sell. Put <b>**two stars**</b> around words to make them bold.</p>
+        <label>Heading</label><input type="text" id="seo-heading">
+        <label>Text <small>(leave an empty line between paragraphs)</small></label><textarea id="seo-text" style="min-height:150px"></textarea>
+        <label>Keyword labels <small>(small blue pills, separated by commas)</small></label><textarea id="seo-chips"></textarea>
+      </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section id="t-products" class="hide">
+      <div class="card">
+        <h2>Products on the website</h2>
+        <p class="why">Change a name, photo or description, hide a product, or change the order. Prices are never shown on the website. Photos look best as a cut-out (no background, PNG).</p>
+        <div id="plist"></div>
+        <button class="btn light" id="padd">＋ Add a new product</button>
+      </div>
+    </section>
+
+    <!-- HOMEPAGE -->
+    <section id="t-home" class="hide">
+      <div class="card">
+        <h2>Top banner</h2>
+        <p class="why">The thin red strip at the very top of the website. Good for promotions.</p>
+        <input type="text" id="ribbon">
+      </div>
+      <div class="card">
+        <h2>Big headline</h2>
+        <p class="why">The first thing people read on the website.</p>
+        <label>Small label above the headline</label><input type="text" id="hero-tag">
+        <label>Headline – line 1</label><input type="text" id="hero-h1a">
+        <label>Headline – line 2</label><input type="text" id="hero-h1b">
+        <label>Headline – line 3</label><input type="text" id="hero-h1c">
+        <label>Text under the headline</label><textarea id="hero-sub"></textarea>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="t-contact" class="hide">
+      <div class="card">
+        <h2>Contact details</h2>
+        <p class="why">Used for every WhatsApp button and the bottom of the website (all languages).</p>
+        <label>WhatsApp number <small>(with country code, e.g. 60143490928)</small></label><input type="text" id="c-wa">
+        <label>Email</label><input type="text" id="c-email">
+        <label>Address</label><textarea id="c-addr"></textarea>
+      </div>
+    </section>
+  </div>
+</div>
+<div class="bar"><div class="st" id="status">Loading…</div><button class="btn" id="save" disabled>💾 Save</button></div>
+
+<template id="ptpl">
+  <div class="prod">
+    <div class="head">
+      <div class="ph"><img alt=""></div>
+      <div class="nm"><h3></h3><small></small></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn light small" data-a="photo">📷 Change photo</button>
+      <button class="btn ghost small" data-a="up">↑ Move up</button>
+      <button class="btn ghost small" data-a="down">↓ Move down</button>
+      <input type="file" accept="image/*" class="hide">
+    </div>
+    <label class="switch"><input type="checkbox" data-f="show"> Show on website</label>
+    <div class="grid2">
+      <div><label>Name <small>(all languages)</small></label><input type="text" data-f="name"></div>
+      <div><label>Pieces &amp; weight</label><input type="text" data-f="spec" placeholder="12 PCS / CTN · 120 G ±"></div>
+    </div>
+    <label>Section on the website</label>
+    <select data-f="cat"><option value="xm">Christmas / seasonal</option><option value="pg">Petit gâteaux</option><option value="bk">Bakes</option></select>
+    <label>Layers / description <small class="lgname"></small></label><textarea data-t="0"></textarea>
+    <div class="grid2">
+      <div><label>Taste <small class="lgname"></small></label><input type="text" data-t="1"></div>
+      <div><label>Badge <small>(e.g. BEST SELLER, can be empty)</small> <small class="lgname"></small></label><input type="text" data-t="2"></div>
+    </div>
+  </div>
+</template>
+
+<script>
+var S=null, LANG='en', TAB='google', dirty=false, busy=false;
+var LN={en:'(English)',zh:'(中文)',ms:'(Bahasa Melayu)'};
+function $(i){return document.getElementById(i)}
+function thumb(p){ if(p&&p.photo) return 'https://drive.google.com/thumbnail?id='+encodeURIComponent(p.photo)+'&sz=w400'; return 'https://bekufrozen.com'+((p&&p.img)||'/img/BK-PG-101.webp'); }
+function setStatus(t,c){var s=$('status'); s.textContent=t; s.className='st'+(c?' '+c:'');}
+function markDirty(){ if(!dirty){dirty=true;} setStatus('You have changes that are not saved yet.','dirty'); $('save').disabled=false; }
+window.addEventListener('beforeunload',function(e){ if(dirty){e.preventDefault(); e.returnValue='';} });
+
+function bindText(id,get,set){ var el=$(id); el.value=get()||''; el.oninput=function(){ set(el.value); markDirty(); refresh(); }; }
+
+function render(){
+  var seo=S.seo[LANG]; ['title','desc','keywords','shareTitle','shareText','heading','text','chips'].forEach(function(k){ bindText('seo-'+k,function(){return seo[k]},function(v){seo[k]=v}); });
+  S.hero=S.hero||{}; S.hero[LANG]=S.hero[LANG]||{}; var h=S.hero[LANG];
+  ['tag','h1a','h1b','h1c','sub'].forEach(function(k){ bindText('hero-'+k,function(){return h[k]},function(v){h[k]=v}); });
+  S.ribbon=S.ribbon||{}; bindText('ribbon',function(){return S.ribbon[LANG]},function(v){S.ribbon[LANG]=v});
+  S.contact=S.contact||{}; bindText('c-wa',function(){return S.contact.whatsapp},function(v){S.contact.whatsapp=v}); bindText('c-email',function(){return S.contact.email},function(v){S.contact.email=v}); bindText('c-addr',function(){return S.contact.address},function(v){S.contact.address=v});
+  renderProducts(); refresh();
+}
+function refresh(){
+  var seo=S.seo[LANG];
+  $('g-t').textContent=seo.title||''; $('g-d').textContent=seo.desc||'';
+  var tl=(seo.title||'').length, dl=(seo.desc||'').length;
+  $('c-title').textContent=tl+' letters'+(tl>60?' – a bit long, Google may cut it':''); $('c-title').className='count'+(tl>60?' bad':'');
+  $('c-desc').textContent=dl+' letters'+(dl>160?' – a bit long, Google may cut it':''); $('c-desc').className='count'+(dl>160?' bad':'');
+  $('w-t').textContent=seo.shareTitle||seo.title||''; $('w-d').textContent=seo.shareText||seo.desc||'';
+  $('w-img').src=S.shareImage?('https://drive.google.com/thumbnail?id='+encodeURIComponent(S.shareImage)+'&sz=w800'):'https://bekufrozen.com/img/share.jpg';
+  $('w-img').onerror=function(){this.onerror=null;this.src='https://bekufrozen.com/img/BK-PG-108.webp';};
+}
+function renderProducts(){
+  var box=$('plist'); box.innerHTML='';
+  S.products.forEach(function(p,i){
+    var n=$('ptpl').content.firstElementChild.cloneNode(true);
+    p.tx=p.tx||{}; p.tx[LANG]=p.tx[LANG]||['','',''];
+    var img=n.querySelector('.ph img'); img.src=thumb(p); n.querySelector('.ph').style.background=p.bg||'#cbe9f8';
+    n.querySelector('h3').textContent=p.name||'New product'; n.querySelector('.nm small').textContent=(p.show===false?'Hidden · ':'')+(p.spec||'');
+    if(p.show===false) n.classList.add('off');
+    n.querySelectorAll('.lgname').forEach(function(x){x.textContent=LN[LANG]});
+    n.querySelectorAll('[data-f]').forEach(function(el){ var f=el.dataset.f;
+      if(f==='show'){ el.checked=p.show!==false; el.onchange=function(){p.show=el.checked; markDirty(); renderProducts();}; return; }
+      el.value=p[f]||(f==='cat'?'pg':''); el.oninput=el.onchange=function(){ p[f]=el.value; markDirty(); if(f==='name') n.querySelector('h3').textContent=el.value; };
+    });
+    n.querySelectorAll('[data-t]').forEach(function(el){ var k=+el.dataset.t; el.value=p.tx[LANG][k]||''; el.oninput=function(){ p.tx[LANG][k]=el.value; markDirty(); }; });
+    var file=n.querySelector('input[type=file]');
+    n.querySelector('[data-a=photo]').onclick=function(){file.click();};
+    file.onchange=function(){ if(!file.files[0])return; upload(file.files[0],1200,function(id){ p.photo=id; markDirty(); renderProducts(); }); };
+    n.querySelector('[data-a=up]').onclick=function(){ if(i>0){ S.products.splice(i-1,0,S.products.splice(i,1)[0]); markDirty(); renderProducts(); } };
+    n.querySelector('[data-a=down]').onclick=function(){ if(i<S.products.length-1){ S.products.splice(i+1,0,S.products.splice(i,1)[0]); markDirty(); renderProducts(); } };
+    box.appendChild(n);
+  });
+}
+function upload(file,max,done){
+  setStatus('Uploading the picture… please wait.');
+  var r=new FileReader();
+  r.onload=function(){
+    var im=new Image();
+    im.onload=function(){
+      var s=Math.min(1,max/Math.max(im.width,im.height)), c=document.createElement('canvas');
+      c.width=Math.round(im.width*s); c.height=Math.round(im.height*s); c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      var png=/png|webp/i.test(file.type), data=c.toDataURL(png?'image/png':'image/jpeg',0.9);
+      google.script.run.withSuccessHandler(function(res){ done(res.id); setStatus('Picture added. Press Save to put it on the website.','dirty'); })
+        .withFailureHandler(function(e){ setStatus('The picture could not be uploaded: '+e.message,'dirty'); }).uploadPhoto(file.name,data);
+    };
+    im.onerror=function(){ setStatus('This file is not a picture I can read. Try a JPG or PNG.','dirty'); };
+    im.src=r.result;
+  };
+  r.readAsDataURL(file);
+}
+$('share-pick').onclick=function(){ $('share-file').click(); };
+$('share-file').onchange=function(){ var f=this.files[0]; if(!f)return; upload(f,1600,function(id){ S.shareImage=id; markDirty(); refresh(); }); };
+$('share-default').onclick=function(){ S.shareImage=''; markDirty(); refresh(); };
+$('padd').onclick=function(){
+  var id='p'+Date.now().toString(36);
+  S.products.push({id:id,name:'New product',cat:'pg',spec:'12 PCS / CTN',show:false,bg:'#cbe9f8',ink:'#17558c',img:'',photo:'',tx:{en:['','',''],zh:['','',''],ms:['','','']}});
+  markDirty(); renderProducts(); setStatus('New product added (hidden until you tick "Show on website"). Add a photo and text, then Save.','dirty');
+};
+document.querySelectorAll('.tab').forEach(function(b){ b.onclick=function(){
+  TAB=b.dataset.tab; document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===b)});
+  ['google','products','home','contact'].forEach(function(t){ $('t-'+t).classList.toggle('hide',t!==TAB); });
+  $('langs').classList.toggle('hide',TAB==='contact');
+};});
+document.querySelectorAll('.lg').forEach(function(b){ b.onclick=function(){ LANG=b.dataset.lang; document.querySelectorAll('.lg').forEach(function(x){x.classList.toggle('on',x===b)}); render(); };});
+$('save').onclick=function(){
+  if(busy)return; busy=true; $('save').disabled=true; setStatus('Saving…');
+  google.script.run.withSuccessHandler(function(res){ busy=false; dirty=false;
+      var t=new Date(res.savedAt); setStatus('✅ Saved at '+t.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+'. Your website will update in about 10–15 minutes.','ok'); })
+    .withFailureHandler(function(e){ busy=false; $('save').disabled=false; setStatus('Not saved: '+e.message+' – please try again.','dirty'); })
+    .saveSettings(S);
+};
+google.script.run.withSuccessHandler(function(s){
+  S=s; ['en','zh','ms'].forEach(function(l){ S.seo[l]=S.seo[l]||{}; });
+  $('loading').classList.add('hide'); $('app').classList.remove('hide');
+  setStatus(s.savedAt?('Last saved '+new Date(s.savedAt).toLocaleString()):'Nothing changed yet.'); render();
+}).withFailureHandler(function(e){ $('loading').textContent='Could not load the settings: '+e.message; }).getSettings();
+</script>
+</body>
+</html>
