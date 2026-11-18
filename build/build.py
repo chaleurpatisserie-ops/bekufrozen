@@ -149,7 +149,7 @@ def page(lang):
           "parentOrganization": {"@type": "Organization", "name": "Chaleur Atelier F&B Sdn. Bhd.", "identifier": "202501028873"},
           "address": {"@type": "PostalAddress", "streetAddress": ADDR, "addressLocality": "Johor Bahru", "addressRegion": "Johor", "addressCountry": "MY"},
           "areaServed": "Johor Bahru", "keywords": seo.get('keywords') or '', "alternateName": ["beku frozen desserts"],
-          "makesOffer": [{"@type": "Offer", "itemOffered": {"@type": "Product", "name": p['name'], "description": p['layers'], "image": SITE + p['img']}} for p in items]}
+          "knowsAbout": [p['name'] for p in items]}
     owa, swa = wa(x['orderWa']), wa(x['sampleWa'])
     chips = [c.strip() for c in (seo.get('chips') or '').split(',') if c.strip()]
     seo_block = ''
@@ -219,3 +219,14 @@ for l in EX:
     with open(os.path.join(d, 'index.html'), 'w', encoding='utf-8') as f:
         f.write(page(l))
 print('built', len(prods), 'products, share', share_path)
+
+# Online order page + Track my order (static pages; prices load live from Bukku through the bot web app)
+oprods = [dict(id=p['id'], name=p['name'], cat=p.get('cat') or 'pg', spec=p.get('spec') or '', img=p['img'], bg=p.get('bg') or '#cbe9f8', ink=p.get('ink') or '#17558c') for p in prods]
+for name in ('order', 'track'):
+    src = open(os.path.join(B, name + '.html'), encoding='utf-8').read()
+    if name == 'order':
+        src = src.replace('/*PRODUCTS*/[]', json.dumps(oprods, ensure_ascii=False))
+    os.makedirs(os.path.join(ROOT, name), exist_ok=True)
+    with open(os.path.join(ROOT, name, 'index.html'), 'w', encoding='utf-8') as f:
+        f.write(src)
+print('order + track pages built')
