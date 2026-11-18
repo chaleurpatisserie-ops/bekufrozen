@@ -102,13 +102,15 @@ function plusWorkDays(n){var d=new Date();while(n>0){d.setDate(d.getDate()+1);va
 function jb(pc){var d=String(pc).replace(/\D/g,'');if(d.length!==5)return null;var n=+d;return(n>=79000&&n<=80999)||(n>=81000&&n<=81499)||(n>=81550&&n<=81599)||(n>=81700&&n<=81899)}
 function items(){ // site products that have a live carton price
   if(!st.menu)return[];var by={};st.menu.forEach(function(m){by[norm(m.name)]=m});
-  return SITE_PRODUCTS.map(function(p){var m=by[norm(p.name)];return m?Object.assign({},p,{sku:m.sku,price:m.price}):null}).filter(Boolean)}
+  var list=SITE_PRODUCTS.map(function(p){var m=by[norm(p.name)];return m?Object.assign({},p,{sku:m.sku,price:m.price}):null}).filter(Boolean);
+  if(qs.get('test')==='1')st.menu.filter(function(m){return m.test}).forEach(function(m){list.unshift({id:m.sku,name:m.name,cat:'pg',spec:'TEST · no delivery fee',img:'/img/beku-logo-256.webp',bg:'#fff0a0',ink:'#7a5a00',sku:m.sku,price:m.price,test:true})});
+  return list}
 function sampleItems(){return SITE_PRODUCTS.filter(function(p){return p.cat!=='bk'})}
 function calc(){
   if(st.mode==='sample'){var n=0,lines=[];sampleItems().forEach(function(p){var q=st.sq[p.id]||0;if(q){n+=q;lines.push({name:p.name,qty:q,amt:''})}});
     return{sample:true,count:n,lines:[{name:L('smpLine'),qty:1,amt:rm(50)}].concat(lines),sub:50,fee:0,total:50}}
   var sub=0,ctn=0,lines=[];items().forEach(function(p){var q=st.qty[p.sku]||0;if(q){sub+=q*p.price;ctn+=q;lines.push({name:p.name,qty:q,amt:rm(q*p.price)})}});
-  sub=Math.round(sub*100)/100;var fee=sub>0&&sub<MIN?FEE:0;return{sample:false,count:ctn,lines:lines,sub:sub,fee:fee,total:sub+fee}}
+  sub=Math.round(sub*100)/100;var onlyTest=items().filter(function(p){return st.qty[p.sku]}).every(function(p){return p.test});var fee=sub>0&&sub<MIN&&!onlyTest?FEE:0;return{sample:false,count:ctn,lines:lines,sub:sub,fee:fee,total:sub+fee}}
 function v(k){return String(st.f[k]||'').trim()}
 function valid(){var ssm=v('ssm'),ph=v('phone').replace(/\D/g,'');
   return{ssm:!ssm||/^\d{12}$/.test(ssm.replace(/\D/g,''))||/^[A-Z]{0,3}\d{5,8}-?[A-Z0-9]$/i.test(ssm.replace(/\s/g,'')),phone:!ph||ph.length>=9,pc:!v('postcode')||jb(v('postcode'))!==false}}
