@@ -1,0 +1,399 @@
+{
+ "T": {
+  "en": {
+   "ribbon": "christmas 2026 specials are here · Santa, Gingerbread Man & Star · while stocks last",
+   "nD": "Desserts",
+   "nH": "How it works",
+   "nF": "FAQ",
+   "nT": "Track order",
+   "orderNow": "Order now",
+   "tag": "christmas is coming · stock up your counter",
+   "h1a": "wholesale frozen",
+   "h1b": "desserts, explained",
+   "h1c": "simply.",
+   "sub": "Everything a café, restaurant or hotel in JB needs to know before ordering: the range, how it works, and the common questions.",
+   "bOrder": "Order online",
+   "bSample": "Sample box · RM50",
+   "bWa": "Ask on WhatsApp",
+   "glance": "at a glance",
+   "g": [
+    {
+     "k": "Range",
+     "v": "12 desserts"
+    },
+    {
+     "k": "Pack",
+     "v": "12 pcs per carton (bakes 10–45)"
+    },
+    {
+     "k": "Storage",
+     "v": "6–9 months at -18°C"
+    },
+    {
+     "k": "Minimum",
+     "v": "RM300 free delivery · RM20 below"
+    },
+    {
+     "k": "Lead time",
+     "v": "usually 3–5 working days"
+    },
+    {
+     "k": "Delivery",
+     "v": "JB area, frozen, by car"
+    },
+    {
+     "k": "Payment",
+     "v": "FPX · card · GrabPay · DuitNow QR"
+    }
+   ],
+   "xmLim": "LIMITED · WHILE STOCKS LAST",
+   "xmT": "christmas 2026",
+   "xmS": "Three festive petit gâteaux for your December menu.",
+   "xmB": "Order christmas cartons",
+   "range": "scoop the range",
+   "catPg": "petit gâteaux",
+   "catBk": "bakes",
+   "seeOrder": "See prices & order",
+   "tap": "Tap a dessert for details",
+   "how": "how it works",
+   "steps": [
+    {
+     "n": 1,
+     "t": "try a sample box",
+     "d": "Any 4 pieces for RM50. Credited on your first order above RM350 within 1 month."
+    },
+    {
+     "n": 2,
+     "t": "order online",
+     "d": "Pick cartons, enter company and SSM details, pay by FPX, card, GrabPay or DuitNow QR."
+    },
+    {
+     "n": 3,
+     "t": "we make & pack",
+     "d": "Stock ships first, the rest is made fresh, usually 3–5 working days."
+    },
+    {
+     "n": 4,
+     "t": "delivered frozen",
+     "d": "By car across the JB area. Invoice on WhatsApp."
+    }
+   ],
+   "strip": "no pork · no lard · no alcohol · made in Larkin, JB",
+   "faqT": "common questions",
+   "faq": [
+    {
+     "q": "Do I need a pastry chef?",
+     "a": "No. Thaw in the chiller, plate and serve."
+    },
+    {
+     "q": "How long do they keep?",
+     "a": "6–9 months frozen at -18°C. Thaw only what you need."
+    },
+    {
+     "q": "What is the minimum order?",
+     "a": "RM300 for free delivery. Below RM300 a RM20 delivery fee applies."
+    },
+    {
+     "q": "Can I try first?",
+     "a": "Yes. The sample box is any 4 pieces for RM50, credited on your first order above RM350 within 1 month."
+    },
+    {
+     "q": "Where do you deliver?",
+     "a": "Anywhere in the Johor Bahru area, by car, frozen."
+    },
+    {
+     "q": "How do I pay?",
+     "a": "Online by FPX, card, GrabPay, Google Pay or Apple Pay, or by DuitNow QR on WhatsApp."
+    },
+    {
+     "q": "Are they pork, lard and alcohol free?",
+     "a": "Yes, every beku° dessert is pork, lard and alcohol free."
+    }
+   ],
+   "foot": "have a cool christmas, chef.",
+   "fWa": "WhatsApp +6014 349 0928",
+   "fTrack": "Track an order",
+   "fLine": "beku° is a brand of Chaleur Atelier F&B Sdn. Bhd. (202501028873) · Larkin, Johor Bahru · No pork, no lard, no alcohol.",
+   "flav": "Flavour",
+   "layers": "Layers",
+   "orderThis": "Add 1 carton & order",
+   "askThis": "Ask about this dessert",
+   "close": "Close",
+   "wa": "Hi BEKU, I found you on your website and I'm interested in your frozen desserts for my business.",
+   "waP": "Hi BEKU, I would like to know more about {n} for my business."
+  },
+  "zh": {
+   "ribbon": "2026 圣诞限定已上架 · Santa、Gingerbread Man 与 Star · 售完即止",
+   "nD": "甜点",
+   "nH": "如何运作",
+   "nF": "常见问题",
+   "nT": "追踪订单",
+   "orderNow": "立即下单",
+   "tag": "圣诞将至 · 为您的柜台备货",
+   "h1a": "冷冻甜点批发，",
+   "h1b": "一看就懂。",
+   "h1c": "",
+   "sub": "新山的咖啡馆、餐厅和酒店在下单前需要知道的一切：产品、流程和常见问题。",
+   "bOrder": "在线下单",
+   "bSample": "样品盒 · RM50",
+   "bWa": "WhatsApp 咨询",
+   "glance": "一览",
+   "g": [
+    {
+     "k": "产品",
+     "v": "12 款甜点"
+    },
+    {
+     "k": "包装",
+     "v": "每箱 12 个（烘焙 10–45 个）"
+    },
+    {
+     "k": "保存",
+     "v": "-18°C 可保存 6–9 个月"
+    },
+    {
+     "k": "最低消费",
+     "v": "满 RM300 免运费 · 未满收 RM20"
+    },
+    {
+     "k": "备货时间",
+     "v": "一般 3–5 个工作日"
+    },
+    {
+     "k": "配送",
+     "v": "新山地区，汽车冷冻配送"
+    },
+    {
+     "k": "付款",
+     "v": "FPX · 信用卡 · GrabPay · DuitNow QR"
+    }
+   ],
+   "xmLim": "限量 · 售完即止",
+   "xmT": "2026 圣诞限定",
+   "xmS": "三款节日法式小蛋糕，点亮您的十二月菜单。",
+   "xmB": "订购圣诞款",
+   "range": "全系列甜点",
+   "catPg": "法式小蛋糕",
+   "catBk": "烘焙点心",
+   "seeOrder": "查看价格并下单",
+   "tap": "点选甜点查看详情",
+   "how": "如何运作",
+   "steps": [
+    {
+     "n": 1,
+     "t": "先试样品盒",
+     "d": "任选 4 个，RM50。1 个月内首次订单满 RM350 以上可抵扣。"
+    },
+    {
+     "n": 2,
+     "t": "在线下单",
+     "d": "选择箱数，填写公司与 SSM 资料，用 FPX、信用卡、GrabPay 或 DuitNow QR 付款。"
+    },
+    {
+     "n": 3,
+     "t": "制作与包装",
+     "d": "现货先出，其余现做，一般 3–5 个工作日。"
+    },
+    {
+     "n": 4,
+     "t": "冷冻配送",
+     "d": "汽车配送至新山地区，发票通过 WhatsApp 发送。"
+    }
+   ],
+   "strip": "不含猪肉 · 不含猪油 · 不含酒精 · 新山 Larkin 制作",
+   "faqT": "常见问题",
+   "faq": [
+    {
+     "q": "需要甜点师吗？",
+     "a": "不需要。冷藏解冻、装盘即可上桌。"
+    },
+    {
+     "q": "可以保存多久？",
+     "a": "-18°C 冷冻可保存 6–9 个月，用多少解冻多少。"
+    },
+    {
+     "q": "最低消费是多少？",
+     "a": "满 RM300 免运费；未满 RM300 收取 RM20 运费。"
+    },
+    {
+     "q": "可以先试吃吗？",
+     "a": "可以。样品盒任选 4 个 RM50，1 个月内首次订单满 RM350 以上可抵扣。"
+    },
+    {
+     "q": "配送到哪里？",
+     "a": "新山地区，汽车冷冻配送。"
+    },
+    {
+     "q": "怎么付款？",
+     "a": "在线用 FPX、信用卡、GrabPay、Google Pay 或 Apple Pay，或在 WhatsApp 用 DuitNow QR。"
+    },
+    {
+     "q": "不含猪肉、猪油和酒精吗？",
+     "a": "是的，所有 beku° 甜点都不含猪肉、猪油和酒精。"
+    }
+   ],
+   "foot": "圣诞快乐，保持冷静，大厨。",
+   "fWa": "WhatsApp +6014 349 0928",
+   "fTrack": "追踪订单",
+   "fLine": "beku° 是 Chaleur Atelier F&B Sdn. Bhd.（202501028873）旗下品牌 · 新山 Larkin · 不含猪肉、猪油和酒精。",
+   "flav": "风味",
+   "layers": "层次",
+   "orderThis": "加 1 箱并下单",
+   "askThis": "咨询这款甜点",
+   "close": "关闭",
+   "wa": "你好 BEKU，我在你们的网站上看到你们，想为我的生意进你们的冷冻甜点。",
+   "waP": "你好 BEKU，我想了解 {n}，用于我的生意。"
+  },
+  "ms": {
+   "ribbon": "istimewa krismas 2026 sudah tiba · Santa, Gingerbread Man & Star · sementara stok masih ada",
+   "nD": "Pencuci mulut",
+   "nH": "Cara ia berfungsi",
+   "nF": "Soalan",
+   "nT": "Jejak order",
+   "orderNow": "Order sekarang",
+   "tag": "krismas semakin dekat · penuhkan kaunter anda",
+   "h1a": "pencuci mulut sejuk beku",
+   "h1b": "borong, diterangkan",
+   "h1c": "dengan mudah.",
+   "sub": "Semua yang kafe, restoran atau hotel di JB perlu tahu sebelum order: produk, cara ia berfungsi dan soalan lazim.",
+   "bOrder": "Order dalam talian",
+   "bSample": "Kotak sampel · RM50",
+   "bWa": "Tanya di WhatsApp",
+   "glance": "sekilas pandang",
+   "g": [
+    {
+     "k": "Produk",
+     "v": "12 pencuci mulut"
+    },
+    {
+     "k": "Pek",
+     "v": "12 biji setiap karton (kek 10–45)"
+    },
+    {
+     "k": "Simpanan",
+     "v": "6–9 bulan pada -18°C"
+    },
+    {
+     "k": "Minimum",
+     "v": "RM300 hantar percuma · RM20 bawah"
+    },
+    {
+     "k": "Tempoh",
+     "v": "biasanya 3–5 hari bekerja"
+    },
+    {
+     "k": "Penghantaran",
+     "v": "Kawasan JB, beku, dengan kereta"
+    },
+    {
+     "k": "Bayaran",
+     "v": "FPX · kad · GrabPay · DuitNow QR"
+    }
+   ],
+   "xmLim": "TERHAD · SEMENTARA STOK MASIH ADA",
+   "xmT": "krismas 2026",
+   "xmS": "Tiga petit gâteaux perayaan untuk menu Disember anda.",
+   "xmB": "Order karton krismas",
+   "range": "semua pencuci mulut",
+   "catPg": "petit gâteaux",
+   "catBk": "kek",
+   "seeOrder": "Lihat harga & order",
+   "tap": "Tekan pencuci mulut untuk butiran",
+   "how": "cara ia berfungsi",
+   "steps": [
+    {
+     "n": 1,
+     "t": "cuba kotak sampel",
+     "d": "Mana-mana 4 biji untuk RM50. Dikreditkan pada order pertama melebihi RM350 dalam 1 bulan."
+    },
+    {
+     "n": 2,
+     "t": "order dalam talian",
+     "d": "Pilih karton, isi butiran syarikat dan SSM, bayar dengan FPX, kad, GrabPay atau DuitNow QR."
+    },
+    {
+     "n": 3,
+     "t": "kami buat & bungkus",
+     "d": "Stok dihantar dahulu, selebihnya dibuat segar, biasanya 3–5 hari bekerja."
+    },
+    {
+     "n": 4,
+     "t": "dihantar beku",
+     "d": "Dengan kereta ke seluruh kawasan JB. Invois di WhatsApp."
+    }
+   ],
+   "strip": "tanpa khinzir · tanpa lemak khinzir · tanpa alkohol · dibuat di Larkin, JB",
+   "faqT": "soalan lazim",
+   "faq": [
+    {
+     "q": "Perlu chef pastri?",
+     "a": "Tidak. Nyahbeku dalam chiller, hidang dan jual."
+    },
+    {
+     "q": "Tahan berapa lama?",
+     "a": "6–9 bulan beku pada -18°C. Nyahbeku ikut keperluan sahaja."
+    },
+    {
+     "q": "Berapa order minimum?",
+     "a": "RM300 untuk penghantaran percuma. Bawah RM300 caj RM20."
+    },
+    {
+     "q": "Boleh cuba dulu?",
+     "a": "Boleh. Kotak sampel mana-mana 4 biji RM50, dikreditkan pada order pertama melebihi RM350 dalam 1 bulan."
+    },
+    {
+     "q": "Hantar ke mana?",
+     "a": "Seluruh kawasan Johor Bahru, dengan kereta, beku."
+    },
+    {
+     "q": "Bagaimana bayar?",
+     "a": "Dalam talian dengan FPX, kad, GrabPay, Google Pay atau Apple Pay, atau DuitNow QR di WhatsApp."
+    },
+    {
+     "q": "Tanpa khinzir, lemak khinzir dan alkohol?",
+     "a": "Ya, semua pencuci mulut beku° tanpa khinzir, lemak khinzir dan alkohol."
+    }
+   ],
+   "foot": "selamat hari krismas, chef.",
+   "fWa": "WhatsApp +6014 349 0928",
+   "fTrack": "Jejak order",
+   "fLine": "beku° ialah jenama Chaleur Atelier F&B Sdn. Bhd. (202501028873) · Larkin, Johor Bahru · Tanpa khinzir, lemak khinzir dan alkohol.",
+   "flav": "Perisa",
+   "layers": "Lapisan",
+   "orderThis": "Tambah 1 karton & order",
+   "askThis": "Tanya tentang pencuci mulut ini",
+   "close": "Tutup",
+   "wa": "Hi BEKU, saya jumpa anda di laman web dan berminat dengan pencuci mulut sejuk beku anda untuk perniagaan saya.",
+   "waP": "Hi BEKU, saya ingin tahu lebih lanjut tentang {n} untuk perniagaan saya."
+  }
+ },
+ "EX": {
+  "en": {
+   "path": "/",
+   "hl": "en",
+   "orderWa": "Hi BEKU, I found you on your website and I'd like to place an order for my business.",
+   "sampleWa": "Hi BEKU, I found you on your website and I'd like to order a sample box (any 4 pieces, RM50).",
+   "orderBtn": "Order on WhatsApp",
+   "privacy": "Privacy policy",
+   "soon": "Online ordering with FPX, card & GrabPay is coming soon. For now, order on WhatsApp."
+  },
+  "zh": {
+   "path": "/zh/",
+   "hl": "zh-Hans",
+   "orderWa": "你好 BEKU，我在你们的网站上看到你们，想为我的生意下单。",
+   "sampleWa": "你好 BEKU，我在你们的网站上看到你们，想订一个样品盒（任选 4 个，RM50）。",
+   "orderBtn": "WhatsApp 下单",
+   "privacy": "隐私政策",
+   "soon": "FPX、信用卡与 GrabPay 在线下单即将推出。目前请通过 WhatsApp 下单。"
+  },
+  "ms": {
+   "path": "/ms/",
+   "hl": "ms",
+   "orderWa": "Hi BEKU, saya jumpa anda di laman web dan ingin membuat order untuk perniagaan saya.",
+   "sampleWa": "Hi BEKU, saya jumpa anda di laman web dan ingin order kotak sampel (mana-mana 4 biji, RM50).",
+   "orderBtn": "Order di WhatsApp",
+   "privacy": "Dasar privasi",
+   "soon": "Order dalam talian dengan FPX, kad & GrabPay akan datang. Buat masa ini, order di WhatsApp."
+  }
+ }
+}
