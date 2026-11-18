@@ -373,27 +373,27 @@
    "hl": "en",
    "orderWa": "Hi BEKU, I found you on your website and I'd like to place an order for my business.",
    "sampleWa": "Hi BEKU, I found you on your website and I'd like to order a sample box (any 4 pieces, RM50).",
-   "orderBtn": "Order on WhatsApp",
+   "orderBtn": "Order online",
    "privacy": "Privacy policy",
-   "soon": "Online ordering with FPX, card & GrabPay is coming soon. For now, order on WhatsApp."
+   "soon": "Order online in minutes · pay by FPX, card or DuitNow QR · delivered in the Johor Bahru area."
   },
   "zh": {
    "path": "/zh/",
    "hl": "zh-Hans",
    "orderWa": "你好 BEKU，我在你们的网站上看到你们，想为我的生意下单。",
    "sampleWa": "你好 BEKU，我在你们的网站上看到你们，想订一个样品盒（任选 4 个，RM50）。",
-   "orderBtn": "WhatsApp 下单",
+   "orderBtn": "在线下单",
    "privacy": "隐私政策",
-   "soon": "FPX、信用卡与 GrabPay 在线下单即将推出。目前请通过 WhatsApp 下单。"
+   "soon": "几分钟内在线下单 · 支持 FPX、信用卡或 DuitNow QR 付款 · 新山地区配送。"
   },
   "ms": {
    "path": "/ms/",
    "hl": "ms",
    "orderWa": "Hi BEKU, saya jumpa anda di laman web dan ingin membuat order untuk perniagaan saya.",
    "sampleWa": "Hi BEKU, saya jumpa anda di laman web dan ingin order kotak sampel (mana-mana 4 biji, RM50).",
-   "orderBtn": "Order di WhatsApp",
+   "orderBtn": "Order dalam talian",
    "privacy": "Dasar privasi",
-   "soon": "Order dalam talian dengan FPX, kad & GrabPay akan datang. Buat masa ini, order di WhatsApp."
+   "soon": "Order dalam talian dalam beberapa minit · bayar melalui FPX, kad atau DuitNow QR · penghantaran di kawasan Johor Bahru."
   }
  }
 }

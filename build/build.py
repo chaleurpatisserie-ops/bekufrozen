@@ -151,6 +151,7 @@ def page(lang):
           "areaServed": "Johor Bahru", "keywords": seo.get('keywords') or '', "alternateName": ["beku frozen desserts"],
           "knowsAbout": [p['name'] for p in items]}
     owa, swa = wa(x['orderWa']), wa(x['sampleWa'])
+    ourl = '/order/' + ('' if lang == 'en' else '?lang=' + lang)   # online order page (Alfred 18 Nov 19:26: homepage order buttons -> Order online)
     chips = [c.strip() for c in (seo.get('chips') or '').split(',') if c.strip()]
     seo_block = ''
     if seo.get('heading') or seo.get('text'):
@@ -180,12 +181,12 @@ def page(lang):
 <div class="ribbon">{e(ribbon)}</div>
 <div class="top">{SNOW}{BUNT}
 <header><nav class="wrap nav"><a href="{x['path']}" class="logo"><img src="/img/beku-logo-256.webp" alt="beku° frozen desserts" width="52" height="52"></a>
-<div class="links"><a href="#d">{e(t['nD'])}</a><a href="#h">{e(t['nH'])}</a><a href="#f">{e(t['nF'])}</a><span class="langs" role="group" aria-label="Language">{langs}</span><a class="btn sm" href="{owa}" target="_blank" rel="noopener">{e(x['orderBtn'])}</a></div></nav></header>
+<div class="links"><a href="#d">{e(t['nD'])}</a><a href="#h">{e(t['nH'])}</a><a href="#f">{e(t['nF'])}</a><a href="/track/">{e(t['nT'])}</a><span class="langs" role="group" aria-label="Language">{langs}</span><a class="btn sm" href="{ourl}">{e(x['orderBtn'])}</a></div></nav></header>
 <section class="wrap hero"><div class="ht">
 <span class="tag">{e(hero.get('tag', t['tag']))}</span>
 <h1><span>{e(hero.get('h1a', t['h1a']))}</span><span>{e(hero.get('h1b', t['h1b']))}</span><span>{e(hero.get('h1c', t['h1c']))}</span></h1>
 <p class="sub">{e(hero.get('sub', t['sub']))}</p>
-<div class="btns"><a class="btn" href="{owa}" target="_blank" rel="noopener">{e(x['orderBtn'])}</a><a class="btn light" href="{swa}" target="_blank" rel="noopener">{e(t['bSample'])}</a></div>
+<div class="btns"><a class="btn" href="{ourl}">{e(x['orderBtn'])}</a><a class="btn light" href="{swa}" target="_blank" rel="noopener">{e(t['bSample'])}</a></div>
 <p class="soon">{e(x['soon'])}</p></div>
 <div class="hv"><img class="dr" src="/img/BK-PG-109.webp" alt="" width="130" height="130" style="left:-10px;top:-6px">{orn('#d6404a','30%',34,0)}{orn('#2f7d4f','55%',54,1)}{orn('#fff0a0','78%',24,2)}<img class="dr" src="/img/BK-PG-108.webp" alt="" width="130" height="130" style="right:-6px;top:-10px;animation-delay:-2s">
 <div class="glance"><h2>{e(t['glance'])}</h2>{''.join(f'<div class="gr"><span>{e(g["k"])}</span><b>{e(g["v"])}</b></div>' for g in t['g'])}</div>
@@ -193,11 +194,11 @@ def page(lang):
 {WAVE('#cbe9f8','#fffdfa')}
 <main>
 <section id="d" class="wrap range">
-{('<div class="xmas">'+SNOW2+'<div class="xh"><div class="lim">'+e(t['xmLim'])+'</div><h2>'+e(t['xmT'])+'</h2><p>'+e(t['xmS'])+'</p></div><div class="grid">'+cat('xm')+'</div><div class="c"><a class="btn white" href="'+owa+'" target="_blank" rel="noopener">'+e(t['xmB'])+'</a></div></div>') if cat('xm') else ''}
+{('<div class="xmas">'+SNOW2+'<div class="xh"><div class="lim">'+e(t['xmLim'])+'</div><h2>'+e(t['xmT'])+'</h2><p>'+e(t['xmS'])+'</p></div><div class="grid">'+cat('xm')+'</div><div class="c"><a class="btn white" href="'+ourl+'">'+e(t['xmB'])+'</a></div></div>') if cat('xm') else ''}
 <div class="sh"><h2>{e(t['range'])}</h2><span>{e(t['tap'])}</span></div>
 {('<h3>'+e(t['catPg'])+'</h3><div class="grid">'+cat('pg')+'</div>') if cat('pg') else ''}
 {('<h3>'+e(t['catBk'])+'</h3><div class="grid">'+cat('bk')+'</div>') if cat('bk') else ''}
-<div class="c"><a class="btn" href="{owa}" target="_blank" rel="noopener">{e(x['orderBtn'])}</a></div></section>
+<div class="c"><a class="btn" href="{ourl}">{e(x['orderBtn'])}</a></div></section>
 {seo_block}{WAVE('#fffdfa','#17558c',True)}
 <section id="h" class="how">{SNOW2}<div class="wrap"><h2>{e(t['how'])}</h2><div class="steps">{''.join(f'<div><div class="n">{s["n"]}</div><h3>{e(s["t"])}</h3><p>{e(s["d"])}</p></div>' for s in t['steps'])}</div><p class="strip">{e(t['strip'])}</p></div></section>
 {WAVE('#17558c','#cbe9f8')}
@@ -205,7 +206,7 @@ def page(lang):
 {WAVE('#cbe9f8','#fffdfa',True)}
 </main>
 <footer class="foot"><div class="ft">{e(t['foot'])}</div><a class="btn" href="{wa(t['wa'])}" target="_blank" rel="noopener">{e(t['fWa'])}</a><p>{e(EMAIL)} · {e(ADDR)}</p><p class="sm">{e(t['fLine'])} · <a href="/privacy.html">{e(x['privacy'])}</a></p></footer>
-<dialog id="pd" aria-labelledby="pdn"><button type="button" class="x" aria-label="{e(t['close'])}">×</button><div class="ph"><img id="pdi" alt="" width="220" height="220"></div><div class="pb"><span id="pdt" class="ptag"></span><h3 id="pdn"></h3><div id="pds" class="psp"></div><p><b>{e(t['layers'])}:</b> <span id="pdl"></span></p><p><b>{e(t['flav'])}:</b> <span id="pdf"></span></p><a id="pdo" class="btn" href="{owa}" target="_blank" rel="noopener">{e(x['orderBtn'])}</a><a id="pdw" class="btn green" target="_blank" rel="noopener">{e(t['askThis'])}</a></div></dialog>
+<dialog id="pd" aria-labelledby="pdn"><button type="button" class="x" aria-label="{e(t['close'])}">×</button><div class="ph"><img id="pdi" alt="" width="220" height="220"></div><div class="pb"><span id="pdt" class="ptag"></span><h3 id="pdn"></h3><div id="pds" class="psp"></div><p><b>{e(t['layers'])}:</b> <span id="pdl"></span></p><p><b>{e(t['flav'])}:</b> <span id="pdf"></span></p><a id="pdo" class="btn" href="{ourl}">{e(x['orderBtn'])}</a><a id="pdw" class="btn green" target="_blank" rel="noopener">{e(t['askThis'])}</a></div></dialog>
 <script>window.BEKU={json.dumps(pdata, ensure_ascii=False)};</script>
 <script src="/app.js" defer></script>
 </body>
