@@ -77,6 +77,27 @@ textarea{min-height:80px;resize:vertical}
 .bar .btn{font-size:18px;padding:12px 28px}
 .hide{display:none}
 .loading{text-align:center;padding:60px;color:var(--mute);font-size:18px}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:10px 0 4px}
+.sum div{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.sum span{display:block;font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em}
+.sum b{font:700 22px Fredoka,sans-serif;color:var(--navy)}
+.sum small{display:block;color:var(--mute);font-size:12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-weight:700;cursor:pointer;color:var(--ink);font-size:14px}
+.chip.on{background:var(--blue);border-color:var(--navy);color:var(--navy)}
+.chips input[type=text]{width:auto;flex:1;min-width:140px;padding:7px 12px}
+.otab{width:100%;border-collapse:collapse;font-size:14px}
+.otab th{text-align:left;color:var(--mute);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em;padding:8px 6px;border-bottom:1px solid var(--line)}
+.otab td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.otab td.no{white-space:nowrap;font-weight:700;color:var(--navy)}
+.otab td.amt{white-space:nowrap;text-align:right;font-weight:700}
+.pill{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;white-space:nowrap}
+.pill.paid{background:#e3f6ea;color:var(--ok)}.pill.unpaid{background:#fdecea;color:var(--warn)}.pill.off{background:#eef1f4;color:var(--mute)}.pill.web{background:var(--blue);color:var(--navy)}
+.mtab{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.mtab th,.mtab td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:right}
+.mtab th:first-child,.mtab td:first-child{text-align:left}
+.mtab th{color:var(--mute);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+@media(max-width:640px){.otab thead{display:none}.otab tr{display:block;border-bottom:2px solid var(--line);padding:8px 0}.otab td{display:block;border:0;padding:2px 4px}.otab td.amt{text-align:left}.otab td:before{content:attr(data-l);color:var(--mute);font-size:12px;text-transform:uppercase;margin-right:6px}}
 </style>
 </head>
 <body>
@@ -90,6 +111,7 @@ textarea{min-height:80px;resize:vertical}
       <button class="tab" data-tab="products">🍰 Products</button>
       <button class="tab" data-tab="home">🏠 Homepage text</button>
       <button class="tab" data-tab="contact">📞 Contact</button>
+      <button class="tab" data-tab="orders">📦 Orders &amp; sales</button>
     </div>
     <div class="langs" id="langs"><span>Language you are editing:</span>
       <button class="lg on" data-lang="en">English</button><button class="lg" data-lang="zh">中文</button><button class="lg" data-lang="ms">Bahasa Melayu</button>
@@ -174,6 +196,26 @@ textarea{min-height:80px;resize:vertical}
         <label>WhatsApp number <small>(with country code, e.g. 60143490928)</small></label><input type="text" id="c-wa">
         <label>Email</label><input type="text" id="c-email">
         <label>Address</label><textarea id="c-addr"></textarea>
+      </div>
+    </section>
+
+    <!-- ORDERS & SALES -->
+    <section id="t-orders" class="hide">
+      <div class="card">
+        <h2>Monthly sales</h2>
+        <p class="why">From the order list (website + WhatsApp orders in the bot sheet). "Sales" = orders marked paid; cancelled and refunded orders are left out. Bukku stays the accounting truth.</p>
+        <div id="o-months"></div>
+      </div>
+      <div class="card">
+        <h2>Orders</h2>
+        <p class="why">Newest first. Website orders carry a BKW number; the invoice number comes from Bukku once it exists.</p>
+        <div class="chips" id="o-chips">
+          <button class="chip on" data-f="all">All</button><button class="chip" data-f="web">Website</button><button class="chip" data-f="unpaid">Unpaid</button><button class="chip" data-f="paid">Paid</button>
+          <input type="text" id="o-q" placeholder="Search customer, order no., item…">
+          <button class="btn ghost small" id="o-refresh">↻ Refresh</button>
+        </div>
+        <div id="o-sum" class="sum"></div>
+        <div id="o-list" class="loading">Loading orders…</div>
       </div>
     </section>
   </div>
@@ -285,9 +327,46 @@ $('padd').onclick=function(){
 };
 document.querySelectorAll('.tab').forEach(function(b){ b.onclick=function(){
   TAB=b.dataset.tab; document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===b)});
-  ['google','products','home','contact'].forEach(function(t){ $('t-'+t).classList.toggle('hide',t!==TAB); });
-  $('langs').classList.toggle('hide',TAB==='contact');
+  ['google','products','home','contact','orders'].forEach(function(t){ $('t-'+t).classList.toggle('hide',t!==TAB); });
+  $('langs').classList.toggle('hide',TAB==='contact'||TAB==='orders');
+  if(TAB==='orders'&&!ORD) loadOrders();
 };});
+/* ---- Orders & sales (reads the bot sheet's Orders tab; nothing here is saved) ---- */
+var ORD=null, OF='all';
+function rm(n){ return 'RM'+(Number(n)||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); }
+function payKind(p){ p=String(p||''); if(/^paid/i.test(p)) return 'paid'; if(/refund|cancel/i.test(p)) return 'off'; return 'unpaid'; }
+function loadOrders(){
+  $('o-list').className='loading'; $('o-list').textContent='Loading orders…';
+  google.script.run.withSuccessHandler(function(r){ ORD=r; renderOrders(); })
+    .withFailureHandler(function(e){ $('o-list').className='hint'; $('o-list').textContent='Could not load the orders: '+e.message; }).getOrders();
+}
+function renderOrders(){
+  if(!ORD) return;
+  var rows=ORD.rows, q=($('o-q').value||'').toLowerCase().trim();
+  // monthly table (all rows, regardless of the filter)
+  var M={};
+  rows.forEach(function(o){ var k=o.d.slice(0,7); var m=M[k]||(M[k]={k:k,n:0,paid:0,sales:0,open:0,web:0,webSales:0}); var pk=payKind(o.pay); if(pk==='off') return; m.n++; if(o.src==='web') m.web++; if(pk==='paid'){ m.paid++; m.sales+=o.total; if(o.src==='web') m.webSales+=o.total; } else m.open+=o.total; });
+  var keys=Object.keys(M).sort().reverse().slice(0,12);
+  $('o-months').innerHTML=keys.length?'<table class="mtab"><thead><tr><th>Month</th><th>Orders</th><th>Paid</th><th>Sales (paid)</th><th>Unpaid</th><th>Website</th><th>Website sales</th></tr></thead><tbody>'+keys.map(function(k){ var m=M[k]; var d=new Date(k+'-01T00:00:00'); return '<tr><td>'+d.toLocaleString('en-GB',{month:'short',year:'numeric'})+'</td><td>'+m.n+'</td><td>'+m.paid+'</td><td><b>'+rm(m.sales)+'</b></td><td>'+(m.open?rm(m.open):'–')+'</td><td>'+m.web+'</td><td>'+rm(m.webSales)+'</td></tr>'; }).join('')+'</tbody></table>':'<p class="hint">No orders yet.</p>';
+  // filtered list
+  var list=rows.filter(function(o){ var pk=payKind(o.pay); if(OF==='web'&&o.src!=='web') return false; if(OF==='unpaid'&&pk!=='unpaid') return false; if(OF==='paid'&&pk!=='paid') return false;
+    if(q){ var hay=(o.no+' '+o.inv+' '+o.biz+' '+o.items+' '+o.phone+' '+o.st).toLowerCase(); if(hay.indexOf(q)<0) return false; } return true; });
+  var n=list.length, paid=0, open=0; list.forEach(function(o){ var pk=payKind(o.pay); if(pk==='paid') paid+=o.total; else if(pk==='unpaid') open+=o.total; });
+  $('o-sum').innerHTML='<div><span>Orders shown</span><b>'+n+'</b></div><div><span>Paid</span><b>'+rm(paid)+'</b></div><div><span>Unpaid</span><b>'+rm(open)+'</b></div><div><span>Updated</span><b style="font-size:16px">'+new Date(ORD.at).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+'</b><small>press Refresh for the latest</small></div>';
+  if(!n){ $('o-list').className='hint'; $('o-list').textContent='No orders match.'; return; }
+  $('o-list').className='';
+  $('o-list').innerHTML='<table class="otab"><thead><tr><th>Date</th><th>Order / invoice</th><th>Customer</th><th>Items</th><th>Delivery</th><th style="text-align:right">Total</th><th>Payment</th><th>Status</th></tr></thead><tbody>'+list.map(function(o){
+    var pk=payKind(o.pay), d=new Date(o.d);
+    return '<tr><td data-l="Date">'+d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+'</td>'+
+      '<td class="no" data-l="Order">'+(o.no?'<span class="pill web">web</span> '+esc(o.no):'')+(o.inv?(o.no?'<br>':'')+esc(o.inv):'')+(!o.no&&!o.inv?'–':'')+'</td>'+
+      '<td data-l="Customer">'+esc(o.biz)+(o.phone&&!/@g\.us/.test(o.phone)?'<br><small style="color:var(--mute)">+'+esc(o.phone)+'</small>':'')+'</td>'+
+      '<td data-l="Items">'+esc(o.items)+'</td><td data-l="Delivery">'+esc(o.del||'–')+'</td><td class="amt" data-l="Total">'+rm(o.total)+'</td>'+
+      '<td data-l="Payment"><span class="pill '+pk+'">'+esc(o.pay||'Unpaid')+'</span></td><td data-l="Status">'+esc(o.st||'')+(o.packed?'<br><small style="color:var(--mute)">'+esc(o.packed)+'</small>':'')+'</td></tr>'; }).join('')+'</tbody></table>';
+}
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+document.querySelectorAll('#o-chips .chip').forEach(function(b){ b.onclick=function(){ OF=b.dataset.f; document.querySelectorAll('#o-chips .chip').forEach(function(x){x.classList.toggle('on',x===b)}); renderOrders(); };});
+$('o-q').oninput=function(){ renderOrders(); };
+$('o-refresh').onclick=function(){ ORD=null; loadOrders(); };
 document.querySelectorAll('.lg').forEach(function(b){ b.onclick=function(){ LANG=b.dataset.lang; document.querySelectorAll('.lg').forEach(function(x){x.classList.toggle('on',x===b)}); render(); };});
 $('save').onclick=function(){
   if(busy)return; busy=true; $('save').disabled=true; setStatus('Saving…');

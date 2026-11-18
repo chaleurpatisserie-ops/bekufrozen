@@ -78,3 +78,23 @@ function uploadPhoto(name, dataUrl) {
 function resetToDefaults() {
   return saveSettings(JSON.parse(JSON.stringify(DEFAULTS)));
 }
+
+/* ---- Orders & sales tab (BEKU Website chat, 18 Nov 2026): reads the bot sheet "BEKU Customers & Leads" › Orders. Read only. ---- */
+var ORDERS_SHEET_ID = '1QahunHiZ_0g8d0BCaWIXI6AfI9D8guFZtEIiwzHtcGg';
+function getOrders() {
+  var sh = SpreadsheetApp.openById(ORDERS_SHEET_ID).getSheetByName('Orders');
+  var v = sh.getDataRange().getValues(), h = v[0].map(function (x) { return String(x).trim(); });
+  var iSt = h.indexOf('Status'), iPk = h.indexOf('Packed cartons / batches');
+  var tz = 'Asia/Kuala_Lumpur', out = [];
+  function iso(d) { return d instanceof Date ? Utilities.formatDate(d, tz, "yyyy-MM-dd'T'HH:mm:ss") : String(d || ''); }
+  function day(d) { return d instanceof Date ? Utilities.formatDate(d, tz, 'EEE d MMM') : String(d || ''); }
+  for (var i = 1; i < v.length; i++) {
+    var r = v[i]; if (!r[0] && !r[2] && !r[3]) continue;
+    var notes = String(r[10] || ''), no = (notes.match(/WEB ORDER (BKW-\d{6}-\d{3})/) || [])[1] || '';
+    var total = Number((notes.match(/Total RM([\d.]+)/) || [])[1]) || ((Number(r[6]) || 0) + (Number(r[7]) || 0));
+    out.push({ d: iso(r[0]), no: no, inv: String(r[8] || ''), biz: String(r[2] || ''), items: String(r[3] || ''), del: day(r[4]), total: Math.round(total * 100) / 100,
+      pay: String(r[9] || ''), st: iSt >= 0 ? String(r[iSt] || '').split(' · ')[0] : '', src: String(r[11] || ''), phone: String(r[1] || ''), packed: iPk >= 0 ? String(r[iPk] || '') : '' });
+  }
+  out.reverse();
+  return { rows: out.slice(0, 500), at: new Date().toISOString() };
+}
