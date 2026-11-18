@@ -16,3 +16,38 @@
   set();document.body.appendChild(a);
   new MutationObserver(set).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 })();
+
+/* beku° visit + action counter (Alfred 19 Nov 00:59: see who visits, what they tap, where from, rough location). No names, no IP, no cookies sent to others:
+   a random visitor id stays in this browser only; the server keeps page, action, source, language, device, time zone. */
+(function(){
+  var API='https://script.google.com/macros/s/AKfycbyP-I4ZnGnmXWoq_G9zt2LxT1ODJofcG3PzC0UBKKM-jhrZzDNo8NB-9WgekMwWY7asoA/exec';
+  if(navigator.webdriver||/bot|crawl|spider|slurp|lighthouse|headless|preview/i.test(navigator.userAgent))return;
+  function st(k,v,l){try{var S=l?localStorage:sessionStorage;if(v!==undefined)S.setItem(k,v);return S.getItem(k)}catch(e){return ''}}
+  function rid(){return Math.random().toString(36).slice(2,10)}
+  var vid=st('bk_v',undefined,1)||st('bk_v',rid(),1), sid=st('bk_s')||st('bk_s',rid());
+  var q=new URLSearchParams(location.search), src=st('bk_src');
+  if(!src){var r='';try{r=document.referrer?new URL(document.referrer).hostname.replace(/^www\./,''):''}catch(e){}
+    if(r===location.hostname)r='';
+    src=q.get('utm_source')?(q.get('utm_source')+(q.get('utm_medium')?' / '+q.get('utm_medium'):'')+(q.get('utm_campaign')?' / '+q.get('utm_campaign'):'')):q.get('fbclid')?'Facebook / Instagram ad':q.get('gclid')?'Google ad':r||'direct';
+    st('bk_src',src)}
+  var dev=/iPad|Tablet/i.test(navigator.userAgent)?'tablet':/Mobi|Android|iPhone/i.test(navigator.userAgent)?'phone':'computer', tz='';
+  try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}
+  var first=!st('bk_seen',undefined,1); st('bk_seen','1',1);
+  function send(ev,name){try{var u=API+'?type=web_hit&v='+vid+'&s='+sid+'&e='+encodeURIComponent(ev)+'&n='+encodeURIComponent(String(name||'').slice(0,120))+'&p='+encodeURIComponent(location.pathname+(location.search.replace(/([?&])(fbclid|gclid)=[^&]*/g,'$1').slice(0,60)))
+    +'&r='+encodeURIComponent(src)+'&l='+encodeURIComponent((document.documentElement.lang||'').slice(0,5))+'&d='+dev+'&z='+encodeURIComponent(tz)+'&f='+(first?1:0);
+    fetch(u,{mode:'no-cors',keepalive:true}).catch(function(){})}catch(e){}}
+  window.bkT=send;
+  send('view',document.title);
+  var t0=Date.now(), maxS=0, left=false;
+  addEventListener('scroll',function(){var h=document.documentElement;var pc=Math.round(100*(scrollY+innerHeight)/Math.max(h.scrollHeight,1));if(pc>maxS)maxS=Math.min(pc,100)},{passive:true});
+  function leave(){if(left)return;left=true;send('leave',Math.round((Date.now()-t0)/1000)+'s · scrolled '+maxS+'% · screen '+screen.width+'x'+screen.height)}
+  addEventListener('pagehide',leave);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')leave()});
+  if(q.get('paid'))send('order','Paid by card '+q.get('paid'));
+  document.addEventListener('click',function(e){var a=e.target.closest('a,button,summary,[data-go],[data-lang]');if(!a)return;
+    var h=a.getAttribute('href')||'', t=(a.innerText||a.getAttribute('aria-label')||'').replace(/\s+/g,' ').trim().slice(0,60), n;
+    if(a.dataset.lang)n='Language '+a.dataset.lang;
+    else if(/wa\.me/.test(h)){var m='';try{m=decodeURIComponent((h.split('text=')[1]||'')).slice(0,60)}catch(x){}n='WhatsApp: '+(t||'button')+(m?' ['+m+']':'')}
+    else if(a.tagName==='SUMMARY')n='FAQ: '+t;
+    else n=(h&&h.charAt(0)!=='#'?'Link: ':'Tap: ')+(t||h)+(h&&h.charAt(0)!=='#'?' → '+h.slice(0,40):'');
+    send('click',n)},true);
+})();

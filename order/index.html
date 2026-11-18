@@ -225,7 +225,7 @@ function submit(){if(!ready()||st.busy)return;var c=calc();st.busy=true;st.err='
     var txt=[L('waHead',{o:r.order}),''].concat(c.sample?[L('smpLine')+': '+c.lines.slice(1).map(function(l){return l.qty+'× '+l.name}).join(', ')]:c.lines.map(function(l){return l.qty+' ctn × '+l.name+' = '+l.amt}))
       .concat([r.fee?L('del')+': '+rm(r.fee):'',L('waTot')+': '+rm(r.total),'',v('company')+' · SSM '+v('ssm'),v('contact')+' · '+v('phone'),[v('addr'),v('postcode'),v('city')].join(', '),L('date')+': '+v('date').split('-').reverse().join('/'),'',L('waPay')]).filter(function(x,i,a){return x!==''||a[i-1]!==''}).join('\n');
     var href='https://wa.me/'+WA+'?text='+encodeURIComponent(txt);if(waWin)waWin.location.href=href;else location.href=href;
-    st.busy=false;st.step='done';st.paidBy='duitnow';render();scrollTo(0,0)
+    st.busy=false;st.step='done';st.paidBy='duitnow';render();scrollTo(0,0);if(window.bkT)bkT('order','Placed (DuitNow QR) '+st.order)
   }).catch(function(){st.busy=false;st.err=L('loadErr');if(waWin)waWin.close();render()})}
 render();
 setInterval(function(){if(st.step!=='details')return;document.querySelectorAll('[data-f]').forEach(function(e){if(e.value!==String(st.f[e.dataset.f]||''))st.f[e.dataset.f]=e.value});refreshDetails()},800);
