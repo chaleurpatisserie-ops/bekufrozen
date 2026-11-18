@@ -231,5 +231,6 @@ render();
 setInterval(function(){if(st.step!=='details')return;document.querySelectorAll('[data-f]').forEach(function(e){if(e.value!==String(st.f[e.dataset.f]||''))st.f[e.dataset.f]=e.value});refreshDetails()},800);
 fetch(API+'?type=web_menu').then(function(r){return r.json()}).then(function(r){st.menu=r.ok?r.items:null;st.menuErr=!r.ok;if(r.ok&&r.min){MIN=r.min;FEE=r.fee}render()}).catch(function(){st.menuErr=true;render()});
 </script>
+<script src="/wa.js" defer></script>
 </body>
 </html>

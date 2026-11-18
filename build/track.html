@@ -55,5 +55,6 @@ document.addEventListener('submit',function(e){e.preventDefault();st.o=document.
   fetch(API+'?type=web_track&order='+encodeURIComponent(st.o)+'&phone='+st.p).then(function(r){return r.json()}).then(function(r){st.r=r;st.busy=false;render()}).catch(function(){st.r={ok:false};st.busy=false;render()})});
 render();
 </script>
+<script src="/wa.js" defer></script>
 </body>
 </html>
