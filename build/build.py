@@ -220,6 +220,106 @@ for l in EX:
     os.makedirs(d, exist_ok=True)
     with open(os.path.join(d, 'index.html'), 'w', encoding='utf-8') as f:
         f.write(page(l))
+
+
+# ---------- introduction page /intro/ (Alfred 19 Nov 22:51: intro PDF with clickable links + the same intro on the web; English, no prices, 4-6 pages) ----------
+def intro_page():
+    t = T['en']
+    it = []
+    for p in prods:
+        tx = ((p.get('tx') or {}).get('en') or ['', '', '']) + ['', '', '']
+        it.append(dict(p, layers=tx[0], profile=tx[1], tag=tx[2]))
+    def card(p, big=False):
+        return ('<div class="pc%s"><div class="ball" style="background:%s"><img src="%s" alt="%s"></div><div class="pt">%s<h3 style="color:%s">%s</h3>'
+                '<p class="pf">%s</p><p class="ly">%s</p><p class="sp">%s</p></div></div>') % (
+            ' big' if big else '', e(p.get('bg') or '#cbe9f8'), e(p['img']), e(p['name']), ('<span class="tg">%s</span>' % e(p['tag'].title())) if p['tag'] else '',
+            e(p.get('ink') or '#17558c'), e(p['name']), e(p['profile']), e(p['layers']), e(p.get('spec') or ''))
+    pg = [p for p in it if p.get('cat') == 'pg']; xm = [p for p in it if p.get('cat') == 'xm']; bk = [p for p in it if p.get('cat') == 'bk']
+    cover_imgs = ''.join('<img src="%s" alt="" style="--i:%d">' % (e(p['img']), i) for i, p in enumerate(it[:5]))
+    glance = [g for g in t['g'] if not re.search(r'RM|\d+\s*sen', g['v'])]
+    U = lambda path: SITE + path + ('&' if '?' in path else '?') + 'utm_source=intro'
+    site_link = '<a href="%s">bekufrozen.com</a>' % U('/')
+    wa_link = 'https://wa.me/%s?text=%s' % (WA_NUM, urllib.parse.quote("Hi BEKU, I read your introduction and I'm interested in your frozen desserts for my business."))
+    phone = '+%s %s-%s %s' % (WA_NUM[:2], WA_NUM[2:4], WA_NUM[4:7], WA_NUM[7:])
+    promises = ['Pork, lard &amp; alcohol free', 'No additives', 'Made by pastry chefs in Larkin, JB', 'Delivered frozen across the JB area']
+    steps = [('Try a sample box', 'Pick any 4 pieces and taste them at your counter before your first order.'),
+             ('Order online', 'Choose cartons at bekufrozen.com/order, enter your company and SSM details and pay online, or order on WhatsApp.'),
+             ('We make &amp; pack', 'Stock ships first, the rest is made fresh. Usually ready in 3–5 working days.'),
+             ('Delivered frozen', 'By car across the JB area, straight into your freezer. Invoice on WhatsApp.')]
+    return f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>beku° · Introduction · Frozen petit gâteaux &amp; bakes for cafés in Johor Bahru</title>
+<meta name="description" content="Introduction to beku°: frozen petit gâteaux and bakes for cafés, restaurants and hotels in Johor Bahru, by the pastry team behind Chaleur Atelier Pâtisserie. Pork, lard &amp; alcohol free.">
+<link rel="canonical" href="{SITE}/intro/"><meta property="og:title" content="beku° · Introduction"><meta property="og:image" content="{SITE}{share_path}">
+<link rel="icon" href="/img/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/intro/intro.css">
+</head><body>
+<div class="bar"><a href="/"><img src="/img/beku-logo-256.webp" alt="beku°" width="40" height="40"></a><span>beku° introduction</span><a class="dl" href="/intro/beku-introduction.pdf" download>Download PDF</a></div>
+
+<section class="pg cover"><div class="cv">
+<img class="lg" src="/img/beku-logo-256.webp" alt="beku° frozen desserts">
+<p class="kick">introducing</p><h1>beku°</h1>
+<p class="lead">Frozen petit gâteaux &amp; bakes for cafés, restaurants and hotels in Johor Bahru.</p>
+<div class="fan">{cover_imgs}</div>
+<p class="by">By the pastry team behind <b>Chaleur Atelier Pâtisserie</b></p>
+<p class="url">{site_link}</p></div></section>
+
+<section class="pg"><div class="in">
+<p class="kick">about us</p><h2>Café-quality desserts, ready when you are.</h2>
+<p class="big">beku° is the frozen wholesale line of Chaleur Atelier F&amp;B Sdn. Bhd., the team behind Chaleur Atelier Pâtisserie in Larkin, Johor Bahru. We make modern French petit gâteaux and bakes in our own kitchen, freeze them at their best and deliver them across JB.</p>
+<p>For a café, restaurant or hotel that means a full dessert counter without a pastry kitchen: keep cartons in your freezer, take out what you need, thaw and serve. Every piece looks and tastes the same as the last.</p>
+<div class="prom">{''.join('<span>%s</span>' % x for x in promises)}</div>
+<div class="why">
+<div><b>Made by pastry chefs</b><p>Recipes developed and made by the Chaleur Atelier pastry team.</p></div>
+<div><b>Long freezer life</b><p>6–9 months at -18°C, so you can stock up and waste less.</p></div>
+<div><b>Easy portions</b><p>12 pieces per carton for petit gâteaux. Take out only what you sell.</p></div>
+<div><b>Local &amp; reliable</b><p>Made in Larkin and delivered frozen by car across the JB area.</p></div></div>
+<div class="gl"><h3>at a glance</h3>{''.join('<div><span>%s</span><b>%s</b></div>' % (e(g['k']), e(g['v'])) for g in glance)}</div>
+</div></section>
+
+<section class="pg"><div class="in">
+<p class="kick">the range</p><h2>{e(t['catPg']).capitalize()}</h2>
+<div class="grid">{''.join(card(p) for p in pg)}</div>
+</div></section>
+
+<section class="pg"><div class="in">
+{('<p class="kick">seasonal</p><h2>Christmas 2026</h2><p class="sub2">' + e(t['xmS']) + '</p><div class="grid g3">' + ''.join(card(p) for p in xm) + '</div>') if xm else ''}
+{('<p class="kick">' + ('also from our kitchen' if xm else 'the range') + '</p><h2>' + e(t['catBk']).capitalize() + '</h2><div class="grid g2">' + ''.join(card(p, True) for p in bk) + '</div>') if bk else ''}
+<p class="note">Photos show the real products. Specifications per carton; weights are approximate.</p>
+</div></section>
+
+<section class="pg blue"><div class="in">
+<p class="kick">how it works</p><h2>From our kitchen to your counter</h2>
+<div class="steps">{''.join('<div><div class="n">%d</div><h3>%s</h3><p>%s</p></div>' % (i + 1, a, b) for i, (a, b) in enumerate(steps))}</div>
+<div class="tips"><h3>Good to know</h3><ul>
+<li>Keep frozen at -18°C. Thaw in the chiller before serving.</li>
+<li>Delivery dates: Monday to Friday, across the Johor Bahru area.</li>
+<li>Pay online by FPX, card, GrabPay or DuitNow QR. Invoice and receipt on WhatsApp.</li>
+<li>Track every order at <a href="{U('/track/')}">bekufrozen.com/track</a>.</li></ul></div>
+</div></section>
+
+<section class="pg contact"><div class="in">
+<p class="kick">let's talk</p><h2>Start with a sample box.</h2>
+<p class="big">See the full range, order online or ask us anything. We reply on WhatsApp.</p>
+<div class="cta">
+<a class="b" href="{U('/')}"><small>Website</small>bekufrozen.com</a>
+<a class="b" href="{U('/order/')}"><small>Order online</small>bekufrozen.com/order</a>
+<a class="b wa" href="{wa_link}"><small>WhatsApp</small>{phone}</a>
+<a class="b" href="mailto:{e(EMAIL)}"><small>Email</small>{e(EMAIL)}</a></div>
+<div class="qr"><img src="/img/qr-intro.svg" alt="QR code to bekufrozen.com"><p>Scan to visit<br><b>bekufrozen.com</b></p></div>
+<p class="addr">{e(ADDR)}</p>
+<p class="co">beku° is a brand of Chaleur Atelier F&amp;B Sdn. Bhd. (202501028873) · Pork, lard &amp; alcohol free · No additives</p>
+</div></section>
+<script src="/wa.js" defer></script>
+</body></html>
+"""
+
+
+os.makedirs(os.path.join(ROOT, 'intro'), exist_ok=True)
+with open(os.path.join(ROOT, 'intro', 'index.html'), 'w', encoding='utf-8') as f:
+    f.write(intro_page())
 print('built', len(prods), 'products, share', share_path)
 
 # Online order page + Track my order (static pages; prices load live from Bukku through the bot web app)

@@ -1,0 +1,103 @@
+/* beku° introduction (web + print/PDF). BEKU design: Fredoka + DM Sans, baby blue #cbe9f8, navy #17558c, cream #fffdfa */
+:root{--blue:#cbe9f8;--navy:#17558c;--cream:#fffdfa;--ink:#24364a;--mute:#5d7084}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:#e9f4fb;color:var(--ink);font:400 15px/1.55 "DM Sans",system-ui,sans-serif}
+h1,h2,h3,.kick{font-family:"Fredoka","DM Sans",sans-serif;color:var(--navy);margin:0}
+a{color:var(--navy)}
+.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:10px 18px;background:var(--cream);border-bottom:2px solid var(--blue);font:600 15px "Fredoka",sans-serif;color:var(--navy)}
+.bar span{flex:1}.bar img{display:block;border-radius:50%}
+.bar .dl{background:var(--navy);color:#fff;text-decoration:none;padding:8px 16px;border-radius:999px;font-size:14px}
+
+/* one "page" = one A4 sheet in the PDF; on screen stacked cards */
+.pg{width:210mm;min-height:297mm;margin:22px auto;background:var(--cream);border-radius:18px;box-shadow:0 8px 30px rgba(23,85,140,.12);overflow:hidden;position:relative}
+.in{padding:20mm 18mm 18mm}
+.kick{display:inline-block;font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:lowercase;background:var(--blue);padding:3px 12px;border-radius:999px;margin-bottom:10px}
+h2{font-size:34px;line-height:1.1;margin-bottom:14px}
+h3{font-size:18px;line-height:1.2}
+p{margin:0 0 10px}
+.big{font-size:17px;line-height:1.6}
+
+/* cover */
+.cover{background:var(--blue);display:flex}
+.cv{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18mm 16mm}
+.cv .lg{width:92px;height:92px;border-radius:50%;background:#fff;box-shadow:0 4px 14px rgba(23,85,140,.18)}
+.cv .kick{background:#fff;margin:22px 0 4px}
+.cv h1{font-size:110px;line-height:1;letter-spacing:-.02em}
+.lead{font:600 22px/1.35 "Fredoka",sans-serif;color:var(--navy);max-width:130mm;margin:10px auto 0}
+.fan{position:relative;height:86mm;width:176mm;margin:12mm auto 6mm}
+.fan img{position:absolute;width:56mm;height:56mm;object-fit:contain;border-radius:50%;background:#fff;padding:3mm;box-shadow:0 8px 22px rgba(23,85,140,.2);
+  top:calc(14mm + (var(--i) - 2) * (var(--i) - 2) * 3.4mm);left:calc(var(--i) * 30mm);transform:rotate(calc((var(--i) - 2) * 6deg))}
+.by{font-size:15px;color:var(--navy);margin-top:4mm}
+.url{font:700 22px "Fredoka",sans-serif;margin-top:4mm}
+.url a{text-decoration:none;background:var(--navy);color:#fff;padding:8px 22px;border-radius:999px}
+
+/* about */
+.prom{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}
+.prom span{background:var(--navy);color:#fff;font:600 13.5px "Fredoka",sans-serif;padding:6px 14px;border-radius:999px}
+.why{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.why div{background:#fff;border:2px solid var(--blue);border-radius:14px;padding:12px 14px}
+.why b{font:600 16px "Fredoka",sans-serif;color:var(--navy)}.why p{margin:4px 0 0;font-size:14px;color:var(--mute)}
+.gl{background:var(--blue);border-radius:16px;padding:14px 18px}
+.gl h3{margin-bottom:6px}
+.gl div{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dashed rgba(23,85,140,.25);font-size:14.5px}
+.gl div:last-child{border:0}.gl span{color:var(--mute)}.gl b{color:var(--navy);text-align:right}
+
+/* products */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
+.pc{display:flex;gap:12px;align-items:flex-start;background:#fff;border:2px solid var(--blue);border-radius:16px;padding:10px 12px}
+.ball{flex:none;width:30mm;height:30mm;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ball img{width:92%;height:92%;object-fit:contain}
+.pt{min-width:0}.pt h3{font-size:17px;margin:2px 0 3px}
+.tg{display:inline-block;font:600 10.5px "DM Sans",sans-serif;letter-spacing:.04em;text-transform:uppercase;color:var(--navy);background:var(--blue);padding:2px 8px;border-radius:999px}
+.pf{font-weight:700;font-size:13.5px;margin:0 0 3px;color:var(--ink)}
+.ly{font-size:12.5px;color:var(--mute);margin:0 0 4px;line-height:1.4}
+.sp{font:600 11.5px "DM Sans",sans-serif;color:var(--navy);margin:0;letter-spacing:.03em}
+.g3{grid-template-columns:1fr 1fr 1fr;margin-bottom:12mm}
+.g3 .pc{flex-direction:column;align-items:center;text-align:center}
+.g3 .ball{width:36mm;height:36mm}
+.g2 .pc.big .ball{width:36mm;height:36mm}
+.sub2{margin:-6px 0 12px;color:var(--mute)}
+.note{font-size:12px;color:var(--mute);margin-top:10mm}
+
+/* how it works */
+.blue{background:var(--navy);color:#eaf5fc}
+.blue h2,.blue h3{color:#fff}.blue .kick{background:var(--blue);color:var(--navy)}
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 18px}
+.steps div{background:rgba(255,255,255,.08);border:2px solid rgba(203,233,248,.35);border-radius:16px;padding:14px 16px}
+.steps .n{width:34px;height:34px;border-radius:50%;background:var(--blue);color:var(--navy);font:700 18px "Fredoka",sans-serif;display:flex;align-items:center;justify-content:center;margin-bottom:8px;padding:0;border:0}
+.steps p{font-size:14.5px;margin:6px 0 0}
+.tips{background:var(--cream);color:var(--ink);border-radius:16px;padding:14px 18px}
+.tips h3{color:var(--navy);margin-bottom:6px}.tips ul{margin:0;padding-left:20px}.tips li{margin:4px 0;font-size:14.5px}
+
+/* contact */
+.contact{background:var(--blue)}
+.cta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0 16px}
+.cta .b{display:block;background:#fff;border-radius:16px;padding:14px 16px;text-decoration:none;font:600 19px "Fredoka",sans-serif;color:var(--navy);border:2px solid #fff;word-break:break-word}
+.cta .b small{display:block;font:500 12px "DM Sans",sans-serif;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.cta .b.wa{background:var(--navy);color:#fff}.cta .b.wa small{color:#cbe9f8}
+.qr{display:flex;align-items:center;gap:16px;background:#fff;border-radius:16px;padding:12px 16px;width:max-content;margin-bottom:14px}
+.qr img{width:34mm;height:34mm}.qr p{margin:0;font:500 15px "DM Sans",sans-serif;color:var(--navy)}.qr b{font:700 20px "Fredoka",sans-serif}
+.addr{font-size:14px;color:var(--navy)}
+.co{font-size:12px;color:var(--mute);margin-top:6mm}
+
+/* phones: pages become normal full-width sections */
+@media screen and (max-width:860px){
+  .pg{width:auto;min-height:0;margin:12px;border-radius:16px}
+  .in{padding:22px 18px}
+  .cv{padding:30px 16px}.cv h1{font-size:72px}
+  .fan{width:100%;height:150px}.fan img{width:96px;height:96px;left:calc(var(--i) * 19%);top:calc(20px + (var(--i) - 2) * (var(--i) - 2) * 6px)}
+  .grid,.g2,.g3,.why,.steps,.cta{grid-template-columns:1fr}
+  .ball{width:84px;height:84px}.g3 .ball,.g2 .pc.big .ball{width:100px;height:100px}
+  h2{font-size:28px}
+}
+
+/* print / PDF: one A4 page per section, no screen chrome */
+@page{size:A4;margin:0}
+@media print{
+  body{background:none}
+  .bar,.wafab{display:none!important}
+  .pg{margin:0;border-radius:0;box-shadow:none;height:297mm;min-height:297mm;page-break-after:always;break-after:page}
+  .pg:last-of-type{page-break-after:auto;break-after:auto}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
