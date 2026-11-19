@@ -101,3 +101,81 @@ p{margin:0 0 10px}
   .pg:last-of-type{page-break-after:auto;break-after:auto}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+
+/* ---- brand kit elements (19 Nov 23:31) ---- */
+.ic{display:inline-block;width:1.25em;height:1.25em;vertical-align:-.25em;margin-right:.45em;background:currentColor;-webkit-mask:var(--u) center/contain no-repeat;mask:var(--u) center/contain no-repeat;flex:none}
+.wm{display:block;height:100%}.wm-l{display:none}
+.dark .wm{display:none}.dark .wm-l{display:block}
+.barwm{height:22px}.bar span{font-weight:500;color:var(--mute)}
+.pg{display:flex;flex-direction:column}.pg>.in,.pg>.cv{flex:1}
+.pfoot{display:flex;justify-content:space-between;align-items:center;padding:0 18mm 9mm;font:700 10px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--navy)}
+.pfoot .wm{height:18px;width:auto}
+.temp{display:inline-flex;align-items:center;gap:6px;background:#2a1e2e;color:#fff;font:700 12px "DM Sans",sans-serif;letter-spacing:.04em;padding:4px 11px 4px 6px;border-radius:999px;vertical-align:middle}
+.temp b{width:12px;height:12px;border-radius:50%;border:3px solid #8fcdf0}
+.mascot{width:96px;height:96px;border-radius:50%;background:#fff;box-shadow:0 4px 14px rgba(23,85,140,.18)}
+.mascot.sm{width:70px;height:70px;float:right}
+.cv h1{height:96px;margin:18px 0 8px}.cv h1 .wm{height:96px;width:auto;margin:0 auto}
+.tagl{font:600 24px "Fredoka",sans-serif;color:var(--navy);margin:0}
+.lead{font:500 17px/1.45 "DM Sans",sans-serif}
+.cvb{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:4mm}
+.pill{display:inline-flex;align-items:center;background:#fff;color:var(--navy);font:600 13px "Fredoka",sans-serif;padding:5px 12px;border-radius:999px}
+.url a{display:inline-flex;align-items:center}
+.prom span{display:inline-flex;align-items:center}
+.why div{display:block}.why .ic{width:26px;height:26px;color:var(--navy);display:block;margin:0 0 6px}
+.gl h3{display:flex;align-items:center;gap:8px}.mk{width:26px;height:26px}
+.gl span{display:flex;align-items:center}.gl .ic{color:var(--navy)}
+.sub2 .temp{margin-right:8px}
+/* product cards take the product's own colour (tonal pair) */
+.pc{background:var(--pbg);border-color:transparent}
+.pc .ball{background:#fff!important;position:relative;overflow:visible}
+.pc h3{color:var(--pink)!important}.pc .sp{color:var(--pink)}
+.stk{position:absolute;left:-4px;bottom:-6px;background:var(--pink);color:#fff;font:700 9px "DM Sans",sans-serif;letter-spacing:.05em;padding:3px 7px;border-radius:6px;transform:rotate(-4deg);white-space:nowrap}
+.tg{display:none}
+.xm .kick .ic{margin-right:.3em}
+.steps .ic{width:28px;height:28px;display:block;margin:0 0 6px;color:var(--blue)}
+.steps .n{float:right;margin:0}
+.tips li{list-style:none;display:flex;align-items:flex-start;gap:4px}.tips ul{padding:0}.tips .ic{color:var(--navy);margin-top:2px}
+.cta .b{position:relative;padding-left:52px}.cta .b .ic{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:24px;height:24px;margin:0}
+.qr .mk{width:40px;height:40px;margin-left:8px}
+.addr{display:flex;align-items:center}
+.dots{position:absolute;inset:auto 0 0 0;height:38mm;background-image:radial-gradient(#8fcdf0 2.2px,transparent 2.6px);background-size:16px 16px;opacity:.55;pointer-events:none}
+.cover .dots{top:0;bottom:auto;height:30mm}
+.cover .cv,.contact .in{position:relative}
+.how{background:var(--navy);color:#eaf5fc}.how h2,.how h3{color:#fff}.how .kick{background:var(--blue);color:var(--navy)}
+.how .pfoot{color:var(--blue)}.how .wm{display:none}.how .wm-l{display:block}
+/* sample box offer (Alfred 19 Nov 23:43: "sample box can include price") */
+.smp{display:flex;align-items:center;gap:14px;background:var(--navy);color:#fff;text-decoration:none;border-radius:18px;padding:14px 18px;margin:0 0 14px}
+.smp .sp1{flex:none;width:52px;height:52px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center}.smp .sp1 .ic{width:28px;height:28px;color:var(--navy)}
+.smp .sp2{flex:1;min-width:0}.smp small{display:block;font:600 12px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+.smp b{display:block;font:600 24px/1.15 "Fredoka",sans-serif;color:#fff}.smp em{display:block;font-style:normal;font-size:13px;color:#cbe9f8;margin-top:3px}
+.smp .sp3{flex:none;background:var(--blue);color:var(--navy);font:600 14px "Fredoka",sans-serif;padding:8px 14px;border-radius:999px}
+.sbadge{position:absolute;right:16mm;top:16mm;z-index:2;width:34mm;height:34mm;border-radius:50%;background:var(--navy);color:#fff;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(8deg);font:700 30px/1 "Fredoka",sans-serif;box-shadow:0 6px 16px rgba(23,85,140,.25)}
+.sbadge small{font:600 10px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:3px}.sbadge i{font:500 11px "DM Sans",sans-serif;font-style:normal;color:#cbe9f8;margin-top:3px}
+@media screen and (max-width:860px){.sbadge{width:86px;height:86px;font-size:22px;right:12px;top:12px}.smp{flex-wrap:wrap}}
+svg.ic{background:none;-webkit-mask:none;mask:none;overflow:visible}
+.pc .ball img{border-radius:50%}
+/* ===== Design 6 · Split Magazine (Alfred chose 19 Nov 23:51) — print + desktop; phones keep the simple stacked layout ===== */
+@media print, screen and (min-width:861px){
+.pg{background:#eaf6fd}
+.pg.cover{background:linear-gradient(90deg,#17558c 0 55%,#cbe9f8 55%)}.cover .dots{display:none}
+.cv{display:grid;grid-template-columns:55% 45%;grid-auto-rows:min-content;align-content:center;text-align:left;justify-items:start;padding:18mm 0 18mm 14mm;column-gap:0}
+.cv>*{grid-column:1}.cv>p,.cv>h1,.cv>.cvb{padding-right:10mm}
+.cv .wm{display:none}.cv .wm-l{display:block}.cv h1{font-size:96px}.tagl{color:#fff}.cv .lead{color:#cbe9f8;margin-left:0}.cv .by{color:#cbe9f8}.cv .by b{color:#fff}
+.cv .url a{background:#cbe9f8;color:#17558c}.cv .pill{background:rgba(255,255,255,.12);color:#fff}.cvb{justify-content:flex-start}
+.fan{grid-column:2;grid-row:1/span 9;width:auto;height:auto;margin:0;padding:0;display:flex;flex-direction:column;gap:5mm;align-items:center;justify-self:center}
+.fan img{position:static;transform:none;width:44mm;height:44mm}.fan img:nth-child(odd){transform:translateX(-9mm)}.fan img:nth-child(even){transform:translateX(9mm)}
+.sbadge{left:auto;right:12mm;top:auto;bottom:16mm;background:#cbe9f8;color:#17558c;box-shadow:0 0 0 3px #17558c}.sbadge small,.sbadge i{color:#17558c}
+h2{font-size:44px;text-transform:lowercase}
+.about .in{padding-top:16mm;padding-bottom:10mm}.about .why{gap:9px;margin-bottom:12px}.about .prom{margin:10px 0 12px}
+.range .grid{grid-template-columns:1fr;gap:7px}.range .pc{align-items:center;padding:6px 16px 6px 8px;border:0;border-radius:18px}.range .ball{width:27mm;height:27mm;background:#fff}
+.range .ly{display:none}.range .pt{display:grid;grid-template-columns:1fr auto;column-gap:14px;flex:1}.range .pt h3{grid-column:1}.range .pf{grid-column:1}.range .sp{grid-column:2;grid-row:1/3;align-self:center;text-align:right;max-width:46mm}
+.why div,.gl{border:0}
+.how .steps{grid-template-columns:1fr;gap:0;padding-left:16px;margin-top:16px}
+.how .steps>div{border:0;border-left:3px dashed rgba(203,233,248,.6);border-radius:0;background:none;padding:4px 0 22px 34px;position:relative}
+.how .steps>div:last-child{border-left-color:transparent}
+.how .steps .n{position:absolute;left:-18px;top:0;float:none;width:34px;height:34px;margin:0;background:#cbe9f8;color:#17558c;z-index:2}
+.how .steps .ic{display:none}.how .steps h3{font-size:21px}.how .steps p{font-size:15.5px}
+.how .tips h3{color:#17558c}.how .tips{margin-top:8px}
+.pg.how{background:#17558c;color:#eaf5fc}
+.range .in{padding-top:16mm;padding-bottom:8mm}.range .ball{width:25mm;height:25mm}.range .grid{gap:6px}
+}
