@@ -176,7 +176,7 @@ def page(lang):
 <meta property="og:type" content="website"><meta property="og:site_name" content="beku°"><meta property="og:title" content="{e(stitle)}"><meta property="og:description" content="{e(stext)}"><meta property="og:url" content="{SITE}{x['path']}">
 <meta property="og:image" content="{SITE}{share_path}?v={sv}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="beku° frozen desserts">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{e(stitle)}"><meta name="twitter:description" content="{e(stext)}"><meta name="twitter:image" content="{SITE}{share_path}?v={sv}">
-<link rel="icon" href="/img/favicon.png" type="image/png"><link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/img/favicon-192.png" type="image/png" sizes="192x192"><link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
@@ -322,7 +322,7 @@ def intro_page():
 <title>beku° · Introduction · Frozen petit gâteaux &amp; bakes for cafés in Johor Bahru</title>
 <meta name="description" content="Introduction to beku°: frozen petit gâteaux and bakes for cafés, restaurants and hotels in Johor Bahru, by the pastry team behind Chaleur Atelier Pâtisserie. Pork, lard &amp; alcohol free.">
 <link rel="canonical" href="{SITE}/intro/"><meta property="og:title" content="beku° · Introduction"><meta property="og:image" content="{SITE}{share_path}">
-<link rel="icon" href="/img/favicon.png" type="image/png">
+<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/img/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/intro/intro.css">
@@ -379,7 +379,7 @@ def clients_page():
 <title>Our clients &amp; our work · beku° frozen desserts, Johor Bahru</title>
 <meta name="description" content="Cafés, restaurants, hotels and brands served by the Chaleur Atelier pastry team, the makers of beku° frozen petit gâteaux and bakes in Johor Bahru. Pork, lard and alcohol free.">
 <link rel="canonical" href="{SITE}/clients/"><meta property="og:title" content="beku° · Our clients &amp; our work"><meta property="og:image" content="{SITE}{share_path}">
-<link rel="icon" href="/img/favicon.png" type="image/png">
+<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/img/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/clients/clients.css">
