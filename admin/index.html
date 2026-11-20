@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#cbe9f8;--navy:#17558c;--ink:#1d2b3a;--mute:#5f6f80;--line:#d9e6ef;--bg:#f4f9fc;--ok:#1f8a4c;--warn:#c0392b}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.5 'DM Sans',system-ui,sans-serif;color:var(--ink);background:var(--bg);padding-bottom:110px}
+h1,h2,h3{font-family:Fredoka,sans-serif;color:var(--navy);margin:0}
+.top{background:var(--blue);padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5;box-shadow:0 2px 8px #17558c22}
+.top img{width:44px;height:44px;border-radius:50%}
+.top h1{font-size:22px;flex:1}
+.top a{color:var(--navy);font-weight:700;text-decoration:none;background:#fff;border-radius:999px;padding:7px 14px;font-size:14px;white-space:nowrap}
+.wrap{max-width:900px;margin:0 auto;padding:16px}
+.intro{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:14px;color:var(--mute)}
+.intro b{color:var(--ink)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.tab{border:2px solid var(--navy);background:#fff;color:var(--navy);border-radius:999px;padding:9px 16px;font:600 16px Fredoka,sans-serif;cursor:pointer}
+.tab.on{background:var(--navy);color:#fff}
+.langs{display:flex;gap:6px;align-items:center;margin:0 0 14px;flex-wrap:wrap}
+.langs span{color:var(--mute);font-size:14px;margin-right:4px}
+.lg{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-weight:700;cursor:pointer;color:var(--ink)}
+.lg.on{background:var(--blue);border-color:var(--navy);color:var(--navy)}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px}
+.card h2{font-size:21px;margin-bottom:4px}
+.card .why{color:var(--mute);font-size:14px;margin:0 0 14px}
+label{display:block;font-weight:700;margin:14px 0 4px}
+label small{font-weight:400;color:var(--mute)}
+input[type=text],textarea,select{width:100%;font:16px 'DM Sans',sans-serif;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;color:var(--ink)}
+input[type=text]:focus,textarea:focus,select:focus{outline:none;border-color:var(--navy)}
+textarea{min-height:80px;resize:vertical}
+.count{font-size:13px;color:var(--mute);text-align:right;margin-top:2px}
+.count.bad{color:var(--warn);font-weight:700}
+.gprev{border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:16px;background:#fff;font-family:Arial,sans-serif}
+.gprev .site{display:flex;align-items:center;gap:8px;font-size:14px;color:#202124}
+.gprev .site img{width:26px;height:26px;border-radius:50%;background:#eef}
+.gprev .site small{display:block;color:#4d5156;font-size:12px}
+.gprev .t{color:#1a0dab;font-size:20px;line-height:1.3;margin:6px 0 3px}
+.gprev .d{color:#4d5156;font-size:14px}
+.ptitle{font-size:13px;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;margin-top:16px}
+.wa{background:#e5ddd5;border-radius:14px;padding:14px;margin-top:8px}
+.bubble{background:#dcf8c6;border-radius:10px;max-width:340px;margin-left:auto;padding:4px;box-shadow:0 1px 1px #0002}
+.bubble .lp{background:#cfe9ba;border-radius:8px;overflow:hidden}
+.bubble .lp img{width:100%;aspect-ratio:1200/630;object-fit:cover;display:block;background:#fff}
+.bubble .lp .tx{padding:6px 8px;font-family:Arial,sans-serif}
+.bubble .lp b{display:block;font-size:14px;color:#111}
+.bubble .lp p{margin:2px 0;font-size:12px;color:#555;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bubble .lp small{font-size:12px;color:#777}
+.bubble .msg{padding:6px 6px 2px;font-family:Arial,sans-serif;font-size:14px;color:#027eb5}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn{border:0;border-radius:999px;padding:10px 18px;font:600 16px Fredoka,sans-serif;cursor:pointer;background:var(--navy);color:#fff}
+.btn.light{background:var(--blue);color:var(--navy)}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+.btn.small{padding:6px 12px;font-size:14px}
+.btn:disabled{opacity:.5;cursor:default}
+.hint{font-size:14px;color:var(--mute);margin:6px 0 0}
+.prod{border:1.5px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px}
+.prod.off{opacity:.55}
+.prod .head{display:flex;gap:14px;align-items:center}
+.prod .ph{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden}
+.prod .ph img{max-width:84px;max-height:84px}
+.prod .nm{flex:1;min-width:0}
+.prod .nm h3{font-size:19px;word-break:break-word}
+.prod .nm small{color:var(--mute)}
+.prod details{margin-top:10px}
+.prod summary{cursor:pointer;color:var(--navy);font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}.top h1{font-size:18px}}
+.switch{display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer;margin-top:10px}
+.switch input{width:22px;height:22px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px;justify-content:center;z-index:6;box-shadow:0 -2px 10px #17558c18}
+.bar .st{color:var(--mute);font-size:14px;max-width:520px}
+.bar .st.dirty{color:var(--warn);font-weight:700}
+.bar .st.ok{color:var(--ok);font-weight:700}
+.bar .btn{font-size:18px;padding:12px 28px}
+.hide{display:none}
+.loading{text-align:center;padding:60px;color:var(--mute);font-size:18px}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:10px 0 4px}
+.sum div{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.sum span{display:block;font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em}
+.sum b{font:700 22px Fredoka,sans-serif;color:var(--navy)}
+.sum small{display:block;color:var(--mute);font-size:12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-weight:700;cursor:pointer;color:var(--ink);font-size:14px}
+.chip.on{background:var(--blue);border-color:var(--navy);color:var(--navy)}
+.chips input[type=text]{width:auto;flex:1;min-width:140px;padding:7px 12px}
+.otab{width:100%;border-collapse:collapse;font-size:14px}
+.otab th{text-align:left;color:var(--mute);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em;padding:8px 6px;border-bottom:1px solid var(--line)}
+.otab td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.otab td.no{white-space:nowrap;font-weight:700;color:var(--navy)}
+.otab td.amt{white-space:nowrap;text-align:right;font-weight:700}
+.pill{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;white-space:nowrap}
+.pill.paid{background:#e3f6ea;color:var(--ok)}.pill.unpaid{background:#fdecea;color:var(--warn)}.pill.off{background:#eef1f4;color:var(--mute)}.pill.web{background:var(--blue);color:var(--navy)}
+.mtab{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.mtab th,.mtab td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:right}
+.mtab th:first-child,.mtab td:first-child{text-align:left}
+.mtab th{color:var(--mute);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+@media(max-width:640px){.otab thead{display:none}.otab tr{display:block;border-bottom:2px solid var(--line);padding:8px 0}.otab td{display:block;border:0;padding:2px 4px}.otab td.amt{text-align:left}.otab td:before{content:attr(data-l);color:var(--mute);font-size:12px;text-transform:uppercase;margin-right:6px}}
+.vt{width:100%;border-collapse:collapse;font-size:14px}.vt td{padding:5px 6px;border-bottom:1px solid #eef3f7;vertical-align:middle}.vt td:first-child{max-width:260px;word-break:break-word}
+.vb{width:40%}.vb i{display:block;height:10px;border-radius:6px;background:#17558c;min-width:2px}.vn{text-align:right;white-space:nowrap;font-weight:700;color:#17558c}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}.vgrid .card{margin:0}
+</style>
+<title>beku° admin</title><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#17558c"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="/admin/manifest.webmanifest"><link rel="icon" href="/img/favicon-192.png" sizes="192x192"><link rel="apple-touch-icon" href="/admin/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="beku admin"><script src="https://accounts.google.com/gsi/client" async defer></script><style>#gate{position:fixed;inset:0;z-index:50;background:#f4f9fc;display:flex;align-items:center;justify-content:center;padding:24px}#gate.hide{display:none}#gate .card{background:#fff;border-radius:24px;padding:30px 26px;max-width:380px;width:100%;text-align:center;box-shadow:0 6px 24px #17558c22}#gate img{width:86px;height:86px;border-radius:50%;box-shadow:0 0 0 4px #cbe9f8}#gate h1{margin:14px 0 6px}#gate p{color:#5f6f80;margin:6px 0 18px}#gbtn{display:flex;justify-content:center;min-height:44px}#gmsg{color:#c0392b;font-weight:500;min-height:1.4em;margin-top:14px}#so{margin-left:auto;background:#fff;border:0;border-radius:999px;padding:6px 12px;font:600 13px Fredoka,sans-serif;color:#17558c;cursor:pointer}.top a{white-space:nowrap}</style></head>
+<body><div id="gate"><div class="card"><img src="/img/beku-logo-256.webp" alt=""><h1>beku° admin</h1><p>Sign in with your Google account to edit the website and see orders.</p><div id="gbtn"></div><div id="gmsg"></div></div></div>
+<div class="top"><img src="https://bekufrozen.com/img/beku-logo-256.webp" alt=""><h1>beku° website admin</h1><a href="https://bekufrozen.com" target="_blank">Open my website ↗</a><button id="so" type="button">Sign out</button></div>
+<div class="wrap">
+  <div id="loading" class="loading">Loading your website settings…</div>
+  <div id="app" class="hide">
+    <div class="intro">Change anything below, then press <b>Save</b> at the bottom. Your website updates <b>by itself in about 10–15 minutes</b>. Nothing changes on the website until you save. Every save is kept, so mistakes can be undone.</div>
+    <div class="tabs">
+      <button class="tab on" data-tab="google">🔎 Google &amp; sharing</button>
+      <button class="tab" data-tab="products">🍰 Products</button>
+      <button class="tab" data-tab="home">🏠 Homepage text</button>
+      <button class="tab" data-tab="contact">📞 Contact</button>
+      <button class="tab" data-tab="orders">📦 Orders &amp; sales</button>
+      <button class="tab" data-tab="visits">📈 Visitors</button>
+    </div>
+    <div class="langs" id="langs"><span>Language you are editing:</span>
+      <button class="lg on" data-lang="en">English</button><button class="lg" data-lang="zh">中文</button><button class="lg" data-lang="ms">Bahasa Melayu</button>
+    </div>
+
+    <!-- GOOGLE & SHARING -->
+    <section id="t-google">
+      <div class="card">
+        <h2>How you look on Google</h2>
+        <p class="why">This is what people see in Google search results. Keep the title short and put your most important words first.</p>
+        <label>Page title <small>(best under 60 letters)</small></label>
+        <input type="text" id="seo-title"><div class="count" id="c-title"></div>
+        <label>Description <small>(the grey text under the title, best under 160 letters)</small></label>
+        <textarea id="seo-desc"></textarea><div class="count" id="c-desc"></div>
+        <label>Search words <small>(what customers type in Google, separated by commas)</small></label>
+        <textarea id="seo-keywords"></textarea>
+        <p class="hint">Example: cake supplier JB, frozen dessert supplier, 蛋糕批发. Google mainly reads the title, description and the words on your page, so also use these words in the "keyword section" below.</p>
+        <div class="ptitle">Preview on Google</div>
+        <div class="gprev"><div class="site"><img src="https://bekufrozen.com/img/favicon.png" alt=""><div>beku°<small>https://bekufrozen.com</small></div></div><div class="t" id="g-t"></div><div class="d" id="g-d"></div></div>
+      </div>
+
+      <div class="card">
+        <h2>When someone shares your link</h2>
+        <p class="why">The picture and text that appear when bekufrozen.com is sent on WhatsApp, Facebook, Instagram or Telegram.</p>
+        <div class="row">
+          <button class="btn light" id="share-pick">📷 Change picture</button>
+          <button class="btn ghost small" id="share-default">Use the beku° default picture</button>
+          <input type="file" accept="image/*" id="share-file" class="hide">
+        </div>
+        <p class="hint">Use a wide (landscape) photo. We cut it to the right size (1200 × 630) for you; the middle part is kept.</p>
+        <label>Share title <small>(leave empty to use the Google title)</small></label>
+        <input type="text" id="seo-shareTitle">
+        <label>Share text <small>(leave empty to use the Google description)</small></label>
+        <textarea id="seo-shareText"></textarea>
+        <div class="ptitle">Preview in WhatsApp</div>
+        <div class="wa"><div class="bubble"><div class="lp"><img id="w-img" alt=""><div class="tx"><b id="w-t"></b><p id="w-d"></p><small>bekufrozen.com</small></div></div><div class="msg">https://bekufrozen.com</div></div></div>
+        <p class="hint">WhatsApp and Facebook remember old previews for a while. A new picture can take a day to show on links you already sent.</p>
+      </div>
+
+      <div class="card">
+        <h2>Keyword section on your page</h2>
+        <p class="why">A short paragraph on the website that tells Google what you sell. Put <b>**two stars**</b> around words to make them bold.</p>
+        <label>Heading</label><input type="text" id="seo-heading">
+        <label>Text <small>(leave an empty line between paragraphs)</small></label><textarea id="seo-text" style="min-height:150px"></textarea>
+        <label>Keyword labels <small>(small blue pills, separated by commas)</small></label><textarea id="seo-chips"></textarea>
+      </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section id="t-products" class="hide">
+      <div class="card">
+        <h2>Products on the website</h2>
+        <p class="why">Change a name, photo or description, hide a product, or change the order. Prices are never shown on the website. Photos look best as a cut-out (no background, PNG).</p>
+        <div id="plist"></div>
+        <button class="btn light" id="padd">＋ Add a new product</button>
+      </div>
+    </section>
+
+    <!-- HOMEPAGE -->
+    <section id="t-home" class="hide">
+      <div class="card">
+        <h2>Top banner</h2>
+        <p class="why">The thin red strip at the very top of the website. Good for promotions.</p>
+        <input type="text" id="ribbon">
+      </div>
+      <div class="card">
+        <h2>Big headline</h2>
+        <p class="why">The first thing people read on the website.</p>
+        <label>Small label above the headline</label><input type="text" id="hero-tag">
+        <label>Headline – line 1</label><input type="text" id="hero-h1a">
+        <label>Headline – line 2</label><input type="text" id="hero-h1b">
+        <label>Headline – line 3</label><input type="text" id="hero-h1c">
+        <label>Text under the headline</label><textarea id="hero-sub"></textarea>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="t-contact" class="hide">
+      <div class="card">
+        <h2>Contact details</h2>
+        <p class="why">Used for every WhatsApp button and the bottom of the website (all languages).</p>
+        <label>WhatsApp number <small>(with country code, e.g. 60143490928)</small></label><input type="text" id="c-wa">
+        <label>Email</label><input type="text" id="c-email">
+        <label>Address</label><textarea id="c-addr"></textarea>
+      </div>
+    </section>
+
+    <!-- ORDERS & SALES -->
+    <section id="t-orders" class="hide">
+      <div class="card">
+        <h2>Monthly sales</h2>
+        <p class="why">From the order list (website + WhatsApp orders in the bot sheet). "Sales" = orders marked paid; cancelled and refunded orders are left out. Bukku stays the accounting truth.</p>
+        <div id="o-months"></div>
+      </div>
+      <div class="card">
+        <h2>Orders</h2>
+        <p class="why">Newest first. Website orders carry a BKW number; the invoice number comes from Bukku once it exists.</p>
+        <div class="chips" id="o-chips">
+          <button class="chip on" data-f="all">All</button><button class="chip" data-f="web">Website</button><button class="chip" data-f="unpaid">Unpaid</button><button class="chip" data-f="paid">Paid</button>
+          <input type="text" id="o-q" placeholder="Search customer, order no., item…">
+          <button class="btn ghost small" id="o-refresh">↻ Refresh</button>
+        </div>
+        <div id="o-sum" class="sum"></div>
+        <div id="o-list" class="loading">Loading orders…</div>
+      </div>
+    </section>
+
+    <!-- VISITORS -->
+    <section id="t-visits" class="hide">
+      <div class="card">
+        <h2>Who visits your website</h2>
+        <p class="why">Counted by the website itself: page views, taps, where visitors came from, rough location (from the phone's time zone), device and language. No names, no IP addresses. Your own visits are counted too. Started 19 Nov 2026.</p>
+        <div class="chips" id="v-chips">
+          <button class="chip" data-d="1">Today</button><button class="chip" data-d="7">7 days</button><button class="chip on" data-d="30">30 days</button><button class="chip" data-d="90">90 days</button><button class="chip" data-d="365">1 year</button>
+          <button class="btn ghost small" id="v-refresh">↻ Refresh</button>
+        </div>
+        <div id="v-sum" class="sum"></div>
+      </div>
+      <div id="v-body" class="loading">Loading visits…</div>
+    </section>
+  </div>
+</div>
+<div class="bar"><div class="st" id="status">Loading…</div><button class="btn" id="save" disabled>💾 Save</button></div>
+
+<template id="ptpl">
+  <div class="prod">
+    <div class="head">
+      <div class="ph"><img alt=""></div>
+      <div class="nm"><h3></h3><small></small></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn light small" data-a="photo">📷 Change photo</button>
+      <button class="btn ghost small" data-a="up">↑ Move up</button>
+      <button class="btn ghost small" data-a="down">↓ Move down</button>
+      <input type="file" accept="image/*" class="hide">
+    </div>
+    <label class="switch"><input type="checkbox" data-f="show"> Show on website</label>
+    <div class="grid2">
+      <div><label>Name <small>(all languages)</small></label><input type="text" data-f="name"></div>
+      <div><label>Pieces &amp; weight</label><input type="text" data-f="spec" placeholder="12 PCS / CTN · 120 G ±"></div>
+    </div>
+    <label>Section on the website</label>
+    <select data-f="cat"><option value="xm">Christmas / seasonal</option><option value="pg">Petit gâteaux</option><option value="bk">Bakes</option></select>
+    <label>Layers / description <small class="lgname"></small></label><textarea data-t="0"></textarea>
+    <div class="grid2">
+      <div><label>Taste <small class="lgname"></small></label><input type="text" data-t="1"></div>
+      <div><label>Badge <small>(e.g. BEST SELLER, can be empty)</small> <small class="lgname"></small></label><input type="text" data-t="2"></div>
+    </div>
+  </div>
+</template>
+
+<script>
+/* Google sign-in + API bridge: replaces google.script.run for the app. */
+var GSR=(function(){
+  var API='https://script.google.com/macros/s/AKfycbxNYrq26BteZEz2XrrEHXEv7pvqnn5VDsoULjC1g2Q3JkpZSQNxg8CgQThCnFvCxtfJ6A/exec', CID='383653792650-5c9pt8ss2jfjmn57g19oe191eo0dqoga.apps.googleusercontent.com', KEY='bekuAdminTok', tok=null, waiting=[], gisReady=false;
+  try{ tok=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
+  function valid(){ return tok && tok.exp*1000 > Date.now()+120000; }
+  function gate(show,msg){ document.getElementById('gate').classList.toggle('hide',!show); document.getElementById('gmsg').textContent=msg||''; if(show) initGis(); }
+  function decode(t){ try{ var p=t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'); return JSON.parse(decodeURIComponent(escape(atob(p)))); }catch(e){ return {}; } }
+  function onCred(r){ var c=decode(r.credential); tok={t:r.credential, exp:c.exp||0, email:c.email||''}; try{ localStorage.setItem(KEY,JSON.stringify(tok)); }catch(e){}
+    gate(false); var w=waiting; waiting=[]; w.forEach(function(f){ f(tok.t); }); }
+  function initGis(){
+    if(!window.google || !google.accounts || !google.accounts.id){ setTimeout(initGis,300); return; }
+    if(!gisReady){ gisReady=true; google.accounts.id.initialize({client_id:CID, callback:onCred, auto_select:true, use_fedcm_for_prompt:true, itp_support:true});
+      google.accounts.id.renderButton(document.getElementById('gbtn'),{theme:'filled_blue',size:'large',shape:'pill',text:'signin_with',logo_alignment:'left'}); }
+    try{ google.accounts.id.prompt(); }catch(e){}
+  }
+  function token(){ if(valid()) return Promise.resolve(tok.t); return new Promise(function(res){ waiting.push(res); gate(true); }); }
+  function signOut(){ var em=tok&&tok.email; tok=null; try{ localStorage.removeItem(KEY); }catch(e){}
+    try{ google.accounts.id.disableAutoSelect(); if(em) google.accounts.id.revoke(em,function(){}); }catch(e){} location.reload(); }
+  function call(fn,args,ok,fail,tries){
+    token().then(function(t){ return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({t:t,fn:fn,args:args})}); })
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if(j.ok){ ok&&ok(j.r); return; }
+      if(j.err==='signin' && !(tries>0)){ tok=null; try{ localStorage.removeItem(KEY); }catch(e){} call(fn,args,ok,fail,1); return; }
+      if(j.err==='noaccess'){ tok=null; try{ localStorage.removeItem(KEY); google.accounts.id.disableAutoSelect(); }catch(e){}
+        gate(true,'The account '+(j.email||'')+' has no access. Please sign in with another Google account.'); waiting.push(function(){ call(fn,args,ok,fail); }); return; }
+      var e=new Error(j.err||'Something went wrong'); if(fail) fail(e); else alert(e.message);
+    })
+    .catch(function(e){ e=new Error('No connection – please try again. ('+e.message+')'); if(fail) fail(e); else alert(e.message); });
+  }
+  function runner(ok,fail){ return new Proxy({}, {get:function(_,k){
+    if(k==='withSuccessHandler') return function(f){ return runner(f,fail); };
+    if(k==='withFailureHandler') return function(f){ return runner(ok,f); };
+    return function(){ call(k,[].slice.call(arguments),ok,fail); }; }}); }
+  document.addEventListener('DOMContentLoaded',function(){ var b=document.getElementById('so'); if(b) b.onclick=signOut; if(valid()) gate(false); });
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('/admin/sw.js',{scope:'/admin/'}).catch(function(){});
+  return runner(null,null);
+})();
+</script>
+<script>
+var S=null, LANG='en', TAB='google', dirty=false, busy=false;
+var LN={en:'(English)',zh:'(中文)',ms:'(Bahasa Melayu)'};
+function $(i){return document.getElementById(i)}
+function thumb(p){ if(p&&p.photo) return 'https://drive.google.com/thumbnail?id='+encodeURIComponent(p.photo)+'&sz=w400'; return 'https://bekufrozen.com'+((p&&p.img)||'/img/BK-PG-101.webp'); }
+function setStatus(t,c){var s=$('status'); s.textContent=t; s.className='st'+(c?' '+c:'');}
+function markDirty(){ if(!dirty){dirty=true;} setStatus('You have changes that are not saved yet.','dirty'); $('save').disabled=false; }
+window.addEventListener('beforeunload',function(e){ if(dirty){e.preventDefault(); e.returnValue='';} });
+
+function bindText(id,get,set){ var el=$(id); el.value=get()||''; el.oninput=function(){ set(el.value); markDirty(); refresh(); }; }
+
+function render(){
+  var seo=S.seo[LANG]; ['title','desc','keywords','shareTitle','shareText','heading','text','chips'].forEach(function(k){ bindText('seo-'+k,function(){return seo[k]},function(v){seo[k]=v}); });
+  S.hero=S.hero||{}; S.hero[LANG]=S.hero[LANG]||{}; var h=S.hero[LANG];
+  ['tag','h1a','h1b','h1c','sub'].forEach(function(k){ bindText('hero-'+k,function(){return h[k]},function(v){h[k]=v}); });
+  S.ribbon=S.ribbon||{}; bindText('ribbon',function(){return S.ribbon[LANG]},function(v){S.ribbon[LANG]=v});
+  S.contact=S.contact||{}; bindText('c-wa',function(){return S.contact.whatsapp},function(v){S.contact.whatsapp=v}); bindText('c-email',function(){return S.contact.email},function(v){S.contact.email=v}); bindText('c-addr',function(){return S.contact.address},function(v){S.contact.address=v});
+  renderProducts(); refresh();
+}
+function refresh(){
+  var seo=S.seo[LANG];
+  $('g-t').textContent=seo.title||''; $('g-d').textContent=seo.desc||'';
+  var tl=(seo.title||'').length, dl=(seo.desc||'').length;
+  $('c-title').textContent=tl+' letters'+(tl>60?' – a bit long, Google may cut it':''); $('c-title').className='count'+(tl>60?' bad':'');
+  $('c-desc').textContent=dl+' letters'+(dl>160?' – a bit long, Google may cut it':''); $('c-desc').className='count'+(dl>160?' bad':'');
+  $('w-t').textContent=seo.shareTitle||seo.title||''; $('w-d').textContent=seo.shareText||seo.desc||'';
+  $('w-img').src=S.shareImage?('https://drive.google.com/thumbnail?id='+encodeURIComponent(S.shareImage)+'&sz=w800'):'https://bekufrozen.com/img/share.jpg';
+  $('w-img').onerror=function(){this.onerror=null;this.src='https://bekufrozen.com/img/BK-PG-108.webp';};
+}
+function renderProducts(){
+  var box=$('plist'); box.innerHTML='';
+  S.products.forEach(function(p,i){
+    var n=$('ptpl').content.firstElementChild.cloneNode(true);
+    p.tx=p.tx||{}; p.tx[LANG]=p.tx[LANG]||['','',''];
+    var img=n.querySelector('.ph img'); img.src=thumb(p); n.querySelector('.ph').style.background=p.bg||'#cbe9f8';
+    n.querySelector('h3').textContent=p.name||'New product'; n.querySelector('.nm small').textContent=(p.show===false?'Hidden · ':'')+(p.spec||'');
+    if(p.show===false) n.classList.add('off');
+    n.querySelectorAll('.lgname').forEach(function(x){x.textContent=LN[LANG]});
+    n.querySelectorAll('[data-f]').forEach(function(el){ var f=el.dataset.f;
+      if(f==='show'){ el.checked=p.show!==false; el.onchange=function(){p.show=el.checked; markDirty(); renderProducts();}; return; }
+      el.value=p[f]||(f==='cat'?'pg':''); el.oninput=el.onchange=function(){ p[f]=el.value; markDirty(); if(f==='name') n.querySelector('h3').textContent=el.value; };
+    });
+    n.querySelectorAll('[data-t]').forEach(function(el){ var k=+el.dataset.t; el.value=p.tx[LANG][k]||''; el.oninput=function(){ p.tx[LANG][k]=el.value; markDirty(); }; });
+    var file=n.querySelector('input[type=file]');
+    n.querySelector('[data-a=photo]').onclick=function(){file.click();};
+    file.onchange=function(){ if(!file.files[0])return; upload(file.files[0],1200,function(id){ p.photo=id; markDirty(); renderProducts(); }); };
+    n.querySelector('[data-a=up]').onclick=function(){ if(i>0){ S.products.splice(i-1,0,S.products.splice(i,1)[0]); markDirty(); renderProducts(); } };
+    n.querySelector('[data-a=down]').onclick=function(){ if(i<S.products.length-1){ S.products.splice(i+1,0,S.products.splice(i,1)[0]); markDirty(); renderProducts(); } };
+    box.appendChild(n);
+  });
+}
+function upload(file,max,done){
+  setStatus('Uploading the picture… please wait.');
+  var r=new FileReader();
+  r.onload=function(){
+    var im=new Image();
+    im.onload=function(){
+      var s=Math.min(1,max/Math.max(im.width,im.height)), c=document.createElement('canvas');
+      c.width=Math.round(im.width*s); c.height=Math.round(im.height*s); c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      var png=/png|webp/i.test(file.type), data=c.toDataURL(png?'image/png':'image/jpeg',0.9);
+      GSR.withSuccessHandler(function(res){ done(res.id); setStatus('Picture added. Press Save to put it on the website.','dirty'); })
+        .withFailureHandler(function(e){ setStatus('The picture could not be uploaded: '+e.message,'dirty'); }).uploadPhoto(file.name,data);
+    };
+    im.onerror=function(){ setStatus('This file is not a picture I can read. Try a JPG or PNG.','dirty'); };
+    im.src=r.result;
+  };
+  r.readAsDataURL(file);
+}
+$('share-pick').onclick=function(){ $('share-file').click(); };
+$('share-file').onchange=function(){ var f=this.files[0]; if(!f)return; upload(f,1600,function(id){ S.shareImage=id; markDirty(); refresh(); }); };
+$('share-default').onclick=function(){ S.shareImage=''; markDirty(); refresh(); };
+$('padd').onclick=function(){
+  var id='p'+Date.now().toString(36);
+  S.products.push({id:id,name:'New product',cat:'pg',spec:'12 PCS / CTN',show:false,bg:'#cbe9f8',ink:'#17558c',img:'',photo:'',tx:{en:['','',''],zh:['','',''],ms:['','','']}});
+  markDirty(); renderProducts(); setStatus('New product added (hidden until you tick "Show on website"). Add a photo and text, then Save.','dirty');
+};
+document.querySelectorAll('.tab').forEach(function(b){ b.onclick=function(){
+  TAB=b.dataset.tab; document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===b)});
+  ['google','products','home','contact','orders','visits'].forEach(function(t){ $('t-'+t).classList.toggle('hide',t!==TAB); });
+  $('langs').classList.toggle('hide',TAB==='contact'||TAB==='orders'||TAB==='visits');
+  if(TAB==='orders'&&!ORD) loadOrders();
+  if(TAB==='visits'&&!VIS) loadVisits();
+};});
+/* ---- Orders & sales (reads the bot sheet's Orders tab; nothing here is saved) ---- */
+var ORD=null, OF='all';
+function rm(n){ return 'RM'+(Number(n)||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); }
+function payKind(p){ p=String(p||''); if(/^paid/i.test(p)) return 'paid'; if(/refund|cancel/i.test(p)) return 'off'; return 'unpaid'; }
+function loadOrders(){
+  $('o-list').className='loading'; $('o-list').textContent='Loading orders…';
+  GSR.withSuccessHandler(function(r){ ORD=r; renderOrders(); })
+    .withFailureHandler(function(e){ $('o-list').className='hint'; $('o-list').textContent='Could not load the orders: '+e.message; }).getOrders();
+}
+function renderOrders(){
+  if(!ORD) return;
+  var rows=ORD.rows, q=($('o-q').value||'').toLowerCase().trim();
+  // monthly table (all rows, regardless of the filter)
+  var M={};
+  rows.forEach(function(o){ var k=o.d.slice(0,7); var m=M[k]||(M[k]={k:k,n:0,paid:0,sales:0,open:0,web:0,webSales:0}); var pk=payKind(o.pay); if(pk==='off') return; m.n++; if(o.src==='web') m.web++; if(pk==='paid'){ m.paid++; m.sales+=o.total; if(o.src==='web') m.webSales+=o.total; } else m.open+=o.total; });
+  var keys=Object.keys(M).sort().reverse().slice(0,12);
+  $('o-months').innerHTML=keys.length?'<table class="mtab"><thead><tr><th>Month</th><th>Orders</th><th>Paid</th><th>Sales (paid)</th><th>Unpaid</th><th>Website</th><th>Website sales</th></tr></thead><tbody>'+keys.map(function(k){ var m=M[k]; var d=new Date(k+'-01T00:00:00'); return '<tr><td>'+d.toLocaleString('en-GB',{month:'short',year:'numeric'})+'</td><td>'+m.n+'</td><td>'+m.paid+'</td><td><b>'+rm(m.sales)+'</b></td><td>'+(m.open?rm(m.open):'–')+'</td><td>'+m.web+'</td><td>'+rm(m.webSales)+'</td></tr>'; }).join('')+'</tbody></table>':'<p class="hint">No orders yet.</p>';
+  // filtered list
+  var list=rows.filter(function(o){ var pk=payKind(o.pay); if(OF==='web'&&o.src!=='web') return false; if(OF==='unpaid'&&pk!=='unpaid') return false; if(OF==='paid'&&pk!=='paid') return false;
+    if(q){ var hay=(o.no+' '+o.inv+' '+o.biz+' '+o.items+' '+o.phone+' '+o.st).toLowerCase(); if(hay.indexOf(q)<0) return false; } return true; });
+  var n=list.length, paid=0, open=0; list.forEach(function(o){ var pk=payKind(o.pay); if(pk==='paid') paid+=o.total; else if(pk==='unpaid') open+=o.total; });
+  $('o-sum').innerHTML='<div><span>Orders shown</span><b>'+n+'</b></div><div><span>Paid</span><b>'+rm(paid)+'</b></div><div><span>Unpaid</span><b>'+rm(open)+'</b></div><div><span>Updated</span><b style="font-size:16px">'+new Date(ORD.at).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+'</b><small>press Refresh for the latest</small></div>';
+  if(!n){ $('o-list').className='hint'; $('o-list').textContent='No orders match.'; return; }
+  $('o-list').className='';
+  $('o-list').innerHTML='<table class="otab"><thead><tr><th>Date</th><th>Order / invoice</th><th>Customer</th><th>Items</th><th>Delivery</th><th style="text-align:right">Total</th><th>Payment</th><th>Status</th></tr></thead><tbody>'+list.map(function(o){
+    var pk=payKind(o.pay), d=new Date(o.d);
+    return '<tr><td data-l="Date">'+d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+'</td>'+
+      '<td class="no" data-l="Order">'+(o.no?'<span class="pill web">web</span> '+esc(o.no):'')+(o.inv?(o.no?'<br>':'')+esc(o.inv):'')+(!o.no&&!o.inv?'–':'')+'</td>'+
+      '<td data-l="Customer">'+esc(o.biz)+(o.phone&&!/@g\.us/.test(o.phone)?'<br><small style="color:var(--mute)">+'+esc(o.phone)+'</small>':'')+'</td>'+
+      '<td data-l="Items">'+esc(o.items)+'</td><td data-l="Delivery">'+esc(o.del||'–')+'</td><td class="amt" data-l="Total">'+rm(o.total)+'</td>'+
+      '<td data-l="Payment"><span class="pill '+pk+'">'+esc(o.pay||'Unpaid')+'</span></td><td data-l="Status">'+esc(o.st||'')+(o.packed?'<br><small style="color:var(--mute)">'+esc(o.packed)+'</small>':'')+'</td></tr>'; }).join('')+'</tbody></table>';
+}
+/* ---- Visitors (reads the "beku° website visits" sheet; nothing here is saved) ---- */
+var VIS=null, VD=30;
+function loadVisits(){
+  $('v-body').className='loading'; $('v-body').textContent='Loading visits…';
+  GSR.withSuccessHandler(function(r){ VIS=r; renderVisits(); })
+    .withFailureHandler(function(e){ $('v-body').className='hint'; $('v-body').textContent='Could not load the visits: '+e.message; }).getVisits(VD);
+}
+function vBars(rows,fmt){ var mx=Math.max.apply(null,rows.map(function(r){return r[1];}).concat([1]));
+  return '<table class="vt">'+rows.map(function(r){ return '<tr><td>'+esc(r[0])+'</td><td class="vb"><i style="width:'+Math.round(100*r[1]/mx)+'%"></i></td><td class="vn">'+(fmt?fmt(r):r[1])+'</td></tr>'; }).join('')+'</table>'; }
+function vCard(title,why,html){ return '<div class="card"><h2>'+title+'</h2>'+(why?'<p class="why">'+why+'</p>':'')+html+'</div>'; }
+function renderVisits(){
+  var r=VIS; if(!r) return;
+  if(r.empty){ $('v-sum').innerHTML=''; $('v-body').className='hint'; $('v-body').textContent='No visits recorded yet. They start appearing a few minutes after someone opens bekufrozen.com.'; return; }
+  var views=0,wa=0,ord=0,nw=0; r.daily.forEach(function(d){views+=d.views;wa+=d.wa;ord+=d.orders;nw+=d.nw;});
+  var tAll=0,tN=0; r.time.forEach(function(x){tAll+=x[1]*x[3];tN+=x[3];});
+  $('v-sum').innerHTML='<div><span>Visitors</span><b>'+r.visitors+'</b></div><div><span>Visits</span><b>'+r.sessions+'</b></div><div><span>Page views</span><b>'+views+'</b></div><div><span>First-time visits</span><b>'+nw+'</b></div><div><span>WhatsApp taps</span><b>'+wa+'</b></div><div><span>Orders from website</span><b>'+ord+'</b></div><div><span>Avg. time on a page</span><b>'+(tN?Math.round(tAll/tN)+'s':'–')+'</b></div>';
+  var h='';
+  h+=vCard('Day by day','Visitors = different people (browsers). Visits = separate sittings. Order taps = taps on an "Order online" button.',
+    r.daily.length?'<table class="mtab"><thead><tr><th>Day</th><th>Visitors</th><th>Visits</th><th>Page views</th><th>First-time</th><th>WhatsApp taps</th><th>Order taps</th><th>Orders</th></tr></thead><tbody>'+r.daily.map(function(d){ var x=new Date(d.d+'T00:00:00'); return '<tr><td>'+x.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})+'</td><td>'+d.visitors+'</td><td>'+d.sessions+'</td><td>'+d.views+'</td><td>'+d.nw+'</td><td>'+d.wa+'</td><td>'+d.oc+'</td><td>'+d.orders+'</td></tr>'; }).join('')+'</tbody></table>':'<p class="hint">No visits in this period.</p>');
+  h+=vCard('From visit to order','How many visits reached each step.',vBars(r.funnel));
+  h+='<div class="vgrid">';
+  h+=vCard('Where they came from','Google, Instagram, Facebook / Instagram ads, WhatsApp, links with utm_source, or "direct" (typed in / no link).',vBars(r.sources));
+  h+=vCard('Location','From the phone or computer time zone (country level).',vBars(r.locations));
+  h+=vCard('Pages viewed','',vBars(r.pages));
+  h+=vCard('Device','',vBars(r.devices));
+  h+=vCard('Language','Language of the page they read (en / zh / ms).',vBars(r.langs));
+  h+=vCard('Time on page','Average seconds and how far down they scrolled.',r.time.length?vBars(r.time.map(function(x){return [x[0],x[1],x[2],x[3]];}),function(x){return x[1]+'s · '+x[2]+'% · '+x[3]+'×';}):'<p class="hint">Not enough data yet.</p>');
+  h+='</div>';
+  h+=vCard('What they tapped','Most tapped buttons and links. WhatsApp taps show the button; ORDER lines are finished orders.',r.actions.length?vBars(r.actions):'<p class="hint">No taps yet.</p>');
+  var dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  h+='<div class="vgrid">'+vCard('Busy hours','Page views by hour (Malaysia time).',vBars(r.hours.map(function(n,i){return [(i<10?'0':'')+i+':00',n];}).filter(function(x){return x[1];})))+vCard('Busy days','Page views by weekday.',vBars(r.weekdays.map(function(n,i){return [dn[i],n];})))+'</div>';
+  h+=vCard('Latest activity','Newest first (last 80). Visitor = short id of one browser, so you can follow one person.',
+    '<table class="otab"><thead><tr><th>Time</th><th>What</th><th>Detail</th><th>Page</th><th>From</th><th>Where</th><th>Device</th><th>Visitor</th></tr></thead><tbody>'+r.recent.map(function(x){ return '<tr><td data-l="Time">'+esc(x[0])+'</td><td data-l="What">'+esc(x[1])+'</td><td data-l="Detail">'+esc(x[2])+'</td><td data-l="Page">'+esc(x[3])+'</td><td data-l="From">'+esc(x[4])+'</td><td data-l="Where">'+esc(x[5])+'</td><td data-l="Device">'+esc(x[6])+'</td><td data-l="Visitor">'+esc(x[7])+(x[8]==='new'?' <small>new</small>':'')+'</td></tr>'; }).join('')+'</tbody></table>');
+  $('v-body').className=''; $('v-body').innerHTML=h;
+}
+document.querySelectorAll('#v-chips .chip').forEach(function(b){ b.onclick=function(){ VD=Number(b.dataset.d); document.querySelectorAll('#v-chips .chip').forEach(function(x){x.classList.toggle('on',x===b)}); VIS=null; loadVisits(); };});
+$('v-refresh').onclick=function(){ VIS=null; loadVisits(); };
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+document.querySelectorAll('#o-chips .chip').forEach(function(b){ b.onclick=function(){ OF=b.dataset.f; document.querySelectorAll('#o-chips .chip').forEach(function(x){x.classList.toggle('on',x===b)}); renderOrders(); };});
+$('o-q').oninput=function(){ renderOrders(); };
+$('o-refresh').onclick=function(){ ORD=null; loadOrders(); };
+document.querySelectorAll('.lg').forEach(function(b){ b.onclick=function(){ LANG=b.dataset.lang; document.querySelectorAll('.lg').forEach(function(x){x.classList.toggle('on',x===b)}); render(); };});
+$('save').onclick=function(){
+  if(busy)return; busy=true; $('save').disabled=true; setStatus('Saving…');
+  GSR.withSuccessHandler(function(res){ busy=false; dirty=false;
+      var t=new Date(res.savedAt); setStatus('✅ Saved at '+t.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+'. Your website will update in about 10–15 minutes.','ok'); })
+    .withFailureHandler(function(e){ busy=false; $('save').disabled=false; setStatus('Not saved: '+e.message+' – please try again.','dirty'); })
+    .saveSettings(S);
+};
+GSR.withSuccessHandler(function(s){
+  S=s; ['en','zh','ms'].forEach(function(l){ S.seo[l]=S.seo[l]||{}; });
+  $('loading').classList.add('hide'); $('app').classList.remove('hide');
+  setStatus(s.savedAt?('Last saved '+new Date(s.savedAt).toLocaleString()):'Nothing changed yet.'); render();
+}).withFailureHandler(function(e){ $('loading').textContent='Could not load the settings: '+e.message; }).getSettings();
+</script>
+</body>
+</html>

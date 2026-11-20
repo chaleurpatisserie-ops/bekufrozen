@@ -423,6 +423,81 @@ os.makedirs(os.path.join(ROOT, 'clients'), exist_ok=True)
 with open(os.path.join(ROOT, 'clients', 'index.html'), 'w', encoding='utf-8') as f:
     f.write(clients_page())
 
+
+# beku° admin APP: bekufrozen.com/admin/ (Alfred 20 Nov 2026: "make it a app … allow me to log in with Google")
+# Same screens as the Apps Script admin (build/admin/Admin.html), but signs in with Google and talks to the
+# admin script's doPost API (checks the Google sign-in + allowed emails there).
+ADMIN_API = 'https://script.google.com/macros/s/AKfycbxNYrq26BteZEz2XrrEHXEv7pvqnn5VDsoULjC1g2Q3JkpZSQNxg8CgQThCnFvCxtfJ6A/exec'
+ADMIN_CLIENT_ID = '383653792650-5c9pt8ss2jfjmn57g19oe191eo0dqoga.apps.googleusercontent.com'
+def admin_app():
+    h = open(os.path.join(B, 'admin', 'Admin.html'), encoding='utf-8').read()
+    h = h.replace('<base target="_top">\n', '')
+    head = ('<title>beku° admin</title><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
+            '<meta name="theme-color" content="#17558c"><meta name="robots" content="noindex,nofollow">'
+            '<link rel="manifest" href="/admin/manifest.webmanifest"><link rel="icon" href="/img/favicon-192.png" sizes="192x192">'
+            '<link rel="apple-touch-icon" href="/admin/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes">'
+            '<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="beku admin">'
+            '<script src="https://accounts.google.com/gsi/client" async defer></script>'
+            '<style>#gate{position:fixed;inset:0;z-index:50;background:#f4f9fc;display:flex;align-items:center;justify-content:center;padding:24px}'
+            '#gate.hide{display:none}#gate .card{background:#fff;border-radius:24px;padding:30px 26px;max-width:380px;width:100%;text-align:center;box-shadow:0 6px 24px #17558c22}'
+            '#gate img{width:86px;height:86px;border-radius:50%;box-shadow:0 0 0 4px #cbe9f8}#gate h1{margin:14px 0 6px}#gate p{color:#5f6f80;margin:6px 0 18px}'
+            '#gbtn{display:flex;justify-content:center;min-height:44px}#gmsg{color:#c0392b;font-weight:500;min-height:1.4em;margin-top:14px}'
+            '#so{margin-left:auto;background:#fff;border:0;border-radius:999px;padding:6px 12px;font:600 13px Fredoka,sans-serif;color:#17558c;cursor:pointer}'
+            '.top a{white-space:nowrap}</style>')
+    h = h.replace('</head>', head + '</head>', 1)
+    gate = ('<div id="gate"><div class="card"><img src="/img/beku-logo-256.webp" alt=""><h1>beku° admin</h1>'
+            '<p>Sign in with your Google account to edit the website and see orders.</p><div id="gbtn"></div><div id="gmsg"></div></div></div>')
+    h = h.replace('<body>', '<body>' + gate, 1)
+    h = h.replace('target="_blank">Open my website ↗</a></div>', 'target="_blank">Open my website ↗</a><button id="so" type="button">Sign out</button></div>', 1)
+    shim = r"""<script>
+/* Google sign-in + API bridge: replaces google.script.run for the app. */
+var GSR=(function(){
+  var API='__API__', CID='__CID__', KEY='bekuAdminTok', tok=null, waiting=[], gisReady=false;
+  try{ tok=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
+  function valid(){ return tok && tok.exp*1000 > Date.now()+120000; }
+  function gate(show,msg){ document.getElementById('gate').classList.toggle('hide',!show); document.getElementById('gmsg').textContent=msg||''; if(show) initGis(); }
+  function decode(t){ try{ var p=t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'); return JSON.parse(decodeURIComponent(escape(atob(p)))); }catch(e){ return {}; } }
+  function onCred(r){ var c=decode(r.credential); tok={t:r.credential, exp:c.exp||0, email:c.email||''}; try{ localStorage.setItem(KEY,JSON.stringify(tok)); }catch(e){}
+    gate(false); var w=waiting; waiting=[]; w.forEach(function(f){ f(tok.t); }); }
+  function initGis(){
+    if(!window.google || !google.accounts || !google.accounts.id){ setTimeout(initGis,300); return; }
+    if(!gisReady){ gisReady=true; google.accounts.id.initialize({client_id:CID, callback:onCred, auto_select:true, use_fedcm_for_prompt:true, itp_support:true});
+      google.accounts.id.renderButton(document.getElementById('gbtn'),{theme:'filled_blue',size:'large',shape:'pill',text:'signin_with',logo_alignment:'left'}); }
+    try{ google.accounts.id.prompt(); }catch(e){}
+  }
+  function token(){ if(valid()) return Promise.resolve(tok.t); return new Promise(function(res){ waiting.push(res); gate(true); }); }
+  function signOut(){ var em=tok&&tok.email; tok=null; try{ localStorage.removeItem(KEY); }catch(e){}
+    try{ google.accounts.id.disableAutoSelect(); if(em) google.accounts.id.revoke(em,function(){}); }catch(e){} location.reload(); }
+  function call(fn,args,ok,fail,tries){
+    token().then(function(t){ return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({t:t,fn:fn,args:args})}); })
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if(j.ok){ ok&&ok(j.r); return; }
+      if(j.err==='signin' && !(tries>0)){ tok=null; try{ localStorage.removeItem(KEY); }catch(e){} call(fn,args,ok,fail,1); return; }
+      if(j.err==='noaccess'){ tok=null; try{ localStorage.removeItem(KEY); google.accounts.id.disableAutoSelect(); }catch(e){}
+        gate(true,'The account '+(j.email||'')+' has no access. Please sign in with another Google account.'); waiting.push(function(){ call(fn,args,ok,fail); }); return; }
+      var e=new Error(j.err||'Something went wrong'); if(fail) fail(e); else alert(e.message);
+    })
+    .catch(function(e){ e=new Error('No connection – please try again. ('+e.message+')'); if(fail) fail(e); else alert(e.message); });
+  }
+  function runner(ok,fail){ return new Proxy({}, {get:function(_,k){
+    if(k==='withSuccessHandler') return function(f){ return runner(f,fail); };
+    if(k==='withFailureHandler') return function(f){ return runner(ok,f); };
+    return function(){ call(k,[].slice.call(arguments),ok,fail); }; }}); }
+  document.addEventListener('DOMContentLoaded',function(){ var b=document.getElementById('so'); if(b) b.onclick=signOut; if(valid()) gate(false); });
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('/admin/sw.js',{scope:'/admin/'}).catch(function(){});
+  return runner(null,null);
+})();
+</script>
+""".replace('__API__', ADMIN_API).replace('__CID__', ADMIN_CLIENT_ID)
+    i = h.index('<script>\n', h.index('<body>'))
+    main = h[i:].replace('google.script.run', 'GSR')
+    return h[:i] + shim + main
+
+
+with open(os.path.join(ROOT, 'admin', 'index.html'), 'w', encoding='utf-8') as f:
+    f.write(admin_app())
+
 # Online order page + Track my order (static pages; prices load live from Bukku through the bot web app)
 oprods = [dict(id=p['id'], name=p['name'], cat=p.get('cat') or 'pg', spec=p.get('spec') or '', img=p['img'], bg=p.get('bg') or '#cbe9f8', ink=p.get('ink') or '#17558c') for p in prods]
 for name in ('order', 'track'):
