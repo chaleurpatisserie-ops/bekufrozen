@@ -81,6 +81,13 @@ textarea{min-height:80px;resize:vertical}
 .lrow .act{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.wa{background:#1f8a4c;color:#fff;text-decoration:none;border-radius:999px;padding:6px 12px;font:600 13px Fredoka,sans-serif;white-space:nowrap}
 .tagx{display:inline-block;border-radius:999px;padding:1px 9px;font:600 12px Fredoka,sans-serif;background:#eef3f7;color:var(--navy)}.tagx.red{background:#fde8e6;color:#c0392b}.tagx.grn{background:#e3f4ea;color:#1f8a4c}
 .lrow label{font-size:13px;color:var(--mute);display:flex;gap:4px;align-items:center}
+.fun{display:flex;flex-direction:column;gap:6px}.fun div{display:grid;grid-template-columns:minmax(150px,240px) 1fr 120px;gap:10px;align-items:center;font-size:14px}
+.fun i{display:block;height:22px;border-radius:8px;background:#17558c;min-width:3px}.fun b{color:var(--navy)}.fun small{color:var(--mute)}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}.tbl th{text-align:left;color:var(--mute);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.03em;padding:6px;border-bottom:1px solid var(--line)}
+.tbl td{padding:7px 6px;border-bottom:1px solid #eef3f7;vertical-align:top}.tbl td.n{text-align:right;font-weight:700;color:var(--navy);white-space:nowrap}.tblw{overflow-x:auto}
+.heat{display:grid;grid-template-columns:44px repeat(24,1fr);gap:2px;font-size:10px;color:var(--mute);min-width:620px}.heat span{height:18px;border-radius:3px;background:#17558c}.heat em{font-style:normal;text-align:center}
+.lmk{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:8px 0}.lmk select,.lmk input{width:100%;padding:10px;border:2px solid var(--line);border-radius:12px;font:15px 'DM Sans',sans-serif}
+.lout{display:flex;gap:8px;align-items:center;background:var(--bg);border:1px dashed var(--navy);border-radius:12px;padding:10px;word-break:break-all;font-size:14px}
 .hide{display:none}
 .loading{text-align:center;padding:60px;color:var(--mute);font-size:18px}
 .sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:10px 0 4px}
@@ -123,6 +130,7 @@ textarea{min-height:80px;resize:vertical}
       <button class="tab" data-tab="orders">📦 Orders &amp; sales</button>
       <button class="tab" data-tab="visits">📈 Visitors</button>
       <button class="tab" data-tab="live">🟢 Live, carts &amp; leads</button>
+      <button class="tab" data-tab="ins">📊 Insights</button>
     </div>
     <div class="langs" id="langs"><span>Language you are editing:</span>
       <button class="lg on" data-lang="en">English</button><button class="lg" data-lang="zh">中文</button><button class="lg" data-lang="ms">Bahasa Melayu</button>
@@ -231,6 +239,14 @@ textarea{min-height:80px;resize:vertical}
     </section>
 
     <!-- VISITORS -->
+    <section id="t-ins" class="hide">
+      <div class="card">
+        <h2>Insights</h2>
+        <p class="why">What happens on your website and what it brings in: how far people get before they buy, which desserts and which ads work, who comes back, which leads became customers, the busy hours, the website's speed, your customers' value and what people search on Google.</p>
+        <div class="chips" id="i-chips"><button class="chip" data-d="7">7 days</button><button class="chip on" data-d="30">30 days</button><button class="chip" data-d="90">90 days</button><button class="chip" data-d="365">1 year</button><button class="btn ghost small" id="i-refresh">↻ Refresh</button></div>
+      </div>
+      <div id="i-body" class="loading">Loading…</div>
+    </section>
     <section id="t-live" class="hide">
       <div class="card">
         <h2>Right now on your website</h2>
@@ -361,8 +377,9 @@ $('padd').onclick=function(){
 };
 document.querySelectorAll('.tab').forEach(function(b){ b.onclick=function(){
   TAB=b.dataset.tab; document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===b)});
-  ['google','products','home','contact','orders','visits','live'].forEach(function(t){ $('t-'+t).classList.toggle('hide',t!==TAB); });
-  $('langs').classList.toggle('hide',TAB==='contact'||TAB==='orders'||TAB==='visits'||TAB==='live');
+  ['google','products','home','contact','orders','visits','live','ins'].forEach(function(t){ $('t-'+t).classList.toggle('hide',t!==TAB); });
+  $('langs').classList.toggle('hide',TAB==='contact'||TAB==='orders'||TAB==='visits'||TAB==='live'||TAB==='ins');
+  if(TAB==='ins'&&!INS) loadIns();
   if(TAB==='live') loadLive(); clearInterval(window.LT); if(TAB==='live') window.LT=setInterval(function(){ if(!document.hidden) loadLive(true); },30000);
   if(TAB==='orders'&&!ORD) loadOrders();
   if(TAB==='visits'&&!VIS) loadVisits();
@@ -478,6 +495,80 @@ function renderLive(){
   $('l-body').querySelectorAll('input[data-v]').forEach(function(x){ x.onchange=function(){ google.script.run.withSuccessHandler(function(){ loadLive(true); }).markContacted(x.dataset.v, x.checked); }; });
 }
 $('l-refresh').onclick=function(){ loadLive(); };
+
+/* ---- Insights (Alfred 21 Nov 00:35 "add all") ---- */
+var INS=null, ID=30, SRCH=null;
+function pctTxt(x){ return (x||0)+'%'; }
+function loadIns(){
+  $('i-body').className='loading'; $('i-body').textContent='Working it out… (can take 10–20 seconds)';
+  GS_().withSuccessHandler(function(r){ INS=r; renderIns(); if(!SRCH) loadSearch(); })
+    .withFailureHandler(function(e){ $('i-body').className='hint'; $('i-body').textContent='Could not load: '+e.message; }).getInsights(ID);
+}
+function loadSearch(){ GS_().withSuccessHandler(function(r){ SRCH=r; renderIns(); }).withFailureHandler(function(e){ SRCH={err:e.message}; renderIns(); }).getSearch(28); }
+function GS_(){ return (typeof GSR!=='undefined')?GSR:google.script.run; }
+function tbl(head,rows){ return '<div class="tblw"><table class="tbl"><tr>'+head.map(function(h){return '<th>'+h+'</th>';}).join('')+'</tr>'+rows.join('')+'</table></div>'; }
+function td(x,num){ return '<td'+(num?' class="n"':'')+'>'+(x==null||x===''?'–':esc(String(x)))+'</td>'; }
+function heatGrid(H){ var mx=1; H.forEach(function(r){ r.forEach(function(v){ if(v>mx)mx=v; }); }); var dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], h='<div class="tblw"><div class="heat"><em></em>';
+  for(var i=0;i<24;i++) h+='<em>'+(i%3?'':i)+'</em>';
+  [1,2,3,4,5,6,0].forEach(function(w){ h+='<em style="text-align:left">'+dn[w]+'</em>'; for(var i=0;i<24;i++){ var v=H[w][i]; h+='<span title="'+dn[w]+' '+i+':00 – '+v+'" style="opacity:'+(v?(.15+.85*v/mx).toFixed(2):'.06')+'"></span>'; } });
+  return h+'</div></div>'; }
+function sec(ms){ return ms==null?'–':(ms/1000).toFixed(1)+' s'; }
+function renderIns(){
+  var r=INS; if(!r) return; $('i-body').className=''; var h='';
+  // 1 funnel
+  var mx=Math.max(1,r.funnel[0].n);
+  h+=vCard('🪜 From visit to order (last '+r.days+' days)','Each step counts people. The % on the right is how many of the step before made it to this step – the smallest % shows where most people stop.',
+    '<div class="fun">'+r.funnel.map(function(f,i){ return '<div><b>'+esc(f.step)+'</b><i style="width:'+Math.max(1,Math.round(100*f.n/mx))+'%"></i><span><b>'+f.n+'</b> <small>'+(i?pctTxt(f.ofPrev)+' of before':'')+'</small></span></div>'; }).join('')+'</div>');
+  // 2 desserts
+  h+=vCard('🍰 Each dessert','Taps on the website (and how many people), how many carts it went into, and how many cartons were ordered (all orders in the period, website + WhatsApp).',
+    tbl(['Dessert','Taps','People','In carts','Cartons in carts','Orders','Cartons ordered'], r.desserts.map(function(d){ return '<tr>'+td(d.name)+td(d.taps,1)+td(d.people,1)+td(d.carts,1)+td(d.cartQ,1)+td(d.orders,1)+td(d.ordQ,1)+'</tr>'; })));
+  // 3 sources
+  h+=vCard('📣 Where visitors come from (ads, Instagram, Google…)','Use the link maker below for every post, ad, bio and flyer – then each one shows here as its own line.',
+    tbl(['Source','Visitors','Leads','Lead %','Carts','Orders','Order %','Paid online'], r.sources.map(function(s){ return '<tr>'+td(s.src)+td(s.visitors,1)+td(s.leads,1)+td(pctTxt(s.leadRate),1)+td(s.carts,1)+td(s.orders,1)+td(pctTxt(s.orderRate),1)+td(s.paid,1)+'</tr>'; }))
+    +'<h3 style="margin:18px 0 4px">🔗 Link maker</h3><p class="why">Pick where the link will be used and give it a short name. Copy the link into the post, ad, bio or QR code.</p>'
+    +'<div class="lmk"><select id="lk-src"><option value="instagram|bio">Instagram bio</option><option value="instagram|post">Instagram post</option><option value="instagram|story">Instagram story</option><option value="meta|ad">Meta / Facebook ad</option><option value="facebook|post">Facebook post</option><option value="tiktok|bio">TikTok bio</option><option value="tiktok|video">TikTok video</option><option value="whatsapp|status">WhatsApp status</option><option value="whatsapp|message">WhatsApp message</option><option value="google|business">Google Business Profile</option><option value="flyer|qr">Flyer / QR code</option><option value="email|signature">Email signature</option></select>'
+    +'<input id="lk-name" placeholder="Name, e.g. christmas-2026"><select id="lk-page"><option value="/">Homepage</option><option value="/order/">Order page</option><option value="/order/?mode=sample">Sample box</option><option value="/clients/">Our clients</option><option value="/intro/">Introduction</option></select></div>'
+    +'<div class="lout"><span id="lk-out" style="flex:1"></span><button class="btn small" id="lk-copy" type="button">Copy</button></div>');
+  // 4 returning
+  var R=r.returning;
+  h+=vCard('🔁 Visitors who came back','<b>'+R.returning+'</b> of '+R.total+' visitors came back on another visit ('+pctTxt(R.rate)+'). People who come back are often close to buying – a good moment to WhatsApp them.',
+    R.list.length?tbl(['Who','Visits','Days','Pages','Taps','From','Last seen','Cart'], R.list.map(function(x){ return '<tr><td>'+(x.name?'<b>'+esc(x.name)+'</b><br><small>'+esc(x.phone)+'</small>':'Visitor (no name)')+'</td>'+td(x.visits,1)+td(x.days,1)+td(x.pages,1)+td(x.taps,1)+td(x.src)+td(when(x.last))+td(x.cart?'yes':'')+'</tr>'; })):'<p class="hint">Nobody has come back yet in this period.</p>');
+  // 5 leads to customers
+  var L=r.leadsToCustomers;
+  h+=vCard('🙋→🧾 Leads that became customers','Matched by WhatsApp number between the pop-up leads and your orders. '+(L.already?L.already+' lead(s) were already customers before.':''),
+    '<div class="sum"><div><b>'+L.leads+'</b><span>leads</span></div><div><b>'+L.became+'</b><span>became customers</span></div><div><b>'+pctTxt(L.rate)+'</b><span>of leads</span></div><div><b>'+(L.avgDays==null?'–':L.avgDays+' days')+'</b><span>lead → first order</span></div></div>'
+    +(L.list.length?tbl(['Name','WhatsApp','Business','Days to order','From'], L.list.map(function(x){ return '<tr>'+td(x.name)+td(x.phone)+td(x.biz)+td(x.days,1)+td(x.src)+'</tr>'; })):''));
+  // 6 busy hours
+  h+=vCard('🕒 Busy hours','Darker = busier. Use it to time posts, ads and WhatsApp follow-ups.','<h3 style="margin:6px 0">Website visits</h3>'+heatGrid(r.heat)+'<h3 style="margin:14px 0 6px">Orders (website + WhatsApp)</h3>'+heatGrid(r.orderHeat));
+  // 7 search words
+  var sh;
+  if(!SRCH) sh='<p class="hint">Loading Google data…</p>';
+  else if(SRCH.err) sh='<p class="hint">Google search data is not connected yet ('+esc(SRCH.err).slice(0,160)+').</p>';
+  else sh='<p class="why">'+esc(SRCH.from)+' – '+esc(SRCH.to)+' (Google is 2–3 days behind). Shown = how often you appeared in Google; Position = your average place (1 = top).</p>'
+    +(SRCH.queries.length?tbl(['Search words','Clicks','Shown','Click %','Position'], SRCH.queries.map(function(q){ return '<tr>'+td(q.k[0])+td(q.clicks,1)+td(q.imp,1)+td(pctTxt(q.ctr),1)+td(q.pos,1)+'</tr>'; })):'<p class="hint">No search words yet – Google needs a few more days.</p>')
+    +(SRCH.pages.length?'<h3 style="margin:14px 0 4px">Pages</h3>'+tbl(['Page','Clicks','Shown','Position'], SRCH.pages.map(function(q){ return '<tr>'+td(q.k[0].replace('https://bekufrozen.com',''))+td(q.clicks,1)+td(q.imp,1)+td(q.pos,1)+'</tr>'; })):'');
+  h+=vCard('🔎 What people search on Google', '', sh);
+  // 8 speed & errors
+  var P=r.speed;
+  h+=vCard('⚡ Website speed & errors','Measured on visitors’ own phones and computers. Under 3 s is good; over 5 s loses people. You also get an email at 9am if there were errors or the site was slow.',
+    '<div class="sum"><div><b>'+sec(P.median)+'</b><span>typical page load</span></div><div><b>'+sec(P.p75)+'</b><span>slowest quarter</span></div><div><b>'+sec(P.lcp)+'</b><span>main picture shows</span></div><div><b>'+P.errors.reduce(function(a,e){return a+e.n;},0)+'</b><span>errors</span></div></div>'
+    +(P.pages.length?tbl(['Page','Loads','Typical','Slowest quarter'], P.pages.map(function(x){ return '<tr>'+td(x.page)+td(x.n,1)+td(sec(x.median),1)+td(sec(x.p75),1)+'</tr>'; })):'<p class="hint">No speed data yet (starts now).</p>')
+    +(P.devices.length?'<p class="why" style="margin-top:8px">'+P.devices.map(function(d){ return esc(d.dev)+': '+sec(d.median)+' ('+d.n+')'; }).join(' · ')+'</p>':'')
+    +(P.errors.length?'<h3 style="margin:14px 0 4px">Errors</h3>'+tbl(['Error','Times','Page','Last'], P.errors.map(function(x){ return '<tr>'+td(x.msg)+td(x.n,1)+td(x.page)+td(when(x.last))+'</tr>'; })):'<p class="hint">No errors 👍</p>'));
+  // 9 customer value
+  var C=r.customers;
+  h+=vCard('💎 Customer value (all time)','From the Orders sheet (website + WhatsApp, test and cancelled orders left out). "Due" = when they usually reorder; red = late, a good time to message them.',
+    '<div class="sum"><div><b>'+C.count+'</b><span>customers</span></div><div><b>'+C.repeat+'</b><span>ordered again ('+pctTxt(C.repeatRate)+')</span></div><div><b>'+rm(C.total)+'</b><span>total ordered</span></div><div><b>'+rm(C.avgOrder)+'</b><span>average order</span></div></div>'
+    +tbl(['Customer','Orders','Total','Average','First','Last','Orders every','Due'], C.list.map(function(c){ var late=c.late!=null&&c.late>3; return '<tr>'+td(c.biz)+td(c.orders,1)+td(rm(c.total),1)+td(rm(c.avg),1)+td(c.first)+td(c.last)+td(c.every?c.every+' days':'',1)
+      +'<td'+(late?' style="color:#c0392b;font-weight:700"':'')+'>'+(c.next?esc(c.next)+(late?' (late '+c.late+' d)':''):'–')+'</td></tr>'; })));
+  $('i-body').innerHTML=h;
+  function mk(){ var a=$('lk-src').value.split('|'), n=($('lk-name').value||'').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''), pg=$('lk-page').value;
+    var u='https://bekufrozen.com'+pg+(pg.indexOf('?')>=0?'&':'?')+'utm_source='+a[0]+'&utm_medium='+a[1]+(n?'&utm_campaign='+n:''); $('lk-out').textContent=u; }
+  ['lk-src','lk-name','lk-page'].forEach(function(k){ $(k).oninput=mk; $(k).onchange=mk; }); mk();
+  $('lk-copy').onclick=function(){ var t=$('lk-out').textContent; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){ $('lk-copy').textContent='Copied ✓'; setTimeout(function(){ $('lk-copy').textContent='Copy'; },1500); }).catch(function(){ prompt('Copy this link:',t); }); };
+}
+document.querySelectorAll('#i-chips .chip').forEach(function(b){ b.onclick=function(){ ID=+b.dataset.d; document.querySelectorAll('#i-chips .chip').forEach(function(x){x.classList.toggle('on',x===b)}); loadIns(); }; });
+$('i-refresh').onclick=function(){ SRCH=null; loadIns(); };
 $('save').onclick=function(){
   if(busy)return; busy=true; $('save').disabled=true; setStatus('Saving…');
   google.script.run.withSuccessHandler(function(res){ busy=false; dirty=false;

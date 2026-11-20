@@ -184,7 +184,7 @@ function doPost(e) {
     if (!who) return out({ ok: false, err: 'signin' });
     if (allowedEmails_().indexOf(who) < 0) return out({ ok: false, err: 'noaccess', email: who });
     API_USER = who;
-    var fns = { getSettings: getSettings, saveSettings: saveSettings, uploadPhoto: uploadPhoto, getOrders: getOrders, getVisits: getVisits, getLive: getLive, markContacted: markContacted,
+    var fns = { getSettings: getSettings, saveSettings: saveSettings, uploadPhoto: uploadPhoto, getOrders: getOrders, getVisits: getVisits, getLive: getLive, markContacted: markContacted, getInsights: getInsights, getSearch: getSearch,
                 whoami: function () { return who; } };
     if (!fns[b.fn]) return out({ ok: false, err: 'unknown function' });
     return out({ ok: true, r: fns[b.fn].apply(null, b.args || []) });
@@ -250,6 +250,7 @@ function publicCall_(b) {
   if (b.type === 'web_lead') return pubLead_(b);
   if (b.type === 'web_cart') return pubCart_(b);
   if (b.type === 'web_ping') return pubPing_(b);
+  if (b.type === 'web_perf') return pubPerf_(b);
   return { ok: false };
 }
 function markContacted(visitor, done) {   // admin: tick a lead / cart as contacted
@@ -290,3 +291,159 @@ function getLive() {
   var pend = getOrders().rows.filter(function (o) { return !/^paid/i.test(o.pay) && !/cancel|refund|deliver/i.test(o.st + ' ' + o.pay); }).slice(0, 100);
   return { live: live, carts: carts, leads: lds, pending: pend, at: new Date().toISOString() };
 }
+
+
+/* ---- Insights (BEKU Website chat, Alfred 21 Nov 00:35 "add all"): funnel, per dessert, per source/ad, returning visitors,
+   leads → customers, busy hours, site speed & errors, customer value, Google search words, daily alert email. Read only. ---- */
+var ALERT_TO = 'chaleurpatisserie@gmail.com';
+var SC_SITE = 'https://bekufrozen.com/';
+function pubPerf_(d) {
+  var sh = vTab_('Health', ['Time', 'Visitor', 'Kind', 'Page', 'Load ms', 'First byte ms', 'Ready ms', 'Main picture ms', 'Network', 'Device', 'Detail']);
+  sh.appendRow([new Date(), cl_(d, 'v', 20), cl_(d, 'k', 10), cl_(d, 'p'), Number(d.ms) || '', Number(d.ttfb) || '', Number(d.dom) || '', Number(d.lcp) || '',
+    cl_(d, 'net', 10), cl_(d, 'd', 10), cl_(d, 'm', 200)]);
+  if (sh.getLastRow() > 20000) sh.deleteRows(2, 5000);
+  return { ok: true };
+}
+function phoneKey_(p) { var s = String(p || '').replace(/\D/g, ''); if (/^0/.test(s)) s = '6' + s; return s.length >= 9 ? s.slice(-9) : ''; }
+function srcName_(s) {
+  s = String(s || '').trim(); if (!s || s === 'direct') return 'Direct / typed / app';
+  if (/google/i.test(s) && !/\//.test(s)) return 'Google search'; if (/bing|yahoo|duckduckgo/i.test(s)) return 'Other search engine';
+  if (/^(l\.)?(m\.)?(facebook|instagram|fb)\.|lm\.facebook/i.test(s)) return 'Facebook / Instagram (link)';
+  if (/whatsapp|wa\.me/i.test(s)) return 'WhatsApp'; return s;
+}
+function getInsights(days) {
+  guard_();
+  days = Math.min(Math.max(Number(days) || 30, 1), 365);
+  var tz = 'Asia/Kuala_Lumpur', now = Date.now(), since = now - days * 864e5, ss = SpreadsheetApp.openById(VISITS_ID);
+  function rows(name) { var sh = ss.getSheetByName(name); return sh && sh.getLastRow() > 1 ? sh.getRange(2, 1, sh.getLastRow() - 1, sh.getLastColumn()).getValues() : []; }
+  function tm(x) { return x instanceof Date ? x.getTime() : new Date(x).getTime(); }
+  function inP(x) { return tm(x) >= since; }
+  function pct(a, b) { return b ? Math.round(1000 * a / b) / 10 : 0; }
+  var S = getSettings(), names = (S.products || []).filter(function (p) { return p.name; }).map(function (p) { return p.name; });
+  var short = names.map(function (n) { return n.split(' · ')[0].trim(); });
+  function dessertsIn(txt) { txt = String(txt || '').toLowerCase(); var hit = []; short.forEach(function (n, i) { if (n && txt.indexOf(n.toLowerCase()) >= 0) hit.push(i); }); return hit; }
+  // ---- read
+  var visits = rows('Visits').filter(function (r) { return inP(r[0]); });
+  var carts = rows('Carts'), leads = rows('Leads'), health = rows('Health').filter(function (r) { return inP(r[0]); });
+  var orders = getOrders().rows.filter(function (o) { return !/test/i.test(o.biz + ' ' + o.items) && !/cancel|refund/i.test(o.pay + ' ' + o.st); });
+  var leadBy = {}; leads.forEach(function (r) { leadBy[String(r[1])] = { name: String(r[2]), phone: String(r[3]), src: String(r[6]), t: tm(r[0]) }; });
+  // ---- per visitor
+  var V = {};
+  visits.forEach(function (r) {
+    var v = String(r[1]); if (!v) return; var o = V[v] = V[v] || { v: v, sess: {}, days: {}, views: 0, taps: 0, src: '', first: tm(r[0]), last: 0, dessert: false, order: false, pages: {} };
+    var t = tm(r[0]), ev = String(r[3]), det = String(r[4]), pg = String(r[5]).split('?')[0] || '/';
+    o.sess[String(r[2])] = 1; o.days[Utilities.formatDate(new Date(t), tz, 'yyyy-MM-dd')] = 1; o.first = Math.min(o.first, t); o.last = Math.max(o.last, t);
+    if (!o.src && r[6]) o.src = srcName_(r[6]);
+    if (ev === 'view') { o.views++; o.pages[pg] = 1; if (/^\/order\//.test(pg)) o.order = true; }
+    if (ev === 'click') { o.taps++; if (dessertsIn(det).length || /^Dessert:/.test(det)) o.dessert = true; if (/order\//.test(det)) o.order = true; }
+  });
+  var vis = Object.keys(V).map(function (k) { return V[k]; });
+  // ---- carts in period
+  var cartsP = carts.filter(function (r) { return inP(r[0]) && (Number(r[5]) > 0 || /ordered|paid/.test(String(r[8]))); });
+  var cartV = {}, detV = {}, ordV = {}, paidV = {};
+  cartsP.forEach(function (r) { var v = String(r[1]), st = String(r[8]); cartV[v] = 1; if (/details|checkout|ordered|paid/.test(st)) detV[v] = 1; if (/ordered|paid/.test(st)) ordV[v] = 1; if (st === 'paid') paidV[v] = 1; });
+  var nV = vis.length, nD = vis.filter(function (o) { return o.dessert; }).length, nO = vis.filter(function (o) { return o.order; }).length;
+  var funnel = [['Visited the website', nV], ['Looked at a dessert', nD], ['Opened the order page', nO], ['Put something in the cart', Object.keys(cartV).length],
+    ['Filled in their details', Object.keys(detV).length], ['Placed the order', Object.keys(ordV).length], ['Paid online by card / FPX', Object.keys(paidV).length]];
+  funnel = funnel.map(function (f, i) { return { step: f[0], n: f[1], ofAll: pct(f[1], nV), ofPrev: i ? pct(f[1], funnel[i - 1][1]) : 100 }; });
+  // ---- per dessert
+  var D = names.map(function (n) { return { name: n, taps: 0, tapV: {}, carts: 0, cartQ: 0, orders: 0, ordQ: 0 }; });
+  visits.forEach(function (r) { if (String(r[3]) !== 'click') return; dessertsIn(r[4]).forEach(function (i) { D[i].taps++; D[i].tapV[String(r[1])] = 1; }); });
+  cartsP.forEach(function (r) { String(r[4]).split(/;\s*/).forEach(function (part) { var m = part.match(/(\d+)\s*x\s*(.+)/i); if (!m) return; dessertsIn(m[2]).forEach(function (i) { D[i].carts++; D[i].cartQ += Number(m[1]) || 0; }); }); });
+  orders.filter(function (o) { return tm(o.d) >= since; }).forEach(function (o) { String(o.items).split(/;\s*/).forEach(function (part) {
+    var m = part.match(/(.+?)\s*x\s*(\d+)/i) || part.match(/(\d+)\s*x\s*(.+)/i); if (!m) return; var nm = /^\d+$/.test(m[1]) ? m[2] : m[1], q = Number(/^\d+$/.test(m[1]) ? m[1] : m[2]) || 0;
+    dessertsIn(nm).forEach(function (i) { D[i].orders++; D[i].ordQ += q; }); }); });
+  var desserts = D.map(function (d) { return { name: d.name, taps: d.taps, people: Object.keys(d.tapV).length, carts: d.carts, cartQ: d.cartQ, orders: d.orders, ordQ: d.ordQ }; })
+    .sort(function (a, b) { return (b.ordQ - a.ordQ) || (b.cartQ - a.cartQ) || (b.taps - a.taps); });
+  // ---- per source / ad
+  var SRC = {};
+  function sAdd(s, k, n) { s = s || 'Direct / typed / app'; var o = SRC[s] = SRC[s] || { src: s, visitors: 0, leads: 0, carts: 0, orders: 0, paid: 0 }; o[k] += n || 1; }
+  vis.forEach(function (o) { sAdd(o.src, 'visitors'); });
+  leads.filter(function (r) { return inP(r[0]); }).forEach(function (r) { sAdd(srcName_(r[6]), 'leads'); });
+  cartsP.forEach(function (r) { var s = srcName_(r[12]); sAdd(s, 'carts'); if (/ordered|paid/.test(String(r[8]))) sAdd(s, 'orders'); if (String(r[8]) === 'paid') sAdd(s, 'paid'); });
+  var sources = Object.keys(SRC).map(function (k) { var o = SRC[k]; o.leadRate = pct(o.leads, o.visitors); o.orderRate = pct(o.orders, o.visitors); return o; })
+    .sort(function (a, b) { return b.visitors - a.visitors; });
+  // ---- returning visitors
+  var ret = vis.filter(function (o) { return Object.keys(o.sess).length > 1; }).sort(function (a, b) { return Object.keys(b.sess).length - Object.keys(a.sess).length || b.last - a.last; });
+  var returning = { total: nV, returning: ret.length, rate: pct(ret.length, nV),
+    list: ret.slice(0, 30).map(function (o) { var l = leadBy[o.v] || {}; return { name: l.name || '', phone: l.phone || '', visits: Object.keys(o.sess).length, days: Object.keys(o.days).length,
+      pages: Object.keys(o.pages).length, taps: o.taps, src: o.src, last: Utilities.formatDate(new Date(o.last), tz, "yyyy-MM-dd'T'HH:mm:ss"), cart: !!cartV[o.v] }; }) };
+  // ---- leads → customers (match the WhatsApp number with orders)
+  var firstOrd = {}; orders.forEach(function (o) { var k = phoneKey_(o.phone); if (!k) return; var t = tm(o.d); if (!firstOrd[k] || t < firstOrd[k].t) firstOrd[k] = { t: t, biz: o.biz, total: o.total }; });
+  var lc = leads.map(function (r) { var k = phoneKey_(r[3]), o = k && firstOrd[k], t = tm(r[0]); return { name: String(r[2]), phone: String(r[3]), t: t, src: srcName_(r[6]),
+      customer: !!o, before: !!(o && o.t < t), days: o && o.t >= t ? Math.round((o.t - t) / 864e5) : null, biz: o ? o.biz : '' }; });
+  var conv = lc.filter(function (x) { return x.customer && !x.before; }), dd = conv.map(function (x) { return x.days; }).filter(function (x) { return x != null; });
+  var leadsToCustomers = { leads: lc.length, became: conv.length, already: lc.filter(function (x) { return x.before; }).length, rate: pct(conv.length, lc.length),
+    avgDays: dd.length ? Math.round(10 * dd.reduce(function (a, b) { return a + b; }, 0) / dd.length) / 10 : null,
+    list: conv.slice(-20).reverse().map(function (x) { return { name: x.name, phone: x.phone, biz: x.biz, days: x.days, src: x.src }; }) };
+  // ---- busy hours (visits: unique sessions per weekday x hour; orders per weekday x hour)
+  var heat = [], oh = [], sx = {}; for (var w = 0; w < 7; w++) { heat.push([]); oh.push([]); for (var h = 0; h < 24; h++) { heat[w].push(0); oh[w].push(0); } }
+  visits.forEach(function (r) { if (String(r[3]) !== 'view') return; var k = String(r[2]); var d = new Date(tm(r[0]));
+    var wd = Number(Utilities.formatDate(d, tz, 'u')) % 7, hr = Number(Utilities.formatDate(d, tz, 'H')); if (sx[k + wd + '_' + hr]) return; sx[k + wd + '_' + hr] = 1; heat[wd][hr]++; });
+  orders.filter(function (o) { return tm(o.d) >= since; }).forEach(function (o) { var d = new Date(tm(o.d)); if (isNaN(d)) return; oh[Number(Utilities.formatDate(d, tz, 'u')) % 7][Number(Utilities.formatDate(d, tz, 'H'))]++; });
+  // ---- speed & errors
+  function med(a) { if (!a.length) return null; a = a.slice().sort(function (x, y) { return x - y; }); return a[Math.floor(a.length / 2)]; }
+  function p75(a) { if (!a.length) return null; a = a.slice().sort(function (x, y) { return x - y; }); return a[Math.floor(a.length * .75)]; }
+  var loads = health.filter(function (r) { return String(r[2]) === 'load' && Number(r[4]) > 0; }), PG = {}, DV = {};
+  loads.forEach(function (r) { var p = String(r[3]).split('?')[0]; (PG[p] = PG[p] || []).push(Number(r[4])); var dv = String(r[9]) || '?'; (DV[dv] = DV[dv] || []).push(Number(r[4])); });
+  var errs = {}; health.filter(function (r) { return String(r[2]) === 'error'; }).forEach(function (r) { var k = String(r[10]); var o = errs[k] = errs[k] || { msg: k, n: 0, page: String(r[3]), last: 0 }; o.n++; o.last = Math.max(o.last, tm(r[0])); });
+  var speed = { n: loads.length, median: med(loads.map(function (r) { return Number(r[4]); })), p75: p75(loads.map(function (r) { return Number(r[4]); })),
+    lcp: med(loads.map(function (r) { return Number(r[7]); }).filter(function (x) { return x > 0; })),
+    pages: Object.keys(PG).map(function (p) { return { page: p, n: PG[p].length, median: med(PG[p]), p75: p75(PG[p]) }; }).sort(function (a, b) { return b.n - a.n; }).slice(0, 15),
+    devices: Object.keys(DV).map(function (d) { return { dev: d, n: DV[d].length, median: med(DV[d]) }; }),
+    errors: Object.keys(errs).map(function (k) { var o = errs[k]; o.last = Utilities.formatDate(new Date(o.last), tz, "yyyy-MM-dd'T'HH:mm:ss"); return o; }).sort(function (a, b) { return b.n - a.n; }).slice(0, 20) };
+  // ---- customer value (all time)
+  var C = {};
+  orders.forEach(function (o) { var b = String(o.biz || '').trim(); if (!b) return; var t = tm(o.d); if (isNaN(t)) return;
+    var c = C[b.toUpperCase()] = C[b.toUpperCase()] || { biz: b, n: 0, paidTotal: 0, total: 0, ts: [] }; c.n++; c.total += Number(o.total) || 0; if (/^paid/i.test(o.pay)) c.paidTotal += Number(o.total) || 0; c.ts.push(t); });
+  var customers = Object.keys(C).map(function (k) { var c = C[k]; c.ts.sort(); var gaps = []; for (var i = 1; i < c.ts.length; i++) gaps.push((c.ts[i] - c.ts[i - 1]) / 864e5);
+    var gap = gaps.length ? gaps.reduce(function (a, b) { return a + b; }, 0) / gaps.length : null, last = c.ts[c.ts.length - 1];
+    var next = gap ? last + gap * 864e5 : null;
+    return { biz: c.biz, orders: c.n, total: Math.round(c.total * 100) / 100, avg: Math.round(100 * c.total / c.n) / 100, first: Utilities.formatDate(new Date(c.ts[0]), tz, 'yyyy-MM-dd'),
+      last: Utilities.formatDate(new Date(last), tz, 'yyyy-MM-dd'), every: gap ? Math.round(gap) : null, next: next ? Utilities.formatDate(new Date(next), tz, 'yyyy-MM-dd') : '',
+      late: next ? Math.round((now - next) / 864e5) : null, since: Math.round((now - last) / 864e5) }; })
+    .sort(function (a, b) { return b.total - a.total; });
+  var tot = customers.reduce(function (a, c) { return a + c.total; }, 0), rep = customers.filter(function (c) { return c.orders > 1; }).length;
+  return { days: days, at: new Date().toISOString(), funnel: funnel, desserts: desserts, sources: sources, returning: returning, leadsToCustomers: leadsToCustomers,
+    heat: heat, orderHeat: oh, speed: speed,
+    customers: { list: customers, count: customers.length, repeat: rep, repeatRate: pct(rep, customers.length), total: Math.round(tot * 100) / 100,
+      avgOrder: (function () { var n = customers.reduce(function (a, c) { return a + c.orders; }, 0); return n ? Math.round(100 * tot / n) / 100 : 0; })() } };
+}
+function getSearch(days) {   // Google search words + pages, from Search Console (data is ~2-3 days behind)
+  guard_();
+  days = Math.min(Math.max(Number(days) || 28, 1), 480);
+  var tz = 'Asia/Kuala_Lumpur', end = new Date(Date.now() - 2 * 864e5), start = new Date(end.getTime() - (days - 1) * 864e5);
+  function q(dims, limit) {
+    var r = UrlFetchApp.fetch('https://searchconsole.googleapis.com/webmasters/v3/sites/' + encodeURIComponent(SC_SITE) + '/searchAnalytics/query', {
+      method: 'post', contentType: 'application/json', muteHttpExceptions: true, headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
+      payload: JSON.stringify({ startDate: Utilities.formatDate(start, tz, 'yyyy-MM-dd'), endDate: Utilities.formatDate(end, tz, 'yyyy-MM-dd'), dimensions: dims, rowLimit: limit || 50 }) });
+    if (r.getResponseCode() !== 200) throw new Error('Search Console: ' + r.getContentText().slice(0, 200));
+    return (JSON.parse(r.getContentText()).rows || []).map(function (x) { return { k: x.keys, clicks: x.clicks, imp: x.impressions, ctr: Math.round(1000 * x.ctr) / 10, pos: Math.round(10 * x.position) / 10 }; });
+  }
+  return { from: Utilities.formatDate(start, tz, 'd MMM'), to: Utilities.formatDate(end, tz, 'd MMM'), queries: q(['query'], 50), pages: q(['page'], 20), countries: q(['country'], 10), devices: q(['device'], 5) };
+}
+function dailyAlert() {   // 9am every day: emails Alfred when something needs attention (time trigger, set up by setupAlerts)
+  var ss = SpreadsheetApp.openById(VISITS_ID), since = Date.now() - 864e5, tz = 'Asia/Kuala_Lumpur', lines = [];
+  function rows(name) { var sh = ss.getSheetByName(name); return sh && sh.getLastRow() > 1 ? sh.getRange(2, 1, sh.getLastRow() - 1, sh.getLastColumn()).getValues() : []; }
+  var h = rows('Health').filter(function (r) { return new Date(r[0]).getTime() >= since; });
+  var errs = h.filter(function (r) { return r[2] === 'error'; }), loads = h.filter(function (r) { return r[2] === 'load' && Number(r[4]) > 0; }).map(function (r) { return Number(r[4]); }).sort(function (a, b) { return a - b; });
+  var med = loads.length ? loads[Math.floor(loads.length / 2)] : 0;
+  var newLeads = rows('Leads').filter(function (r) { return !r[11]; });
+  var openCarts = rows('Carts').filter(function (r) { return Number(r[5]) > 0 && !/ordered|paid|emptied/.test(String(r[8])) && new Date(r[10]).getTime() >= since; });
+  var visitors = {}; rows('Visits').forEach(function (r) { if (new Date(r[0]).getTime() >= since) visitors[r[1]] = 1; });
+  if (newLeads.length) lines.push('🙋 ' + newLeads.length + ' lead(s) not contacted yet: ' + newLeads.slice(-10).map(function (r) { return r[2] + ' (' + r[3] + ')'; }).join(', '));
+  if (openCarts.length) lines.push('🛒 ' + openCarts.length + ' cart(s) left without paying in the last 24 h: ' + openCarts.map(function (r) { return (r[2] || 'visitor') + ' – ' + r[4] + ' RM' + r[6]; }).join('; '));
+  if (errs.length) lines.push('⚠️ ' + errs.length + ' website error(s) in the last 24 h, e.g. "' + String(errs[0][10]).slice(0, 120) + '" on ' + errs[0][3] + '. Tell the BEKU Website chat.');
+  if (med > 5000) lines.push('🐢 The website was slow yesterday: pages took ' + (med / 1000).toFixed(1) + ' s to load (median). Tell the BEKU Website chat.');
+  if (!lines.length) return;
+  lines.unshift('Good morning! Website in the last 24 hours: ' + Object.keys(visitors).length + ' visitors.');
+  lines.push('', 'Open the beku° admin app → 🟢 Live, carts & leads / 📊 Insights: https://bekufrozen.com/admin/');
+  MailApp.sendEmail(ALERT_TO, 'beku° website – ' + Utilities.formatDate(new Date(), tz, 'd MMM') + ': things to follow up', lines.join('\n'));
+}
+function setupAlerts() {   // run once from the editor
+  ScriptApp.getProjectTriggers().forEach(function (t) { if (t.getHandlerFunction() === 'dailyAlert') ScriptApp.deleteTrigger(t); });
+  ScriptApp.newTrigger('dailyAlert').timeBased().atHour(9).nearMinute(5).everyDays(1).inTimezone('Asia/Kuala_Lumpur').create();
+  return 'daily alert set for 9am';
+}
+function testInsights() { var r = getInsights(30); Logger.log('funnel ' + JSON.stringify(r.funnel.map(function (f) { return f.n; })) + ' desserts ' + r.desserts.length + ' sources ' + r.sources.length + ' customers ' + r.customers.count + ' bytes ' + JSON.stringify(r).length); }
+function testSearch() { var r = getSearch(28); Logger.log('queries ' + r.queries.length + ' pages ' + r.pages.length + ' ' + JSON.stringify(r.queries.slice(0, 3))); }

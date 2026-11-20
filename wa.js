@@ -73,6 +73,14 @@
   var lastCart='';
   window.bkCart=function(c){var d=me();c.type='web_cart';c.name=c.name||d.contact||'';c.phone=c.phone||d.phone||'';
     var sig=JSON.stringify([c.items,c.q,c.val,c.st,c.o,c.name,c.phone]);if(sig===lastCart)return;lastCart=sig;post(c)};
+  // speed + errors (Alfred 21 Nov 00:35 "add all"): page load time once per page, and the first few script errors
+  var LCP=0;try{new PerformanceObserver(function(l){var e=l.getEntries();if(e.length)LCP=e[e.length-1].startTime}).observe({type:'largest-contentful-paint',buffered:true})}catch(x){}
+  var nErr=0;function perr(m){if(++nErr>3)return;post({type:'web_perf',k:'error',m:String(m||'').slice(0,200)})}
+  addEventListener('error',function(e){if(e&&e.message)perr(e.message+' @ '+String(e.filename||'').split('/').pop()+':'+(e.lineno||''))});
+  addEventListener('unhandledrejection',function(e){perr('promise: '+((e&&e.reason&&(e.reason.message||e.reason))||''))});
+  addEventListener('load',function(){setTimeout(function(){try{var n=performance.getEntriesByType('navigation')[0];if(!n)return;
+    var lcp=Math.round(LCP);
+    post({type:'web_perf',k:'load',ms:Math.round(n.loadEventEnd||n.duration),ttfb:Math.round(n.responseStart),dom:Math.round(n.domContentLoadedEventEnd),lcp:lcp,net:(navigator.connection&&navigator.connection.effectiveType)||''})}catch(x){}},1500)});
   // welcome pop-up: once per visitor (answered or skipped)
   if(ls('bk_asked')||me().phone||/privacy|\/admin\//.test(location.pathname))return;
   var T={en:['welcome to beku° 👋','Leave your name and WhatsApp number and our team will send you prices, samples and our Christmas specials.','Your name','WhatsApp number','Business / shop name (optional)','Continue','Skip for now','We only use your number to contact you about beku° orders.','Privacy policy','Please fill in your name and a WhatsApp number.','Thank you! We will WhatsApp you soon 🧊'],
