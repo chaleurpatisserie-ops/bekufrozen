@@ -74,6 +74,12 @@ textarea{min-height:80px;resize:vertical}
 .bar .st.dirty{color:var(--warn);font-weight:700}
 .bar .st.ok{color:var(--ok);font-weight:700}
 .bar .btn{font-size:18px;padding:12px 28px}
+.lrow{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #eef3f7}.lrow:last-child{border-bottom:0}
+.lrow .dot{width:10px;height:10px;border-radius:50%;background:#1f8a4c;margin-top:7px;flex:none;box-shadow:0 0 0 4px #1f8a4c22}
+.lrow .lm{flex:1;min-width:0}.lrow b{color:var(--navy)}.lrow small{display:block;color:var(--mute);font-size:13px}
+.lrow .act{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.wa{background:#1f8a4c;color:#fff;text-decoration:none;border-radius:999px;padding:6px 12px;font:600 13px Fredoka,sans-serif;white-space:nowrap}
+.tagx{display:inline-block;border-radius:999px;padding:1px 9px;font:600 12px Fredoka,sans-serif;background:#eef3f7;color:var(--navy)}.tagx.red{background:#fde8e6;color:#c0392b}.tagx.grn{background:#e3f4ea;color:#1f8a4c}
+.lrow label{font-size:13px;color:var(--mute);display:flex;gap:4px;align-items:center}
 .hide{display:none}
 .loading{text-align:center;padding:60px;color:var(--mute);font-size:18px}
 .sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:10px 0 4px}
@@ -115,6 +121,7 @@ textarea{min-height:80px;resize:vertical}
       <button class="tab" data-tab="contact">📞 Contact</button>
       <button class="tab" data-tab="orders">📦 Orders &amp; sales</button>
       <button class="tab" data-tab="visits">📈 Visitors</button>
+      <button class="tab" data-tab="live">🟢 Live, carts &amp; leads</button>
     </div>
     <div class="langs" id="langs"><span>Language you are editing:</span>
       <button class="lg on" data-lang="en">English</button><button class="lg" data-lang="zh">中文</button><button class="lg" data-lang="ms">Bahasa Melayu</button>
@@ -223,6 +230,15 @@ textarea{min-height:80px;resize:vertical}
     </section>
 
     <!-- VISITORS -->
+    <section id="t-live" class="hide">
+      <div class="card">
+        <h2>Right now on your website</h2>
+        <p class="why">Live visitors (active in the last 3 minutes), the name &amp; WhatsApp number people left in the welcome pop-up, carts on the order page that were not paid, and orders still waiting for payment. Updates by itself every 30 seconds while this tab is open.</p>
+        <div class="chips"><button class="btn ghost small" id="l-refresh">↻ Refresh</button><span class="hint" id="l-at"></span></div>
+        <div id="l-sum" class="sum"></div>
+      </div>
+      <div id="l-body" class="loading">Loading…</div>
+    </section>
     <section id="t-visits" class="hide">
       <div class="card">
         <h2>Who visits your website</h2>
@@ -384,8 +400,9 @@ $('padd').onclick=function(){
 };
 document.querySelectorAll('.tab').forEach(function(b){ b.onclick=function(){
   TAB=b.dataset.tab; document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===b)});
-  ['google','products','home','contact','orders','visits'].forEach(function(t){ $('t-'+t).classList.toggle('hide',t!==TAB); });
-  $('langs').classList.toggle('hide',TAB==='contact'||TAB==='orders'||TAB==='visits');
+  ['google','products','home','contact','orders','visits','live'].forEach(function(t){ $('t-'+t).classList.toggle('hide',t!==TAB); });
+  $('langs').classList.toggle('hide',TAB==='contact'||TAB==='orders'||TAB==='visits'||TAB==='live');
+  if(TAB==='live') loadLive(); clearInterval(window.LT); if(TAB==='live') window.LT=setInterval(function(){ if(!document.hidden) loadLive(true); },30000);
   if(TAB==='orders'&&!ORD) loadOrders();
   if(TAB==='visits'&&!VIS) loadVisits();
 };});
@@ -463,6 +480,43 @@ document.querySelectorAll('#o-chips .chip').forEach(function(b){ b.onclick=funct
 $('o-q').oninput=function(){ renderOrders(); };
 $('o-refresh').onclick=function(){ ORD=null; loadOrders(); };
 document.querySelectorAll('.lg').forEach(function(b){ b.onclick=function(){ LANG=b.dataset.lang; document.querySelectorAll('.lg').forEach(function(x){x.classList.toggle('on',x===b)}); render(); };});
+
+/* ---- Live, carts & leads (Alfred 21 Nov 00:09: "cart, pending, live visitor"; 00:15 "the number should be saved and I will contact them") ---- */
+var LIV=null;
+function ago(sec){ sec=Math.max(0,sec|0); if(sec<60) return sec+' s ago'; var m=Math.round(sec/60); if(m<60) return m+' min ago'; var h=Math.round(m/60); if(h<48) return h+' h ago'; return Math.round(h/24)+' days ago'; }
+function when(iso){ if(!iso) return ''; var d=new Date(iso); return d.toLocaleDateString([], {day:'numeric',month:'short'})+' '+d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); }
+function waLink(phone,name,txt){ phone=String(phone||'').replace(/\D/g,''); if(phone.length<9) return '';
+  var m=txt||('Hi '+(name||'')+'! This is beku° 🧊 Thank you for visiting our website. How can we help you with frozen desserts for your business?');
+  return '<a class="wa" target="_blank" href="https://wa.me/'+phone+'?text='+encodeURIComponent(m)+'">WhatsApp '+esc(name||'')+'</a>'; }
+function loadLive(quiet){
+  if(!quiet){ $('l-body').className='loading'; $('l-body').textContent='Loading…'; }
+  GSR.withSuccessHandler(function(r){ LIV=r; renderLive(); })
+    .withFailureHandler(function(e){ if(!quiet){ $('l-body').className='hint'; $('l-body').textContent='Could not load: '+e.message; } }).getLive();
+}
+function renderLive(){
+  var r=LIV; if(!r) return; $('l-body').className=''; $('l-at').textContent='Updated '+new Date(r.at).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  var open=r.carts.filter(function(c){ return !/ordered|paid/.test(c.st); }), newLeads=r.leads.filter(function(l){ return !l.done; });
+  $('l-sum').innerHTML='<div><b>'+r.live.length+'</b><span>on the site now</span></div><div><b>'+newLeads.length+'</b><span>leads not contacted</span></div><div><b>'+open.length+'</b><span>carts not paid</span></div><div><b>'+r.pending.length+'</b><span>orders waiting for payment</span></div>';
+  var h='';
+  h+=vCard('🟢 Live now','People with the website open in the last 3 minutes. Name shows if they filled in the welcome pop-up.',
+    r.live.length? r.live.map(function(o){ return '<div class="lrow"><span class="dot"></span><div class="lm"><b>'+esc(o.name||'Visitor')+'</b>'+(o.phone?' · '+esc(o.phone):'')
+      +'<small>On '+esc(o.page)+(o.title?' – '+esc(o.title):'')+'</small><small>'+esc([o.dev,o.loc,o.src&&('from '+o.src)].filter(Boolean).join(' · '))+' · on site '+Math.max(1,Math.round(o.on/60))+' min · '+o.taps+' taps · seen '+ago(o.ago)+'</small></div>'
+      +'<div class="act">'+(o.phone?waLink(o.phone,o.name):'')+'</div></div>'; }).join('') : '<p class="hint">Nobody on the website right now.</p>');
+  h+=vCard('🙋 Leads from the welcome pop-up','Name and WhatsApp number visitors left on their first visit. Tick "contacted" after you message them.',
+    r.leads.length? r.leads.map(function(l){ return '<div class="lrow"><div class="lm"><b>'+esc(l.name)+'</b> · '+esc(l.phone)+(l.biz?' · '+esc(l.biz):'')+(l.done?' <span class="tagx grn">contacted '+esc(l.done)+'</span>':' <span class="tagx red">new</span>')
+      +'<small>'+when(l.t)+' · first page '+esc(l.page||'/')+(l.src?' · from '+esc(l.src):'')+(l.dev?' · '+esc(l.dev):'')+(l.loc?' · '+esc(l.loc):'')+'</small></div>'
+      +'<div class="act">'+waLink(l.phone,l.name)+'<label><input type="checkbox" data-v="'+esc(l.v)+'"'+(l.done?' checked':'')+'> contacted</label></div></div>'; }).join('') : '<p class="hint">No leads yet. They appear here as soon as someone fills in the pop-up.</p>');
+  h+=vCard('🛒 Carts not paid','What people put in the order page but did not finish. "Left" = no change for 30 minutes or more.',
+    open.length? open.map(function(c){ var left=c.mins>=30; var msg='Hi '+(c.name||'')+'! This is beku° 🧊 We saw you were ordering '+c.items+' on our website. Can we help you finish the order or answer any question?';
+      return '<div class="lrow"><div class="lm"><b>'+esc(c.name||'Visitor (no name yet)')+'</b>'+(c.phone?' · '+esc(c.phone):'')+' <span class="tagx'+(left?' red':'')+'">'+(left?'left ':'')+esc(c.st)+'</span>'
+        +'<small>'+esc(c.items)+'</small><small>'+c.q+' '+(c.kind==='sample'?'pcs (sample box)':'ctn')+' · '+rm(c.val)+' · updated '+ago(c.mins*60)+'</small></div><div class="act">'+(c.phone?waLink(c.phone,c.name,msg):'')+'</div></div>'; }).join('') : '<p class="hint">No open carts.</p>');
+  h+=vCard('⏳ Orders waiting for payment','Orders in the bot sheet that are not paid yet (website and WhatsApp).',
+    r.pending.length? r.pending.map(function(o){ return '<div class="lrow"><div class="lm"><b>'+esc(o.biz||'-')+'</b> · '+esc(o.no||o.inv||'')+' · '+rm(o.total)
+      +'<small>'+esc(o.items)+'</small><small>'+when(o.d)+(o.del?' · delivery '+esc(o.del):'')+' · '+esc(o.pay||'Unpaid')+(o.st?' · '+esc(o.st):'')+'</small></div><div class="act">'+(String(o.phone).indexOf('@')<0?waLink(o.phone,o.biz,'Hi! This is beku° 🧊 about your order '+(o.no||o.inv||'')+'.'):'')+'</div></div>'; }).join('') : '<p class="hint">Nothing waiting for payment.</p>');
+  $('l-body').innerHTML=h;
+  $('l-body').querySelectorAll('input[data-v]').forEach(function(x){ x.onchange=function(){ GSR.withSuccessHandler(function(){ loadLive(true); }).markContacted(x.dataset.v, x.checked); }; });
+}
+$('l-refresh').onclick=function(){ loadLive(); };
 $('save').onclick=function(){
   if(busy)return; busy=true; $('save').disabled=true; setStatus('Saving…');
   GSR.withSuccessHandler(function(res){ busy=false; dirty=false;

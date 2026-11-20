@@ -51,3 +51,58 @@
     else n=(h&&h.charAt(0)!=='#'?'Link: ':'Tap: ')+(t||h)+(h&&h.charAt(0)!=='#'?' → '+h.slice(0,40):'');
     send('click',n)},true);
 })();
+/* Welcome pop-up (name + WhatsApp, asked once), live pings and cart reporting.
+   Alfred 21 Nov 2026 00:09–00:15: "ask them to fill in their name and number … when they first enter, then stop asking";
+   "the number should be saved and I will contact them"; admin shows live visitors, carts and pending orders. */
+(function(){
+  var API2='https://script.google.com/macros/s/AKfycbxNYrq26BteZEz2XrrEHXEv7pvqnn5VDsoULjC1g2Q3JkpZSQNxg8CgQThCnFvCxtfJ6A/exec';
+  if(navigator.webdriver||/bot|crawl|spider|slurp|lighthouse|headless|preview/i.test(navigator.userAgent))return;
+  function ls(k,v){try{if(v!==undefined)localStorage.setItem(k,v);return localStorage.getItem(k)}catch(e){return null}}
+  function ss(k){try{return sessionStorage.getItem(k)}catch(e){return null}}
+  var dev=/iPad|Tablet/i.test(navigator.userAgent)?'tablet':/Mobi|Android|iPhone/i.test(navigator.userAgent)?'phone':'computer',tz='';
+  try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}
+  function lg(){var l=(document.documentElement.lang||'en').slice(0,2);return /^(zh|ms)$/.test(l)?l:'en'}
+  function me(){var d={};try{d=JSON.parse(ls('beku_details')||'{}')}catch(e){}return d}
+  function post(o){try{o.v=ls('bk_v')||'';o.s=ss('bk_s')||'';o.p=location.pathname+location.search.replace(/([?&])(fbclid|gclid)=[^&]*/g,'$1').slice(0,60);
+    o.r=ss('bk_src')||'';o.l=lg();o.d=dev;o.z=tz;
+    fetch(API2,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(o)}).catch(function(){})}catch(e){}}
+  // live: a small ping every 30 s while the page is open and visible
+  function ping(){if(document.visibilityState==='visible')post({type:'web_ping',n:document.title.slice(0,80)})}
+  setTimeout(ping,4000);setInterval(ping,30000);
+  // cart reporting for the order page (called by /order/)
+  var lastCart='';
+  window.bkCart=function(c){var d=me();c.type='web_cart';c.name=c.name||d.contact||'';c.phone=c.phone||d.phone||'';
+    var sig=JSON.stringify([c.items,c.q,c.val,c.st,c.o,c.name,c.phone]);if(sig===lastCart)return;lastCart=sig;post(c)};
+  // welcome pop-up: once per visitor (answered or skipped)
+  if(ls('bk_asked')||me().phone||/privacy|\/admin\//.test(location.pathname))return;
+  var T={en:['welcome to beku° 👋','Leave your name and WhatsApp number and our team will send you prices, samples and our Christmas specials.','Your name','WhatsApp number','Business / shop name (optional)','Continue','Skip for now','We only use your number to contact you about beku° orders.','Privacy policy','Please fill in your name and a WhatsApp number.','Thank you! We will WhatsApp you soon 🧊'],
+    zh:['欢迎来到 beku° 👋','留下您的名字和 WhatsApp 号码，我们的团队会发给您价格、样品和圣诞特别款。','您的名字','WhatsApp 号码','公司 / 店名（选填）','继续','稍后再说','您的号码只用于联系您有关 beku° 的订单。','隐私政策','请填写名字和 WhatsApp 号码。','谢谢！我们会尽快通过 WhatsApp 联系您 🧊'],
+    ms:['selamat datang ke beku° 👋','Tinggalkan nama dan nombor WhatsApp anda, pasukan kami akan hantar harga, sampel dan menu Krismas kami.','Nama anda','Nombor WhatsApp','Nama perniagaan / kedai (pilihan)','Teruskan','Langkau dulu','Nombor anda hanya digunakan untuk menghubungi anda tentang order beku°.','Dasar privasi','Sila isi nama dan nombor WhatsApp.','Terima kasih! Kami akan WhatsApp anda tidak lama lagi 🧊']};
+  function show(){
+    if(ls('bk_asked')||document.getElementById('bkw'))return;var t=T[lg()];
+    var st=document.createElement('style');st.textContent='#bkw{position:fixed;inset:0;z-index:2147483000;background:rgba(15,45,75,.55);display:flex;align-items:center;justify-content:center;padding:18px;font-family:"DM Sans",system-ui,sans-serif}'
+      +'#bkw .bx{background:#fffdfa;border-radius:26px;max-width:400px;width:100%;padding:26px 22px 18px;box-shadow:0 18px 50px rgba(10,35,60,.35);position:relative;text-align:center;animation:bkin .25s ease-out}'
+      +'@keyframes bkin{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}'
+      +'#bkw img{width:74px;height:74px;border-radius:50%;box-shadow:0 0 0 4px #cbe9f8}#bkw h2{font:700 24px/1.15 Fredoka,sans-serif;color:#17558c;margin:12px 0 6px}#bkw p{margin:0 0 14px;color:#3c4d5e;font-size:15px;line-height:1.45}'
+      +'#bkw input{display:block;width:100%;box-sizing:border-box;margin:0 0 10px;padding:13px 14px;border:2px solid #cbe9f8;border-radius:14px;font:16px "DM Sans",sans-serif;color:#1d2b3a;background:#fff;outline:none}#bkw input:focus{border-color:#17558c}'
+      +'#bkw .go{width:100%;border:0;border-radius:999px;background:#17558c;color:#fff;font:600 17px Fredoka,sans-serif;padding:13px;cursor:pointer;margin-top:2px}'
+      +'#bkw .sk{background:none;border:0;color:#5f6f80;font:500 14px "DM Sans",sans-serif;margin-top:8px;cursor:pointer;text-decoration:underline}'
+      +'#bkw .nt{font-size:12px;color:#5f6f80;margin:10px 0 0}#bkw .nt a{color:#17558c}#bkw .er{color:#c0392b;font-size:14px;min-height:1.2em;margin:0 0 6px}';
+    document.head.appendChild(st);
+    var w=document.createElement('div');w.id='bkw';w.setAttribute('role','dialog');w.setAttribute('aria-modal','true');w.setAttribute('aria-label',t[0]);
+    w.innerHTML='<form class="bx" novalidate><img src="/img/beku-logo-256.webp" alt=""><h2>'+t[0]+'</h2><p>'+t[1]+'</p>'
+      +'<input name="n" autocomplete="name" placeholder="'+t[2]+'" required><input name="p" type="tel" inputmode="tel" autocomplete="tel" placeholder="'+t[3]+' · 012 345 6789" required>'
+      +'<input name="b" autocomplete="organization" placeholder="'+t[4]+'"><div class="er"></div><button class="go" type="submit">'+t[5]+'</button>'
+      +'<button class="sk" type="button">'+t[6]+'</button><p class="nt">'+t[7]+' <a href="/privacy.html">'+t[8]+'</a></p></form>';
+    document.body.appendChild(w);ls('bk_asked','shown');try{window.bkT&&bkT('click','Welcome pop-up shown')}catch(e){}
+    var f=w.querySelector('form');
+    w.querySelector('.sk').onclick=function(){ls('bk_asked','skipped');w.remove();try{window.bkT&&bkT('click','Welcome pop-up skipped')}catch(e){}};
+    f.onsubmit=function(e){e.preventDefault();var n=f.n.value.trim(),p=f.p.value.replace(/[^\d+]/g,''),b=f.b.value.trim();
+      if(!n||p.replace(/\D/g,'').length<9){w.querySelector('.er').textContent=t[9];return}
+      var d=me();d.contact=d.contact||n;d.phone=d.phone||f.p.value.trim();if(b&&!d.company)d.company=b;ls('beku_details',JSON.stringify(d));ls('bk_asked','answered');
+      post({type:'web_lead',name:n,phone:p,biz:b});try{window.bkT&&bkT('click','Welcome pop-up answered')}catch(e){}
+      f.innerHTML='<img src="/img/beku-logo-256.webp" alt=""><h2>'+t[10]+'</h2>';setTimeout(function(){w.remove()},1600)};
+    setTimeout(function(){try{f.n.focus({preventScroll:true})}catch(e){}},50);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(show,1500)});else setTimeout(show,1500);
+})();

@@ -179,15 +179,114 @@ function doPost(e) {
   var out = function (o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); };
   try {
     var b = JSON.parse(e.postData.contents);
+    if (b.type) return out(publicCall_(b));   // website pop-up / cart / live pings (write-only)
     var who = verifyIdToken_(b.t);
     if (!who) return out({ ok: false, err: 'signin' });
     if (allowedEmails_().indexOf(who) < 0) return out({ ok: false, err: 'noaccess', email: who });
     API_USER = who;
-    var fns = { getSettings: getSettings, saveSettings: saveSettings, uploadPhoto: uploadPhoto, getOrders: getOrders, getVisits: getVisits,
+    var fns = { getSettings: getSettings, saveSettings: saveSettings, uploadPhoto: uploadPhoto, getOrders: getOrders, getVisits: getVisits, getLive: getLive, markContacted: markContacted,
                 whoami: function () { return who; } };
     if (!fns[b.fn]) return out({ ok: false, err: 'unknown function' });
     return out({ ok: true, r: fns[b.fn].apply(null, b.args || []) });
   } catch (err) {
     return out({ ok: false, err: String(err && err.message || err) });
   }
+}
+
+
+/* ---- Live visitors, carts, leads, pending (BEKU Website chat, Alfred 21 Nov 00:09–00:15: "cart, pending, live visitor" in admin;
+   "ask them to fill in their name and number … only once"; "the number should be saved and I will contact them").
+   The website posts {type:'web_lead'|'web_cart'|'web_ping', …} to this script's public API deployment (no sign-in needed to WRITE these;
+   reading them needs the admin sign-in). Saved in the spreadsheet "beku° website visits", tabs Leads / Carts / Live. ---- */
+var VISITS_ID = '1SfuAjnI0FwBCNgB3HNRH1Zy7tRJ9VWV5xjA58Kk_-eA';
+function vTab_(name, head) {
+  var ss = SpreadsheetApp.openById(VISITS_ID), sh = ss.getSheetByName(name);
+  if (!sh) { sh = ss.insertSheet(name); sh.appendRow(head); sh.setFrozenRows(1); }
+  return sh;
+}
+function cl_(d, k, n) { return String(d[k] == null ? '' : d[k]).replace(/[\r\n\t]/g, ' ').trim().slice(0, n || 120); }
+function phone_(p) {
+  var s = String(p || '').replace(/[^\d+]/g, '');
+  if (/^\+/.test(s)) s = s.slice(1); else if (/^0/.test(s)) s = '6' + s; else if (/^1\d{8,9}$/.test(s)) s = '60' + s;
+  return s.slice(0, 15);
+}
+function where_(z) { return /Kuala_Lumpur|Kuching/.test(z) ? 'Malaysia' : /Singapore/.test(z) ? 'Singapore' : String(z || '').replace(/^[^/]+\//, '').replace(/_/g, ' '); }
+var LEAD_HEAD = ['Time', 'Visitor', 'Name', 'WhatsApp', 'Business', 'Page', 'Source', 'Language', 'Device', 'Location', 'Last seen', 'Contacted'];
+var CART_HEAD = ['Started', 'Visitor', 'Name', 'WhatsApp', 'Items', 'Qty', 'Value (RM)', 'Kind', 'Status', 'Order no.', 'Updated', 'Page', 'Source'];
+function pubLead_(d) {
+  var name = cl_(d, 'name', 80), ph = phone_(d.phone), v = cl_(d, 'v', 20);
+  if (!name || ph.length < 9) return { ok: false };
+  var sh = vTab_('Leads', LEAD_HEAD), lock = LockService.getScriptLock(); lock.waitLock(15000);
+  try {
+    var f = v ? sh.getRange('B:B').createTextFinder(v).matchEntireCell(true).findNext() : null;
+    var row = [v, name, ph, cl_(d, 'biz', 80), cl_(d, 'p'), cl_(d, 'r'), cl_(d, 'l', 5), cl_(d, 'd', 10), where_(cl_(d, 'z')), new Date()];
+    if (f) sh.getRange(f.getRow(), 2, 1, row.length).setValues([row]);
+    else sh.appendRow([new Date()].concat(row).concat(['']));
+  } finally { lock.releaseLock(); }
+  return { ok: true };
+}
+function pubCart_(d) {
+  var v = cl_(d, 'v', 20); if (!v) return { ok: false };
+  var st = cl_(d, 'st', 12); if (!/^(browsing|details|checkout|ordered|paid|emptied)$/.test(st)) st = 'browsing';
+  var sh = vTab_('Carts', CART_HEAD), lock = LockService.getScriptLock(); lock.waitLock(15000);
+  try {
+    var last = sh.getLastRow(), r = 0;
+    if (last > 1) { var vals = sh.getRange(2, 2, last - 1, 8).getValues();   // B..I
+      for (var i = vals.length - 1; i >= 0; i--) if (String(vals[i][0]) === v && !/^(ordered|paid)$/.test(String(vals[i][7]))) { r = i + 2; break; } }
+    var row = [cl_(d, 'name', 80), phone_(d.phone), cl_(d, 'items', 900), Number(d.q) || 0, Number(d.val) || 0, cl_(d, 'k', 20), st, cl_(d, 'o', 30), new Date(), cl_(d, 'p', 80), cl_(d, 'r', 80)];
+    if (r) { var old = sh.getRange(r, 3, 1, 2).getValues()[0]; if (!row[0]) row[0] = old[0]; if (!row[1]) row[1] = old[1];
+      sh.getRange(r, 3, 1, row.length).setValues([row]); }
+    else if (st !== 'emptied' && (row[3] > 0 || st !== 'browsing')) sh.appendRow([new Date(), v].concat(row));
+  } finally { lock.releaseLock(); }
+  return { ok: true };
+}
+function pubPing_(d) {
+  var sh = vTab_('Live', ['Time', 'Visitor', 'Session', 'Page', 'Title', 'Source', 'Device', 'Location']);
+  sh.appendRow([new Date(), cl_(d, 'v', 20), cl_(d, 's', 20), cl_(d, 'p'), cl_(d, 'n'), cl_(d, 'r'), cl_(d, 'd', 10), where_(cl_(d, 'z'))]);
+  if (sh.getLastRow() > 3000) sh.deleteRows(2, 2000);
+  return { ok: true };
+}
+function publicCall_(b) {
+  if (b.type === 'web_lead') return pubLead_(b);
+  if (b.type === 'web_cart') return pubCart_(b);
+  if (b.type === 'web_ping') return pubPing_(b);
+  return { ok: false };
+}
+function markContacted(visitor, done) {   // admin: tick a lead / cart as contacted
+  guard_();
+  var sh = vTab_('Leads', LEAD_HEAD), f = sh.getRange('B:B').createTextFinder(String(visitor)).matchEntireCell(true).findNext();
+  if (f) sh.getRange(f.getRow(), 12).setValue(done ? Utilities.formatDate(new Date(), 'Asia/Kuala_Lumpur', 'd MMM HH:mm') + ' · ' + (API_USER || 'admin') : '');
+  return { ok: !!f };
+}
+function getLive() {
+  guard_();
+  var tz = 'Asia/Kuala_Lumpur', now = Date.now(), ss = SpreadsheetApp.openById(VISITS_ID);
+  function rows(name) { var sh = ss.getSheetByName(name); return sh && sh.getLastRow() > 1 ? sh.getRange(2, 1, sh.getLastRow() - 1, sh.getLastColumn()).getValues() : []; }
+  function iso(t) { return t instanceof Date ? Utilities.formatDate(t, tz, "yyyy-MM-dd'T'HH:mm:ss") : String(t || ''); }
+  var leads = rows('Leads'), byV = {};
+  leads.forEach(function (r) { byV[String(r[1])] = { name: String(r[2]), phone: String(r[3]) }; });
+  // live = activity in the last 3 minutes (pings every 30 s while the page is open), latest per session, not if they left
+  var S = {}, cut = now - 3 * 60e3;
+  function seen(t, v, s, ev, page, src, dev, loc, title) {
+    t = t instanceof Date ? t.getTime() : new Date(t).getTime(); if (!(t >= cut)) return;
+    var o = S[s] = S[s] || { v: v, s: s, first: t, t: 0 };
+    if (t >= o.t) { o.t = t; o.ev = ev; if (page) o.page = page; if (title) o.title = title; }
+    o.first = Math.min(o.first, t); if (src) o.src = src; if (dev) o.dev = dev; if (loc) o.loc = loc; o.n = (o.n || 0) + (ev === 'click' ? 1 : 0);
+  }
+  var vis = ss.getSheetByName('Visits'), vl = vis ? vis.getLastRow() : 0;
+  if (vl > 1) { var k = Math.min(vl - 1, 1500); vis.getRange(vl - k + 1, 1, k, 12).getValues().forEach(function (r) {
+    seen(r[0], String(r[1]), String(r[2]), String(r[3]), String(r[5]).split('?')[0], String(r[6]), String(r[9]), String(r[7]), r[3] === 'view' ? String(r[4]) : ''); }); }
+  rows('Live').slice(-1500).forEach(function (r) { seen(r[0], String(r[1]), String(r[2]), 'ping', String(r[3]).split('?')[0], String(r[5]), String(r[6]), String(r[7]), String(r[4])); });
+  var live = Object.keys(S).map(function (k) { return S[k]; }).filter(function (o) { return o.ev !== 'leave'; })
+    .sort(function (a, b) { return b.t - a.t; })
+    .map(function (o) { var w = byV[o.v] || {}; return { page: o.page || '/', title: o.title || '', src: o.src || '', dev: o.dev || '', loc: o.loc || '',
+      ago: Math.round((now - o.t) / 1000), on: Math.round((o.t - o.first) / 1000), taps: o.n || 0, name: w.name || '', phone: w.phone || '' }; });
+  var carts = rows('Carts').map(function (r) { var w = byV[String(r[1])] || {}; return { started: iso(r[0]), v: String(r[1]), name: String(r[2] || w.name || ''), phone: String(r[3] || w.phone || ''),
+      items: String(r[4]), q: Number(r[5]) || 0, val: Number(r[6]) || 0, kind: String(r[7]), st: String(r[8]), no: String(r[9]), upd: iso(r[10]),
+      mins: r[10] instanceof Date ? Math.round((now - r[10].getTime()) / 60e3) : 0 }; })
+    .filter(function (c) { return c.q > 0 || /ordered|paid/.test(c.st); }).reverse().slice(0, 200);
+  var lds = leads.map(function (r) { return { t: iso(r[0]), v: String(r[1]), name: String(r[2]), phone: String(r[3]), biz: String(r[4]), page: String(r[5]), src: String(r[6]),
+      lang: String(r[7]), dev: String(r[8]), loc: String(r[9]), last: iso(r[10]), done: String(r[11] || '') }; }).reverse().slice(0, 300);
+  var pend = getOrders().rows.filter(function (o) { return !/^paid/i.test(o.pay) && !/cancel|refund|deliver/i.test(o.st + ' ' + o.pay); }).slice(0, 100);
+  return { live: live, carts: carts, leads: lds, pending: pend, at: new Date().toISOString() };
 }

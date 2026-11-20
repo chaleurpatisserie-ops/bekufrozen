@@ -227,6 +227,15 @@ function submit(){if(!ready()||st.busy)return;var c=calc();st.busy=true;st.err='
     var href='https://wa.me/'+WA+'?text='+encodeURIComponent(txt);if(waWin)waWin.location.href=href;else location.href=href;
     st.busy=false;st.step='done';st.paidBy='duitnow';render();scrollTo(0,0);if(window.bkT)bkT('order','Placed (DuitNow QR) '+st.order)
   }).catch(function(){st.busy=false;st.err=L('loadErr');if(waWin)waWin.close();render()})}
+/* cart reporting for the admin "Live, carts & leads" tab (Alfred 21 Nov 2026): what is in the cart, how far they got */
+(function(){var _r=render,tm=0,had=false;render=function(){var x=_r.apply(this,arguments);clearTimeout(tm);tm=setTimeout(rep,2500);return x};
+  function rep(){if(!window.bkCart)return;var c;try{c=calc()}catch(e){return}
+    var s=st.step==='pick'?'browsing':st.step==='details'?'details':st.step==='done'?(st.paidBy==='stripe'?'paid':'ordered'):'checkout';
+    var it=c.lines.filter(function(l){return!(c.sample&&l.amt)}).map(function(l){return l.qty+' x '+l.name}).join('; ');
+    if(!c.count&&s==='browsing'){if(had)bkCart({items:'',q:0,val:0,k:c.sample?'sample':'cartons',st:'emptied'});return}
+    had=true;bkCart({items:(c.sample?'SAMPLE BOX: ':'')+it,q:c.count,val:c.total,k:c.sample?'sample':'cartons',st:s,o:st.order||'',name:v('contact'),phone:v('phone')})}
+  addEventListener('pagehide',function(){clearTimeout(tm);try{rep()}catch(e){}});
+})();
 render();
 setInterval(function(){if(st.step!=='details')return;document.querySelectorAll('[data-f]').forEach(function(e){if(e.value!==String(st.f[e.dataset.f]||''))st.f[e.dataset.f]=e.value});refreshDetails()},800);
 fetch(API+'?type=web_menu').then(function(r){return r.json()}).then(function(r){st.menu=r.ok?r.items:null;st.menuErr=!r.ok;if(r.ok&&r.min){MIN=r.min;FEE=r.fee}render()}).catch(function(){st.menuErr=true;render()});
