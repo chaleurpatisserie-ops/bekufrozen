@@ -211,7 +211,7 @@ def page(lang):
 <section id="f" class="faq"><div class="wrap narrow"><h2>{e(t['faqT'])}</h2>{''.join(f'<details><summary>{e(q["q"])}<span class="pl" aria-hidden="true">+</span></summary><p>{e(q["a"])}</p></details>' for q in t['faq'])}</div></section>
 {WAVE('#cbe9f8','#fffdfa',True)}
 </main>
-<footer class="foot"><div class="ft">{e(t['foot'])}</div><a class="btn" href="{wa(t['wa'])}" target="_blank" rel="noopener">{e(t['fWa'])}</a><p>{e(EMAIL)} · {e(ADDR)}</p><p class="sm">{e(t['fLine'])} · <a href="/privacy.html">{e(x['privacy'])}</a></p></footer>
+<footer class="foot"><div class="ft">{e(t['foot'])}</div><a class="btn" href="{wa(t['wa'])}" target="_blank" rel="noopener">{e(t['fWa'])}</a><p>{e(EMAIL)} · {e(ADDR)}</p><p class="byca"><a href="/clients/#chaleur">by Chaleur Atelier Pâtisserie</a> · <a href="https://www.instagram.com/chaleuratelier_my/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@chaleuratelier_my" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.instagram.com/beku_frozendessert/" target="_blank" rel="noopener">beku° Instagram</a></p><p class="sm">{e(t['fLine'])} · <a href="/privacy.html">{e(x['privacy'])}</a></p></footer>
 <dialog id="pd" aria-labelledby="pdn"><button type="button" class="x" aria-label="{e(t['close'])}">×</button><div class="ph"><img id="pdi" alt="" width="220" height="220"></div><div class="pb"><span id="pdt" class="ptag"></span><h3 id="pdn"></h3><div id="pds" class="psp"></div><p><b>{e(t['layers'])}:</b> <span id="pdl"></span></p><p><b>{e(t['flav'])}:</b> <span id="pdf"></span></p><a id="pdo" class="btn" href="{ourl}">{e(x['orderBtn'])}</a><a id="pdw" class="btn green" target="_blank" rel="noopener">{e(t['askThis'])}</a></div></dialog>
 <script>window.BEKU={json.dumps(pdata, ensure_ascii=False)};</script>
 <script src="/app.js" defer></script>
@@ -402,9 +402,19 @@ d.querySelector('.x').onclick=function(){{d.close()}};d.querySelector('.pv').onc
 d.addEventListener('click',function(e){{if(e.target===d)d.close()}});
 d.addEventListener('keydown',function(e){{if(e.key==='ArrowRight')show(i+1);if(e.key==='ArrowLeft')show(i-1)}});
 var sx=0;d.addEventListener('touchstart',function(e){{sx=e.touches[0].clientX}},{{passive:true}});d.addEventListener('touchend',function(e){{var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)show(i+(dx<0?1:-1))}});}})();</script>
+<section class="sec ca" id="chaleur"><div class="cab"><div class="cat"><p class="kick">by Chaleur Atelier</p><h2>the pâtisserie behind beku°</h2>
+<p>beku° is the frozen wholesale line of <b>Chaleur Atelier Pâtisserie</b>, a modern French dessert atelier in Larkin, Johor Bahru. <i>Chaleur</i> means warmth and <i>atelier</i> means workshop: we started as a small two-person pastry workshop, and today our team makes petit gâteaux, whole cakes and viennoiseries for our own shop and for cafés and restaurants across JB.</p>
+<p>Every dessert is made by our own pastry chefs, with no pork, no lard and no alcohol. The same recipes go into beku°, frozen at their best for your counter.</p>
+<p class="shop">{IC('pin')}Visit our shop: Lobby, Zennith Suites, Jalan Kebun Teh 2, Larkin · open daily 11am–7pm</p></div>
+<div class="prof"><p class="ph">see all our profiles</p>
+<a href="https://www.instagram.com/chaleuratelier_my/" target="_blank" rel="noopener">{IC('ig')}<span><b>Instagram</b><small>@chaleuratelier_my</small></span></a>
+<a href="https://www.tiktok.com/@chaleuratelier_my" target="_blank" rel="noopener">{IC('tiktok')}<span><b>TikTok</b><small>@chaleuratelier_my</small></span></a>
+<a href="https://www.instagram.com/beku_frozendessert/" target="_blank" rel="noopener">{IC('ig')}<span><b>beku° on Instagram</b><small>@beku_frozendessert</small></span></a>
+<a href="https://www.chaleurpatisserie.com" target="_blank" rel="noopener">{IC('globe')}<span><b>Chaleur Atelier website</b><small>chaleurpatisserie.com</small></span></a>
+<a href="https://chaleurpatisserie.orderla.my/chaleur-atelier-patisserie-larkin" target="_blank" rel="noopener">{IC('cart')}<span><b>Chaleur Atelier online shop</b><small>cakes for home &amp; gifts</small></span></a></div></div></section>
 <section class="cta"><div class="ci"><span class="cg">{IC('gift')}</span><div><p class="kick">your counter next?</p><h2>start with a sample box · RM50</h2><p>Any 4 pieces, free delivery in JB. The RM50 comes off your first order above RM350 within 1 month.</p></div></div>
 <p class="btns"><a class="b1" href="/order/?mode=sample">Order a sample box</a><a class="b2" href="{e(wa_link)}">{IC('chat')}WhatsApp us</a></p></section>
-<footer class="ft"><img src="/img/brand/wordmark-navy.svg" alt="beku°" height="22"><span>beku° is a brand of Chaleur Atelier F&amp;B Sdn. Bhd. · Larkin, Johor Bahru</span></footer>
+<footer class="ft"><img src="/img/brand/wordmark-navy.svg" alt="beku°" height="22"><span>beku° is a brand of Chaleur Atelier F&amp;B Sdn. Bhd. · Larkin, Johor Bahru</span><span class="sl"><a href="https://www.instagram.com/chaleuratelier_my/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@chaleuratelier_my" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.instagram.com/beku_frozendessert/" target="_blank" rel="noopener">beku° Instagram</a></span></footer>
 <script src="/wa.js" defer></script>
 </body></html>"""
 

@@ -57,3 +57,4 @@ dialog{border:0;padding:0;border-radius:32px;max-width:520px;width:calc(100% - 3
 .qm a.go{background:#17558c;color:#fff}.qm a.go:hover{background:#0f3f6b}
 .qm .qi{width:34px;height:34px}
 @media (max-width:860px){.qm{grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:26px}.qm a{min-height:88px;font-size:14.5px;border-radius:18px}.qm .qi{width:28px;height:28px}}
+.foot .byca{margin:10px 0 0;font-size:14px}.foot .byca a{color:inherit;text-decoration:underline;text-underline-offset:3px}
