@@ -1,0 +1,77 @@
+/* beku° — Our clients & our work page (BEKU brand kit: Fredoka / DM Sans, baby blue #cbe9f8 + navy #17558c, no white page background) */
+:root{--navy:#17558c;--blue:#cbe9f8;--ice:#eaf6fd;--ink:#1d3349;--milk:#fffdfa}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--ice);color:var(--ink);font:400 16px/1.55 "DM Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Fredoka",sans-serif;color:var(--navy);margin:0;line-height:1.1}
+a{color:var(--navy)}
+.ic{width:1.2em;height:1.2em;vertical-align:-.22em;margin-right:.4em;flex:none}
+.kick{display:inline-block;margin:0 0 10px;padding:3px 12px;border-radius:999px;background:var(--blue);color:var(--navy);font:600 13px "Fredoka",sans-serif;letter-spacing:.04em}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px max(20px,calc(50% - 560px));background:rgba(234,246,253,.92);backdrop-filter:blur(8px)}
+.top img{display:block}.top nav{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.top nav a{text-decoration:none;font:500 15px "Fredoka",sans-serif;padding:7px 12px;border-radius:999px}
+.top nav a.go{background:var(--navy);color:#fff}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:30px;background:var(--navy);color:#e6f4fc;margin:8px max(16px,calc(50% - 580px)) 0;border-radius:28px;padding:48px 44px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(203,233,248,.18) 2px,transparent 2.4px);background-size:22px 22px;pointer-events:none}
+.hi{position:relative;z-index:1;max-width:640px}.hero h1{color:#fff;font-size:clamp(34px,5vw,56px);font-weight:700}
+.hero .lead{font-size:17px;color:#cbe9f8;margin:14px 0 18px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:0}.pills span{display:inline-flex;align-items:center;background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:6px 12px;font:500 13.5px "DM Sans",sans-serif}
+.mascot{position:relative;z-index:1;border-radius:50%;box-shadow:0 0 0 5px var(--blue);flex:none}
+.sec{padding:52px max(20px,calc(50% - 560px)) 8px}
+.sec h2{font-size:clamp(28px,3.6vw,40px);font-weight:700;text-transform:lowercase}
+.sub{margin:8px 0 0;color:#46607a}
+.logos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:22px}
+.lg{background:var(--milk);border-radius:22px;height:150px;display:flex;align-items:center;justify-content:center;padding:18px;box-shadow:0 2px 0 rgba(23,85,140,.06)}
+.lg img{max-width:80%;max-height:100px;object-fit:contain}
+.lg.nm{flex-direction:column;gap:10px;text-align:center}
+.lg .ini{width:58px;height:58px;border-radius:50%;background:var(--blue);color:var(--navy);display:flex;align-items:center;justify-content:center;font:700 22px "Fredoka",sans-serif}
+.lg.nm b{font:600 19px "Fredoka",sans-serif;color:var(--navy)}
+.ads{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:22px}
+.ads figure{margin:0;background:var(--milk);border-radius:22px;padding:10px}.ads img{width:100%;display:block;border-radius:14px}
+.ads figcaption{font:500 14px "Fredoka",sans-serif;color:var(--navy);padding:8px 4px 2px}
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:22px}
+.shots figure{margin:0}.shots img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:22px;display:block}.shots figcaption{font:500 14px "Fredoka",sans-serif;color:var(--navy);margin-top:6px}
+.work{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-top:22px}
+.wk{background:var(--pbg);border-radius:22px;padding:14px 12px 16px;text-align:center}
+.wb{width:130px;height:130px;margin:0 auto 10px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.wb img{width:92%;height:92%;object-fit:contain;border-radius:50%}
+.wk h3{font-size:16.5px;color:var(--pink)}.wk p{margin:4px 0 0;font-size:13px;color:#3c4d5e}
+.cta{margin:56px max(16px,calc(50% - 580px)) 0;background:var(--blue);border-radius:28px;padding:34px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.ci{display:flex;gap:18px;align-items:center;max-width:640px}.cg{flex:none;width:64px;height:64px;border-radius:50%;background:var(--navy);color:var(--blue);display:flex;align-items:center;justify-content:center}.cg .ic{width:32px;height:32px;margin:0}
+.cta h2{font-size:clamp(24px,3vw,32px)}.cta p{margin:6px 0 0}.cta .kick{background:var(--navy);color:#fff}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin:0}
+.btns a{display:inline-flex;align-items:center;text-decoration:none;font:600 16px "Fredoka",sans-serif;padding:12px 20px;border-radius:999px}
+.b1{background:var(--navy);color:#fff}.b2{background:var(--milk);color:var(--navy)}
+.ft{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:36px max(20px,calc(50% - 560px)) 40px;color:#46607a;font-size:13.5px}
+@media (max-width:700px){.hero{flex-direction:column-reverse;align-items:flex-start;padding:32px 24px}.mascot{width:84px;height:84px}.cta{padding:26px 22px}.top nav a:not(.go){display:none}.wb{width:110px;height:110px}.work{grid-template-columns:1fr 1fr}}
+.logos{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.lg{height:140px;padding:14px}.lg img{max-width:100%;max-height:112px}
+.lineup{display:grid;grid-template-columns:minmax(0,420px) 1fr;gap:28px;align-items:center;margin-top:24px;background:var(--milk);border-radius:28px;padding:18px}
+.lineup img{width:100%;height:auto;border-radius:18px;display:block}.lineup h3{font-size:28px;text-transform:lowercase}.lineup p{margin:10px 0 0}.lineup .btns{margin-top:18px}
+.ads{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.ads img{height:auto}.ads a{display:block}
+.ads figcaption{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.ads figcaption span{font:500 12px "DM Sans",sans-serif;color:#46607a;white-space:nowrap}
+@media (max-width:700px){.lineup{grid-template-columns:1fr}.logos{grid-template-columns:1fr 1fr}.lg{height:110px}.ads{grid-template-columns:1fr 1fr;gap:10px}.ads figure{padding:6px}.ads figcaption{flex-direction:column;gap:0}}
+/* logo strip: one row, slides left → right, loops (Alfred 20 Nov 21:51) */
+.marq{margin-top:22px;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.marq .track{display:flex;gap:16px;width:max-content;animation:slide 45s linear infinite}
+.marq:hover .track{animation-play-state:paused}
+.marq .lg{flex:none;width:170px;height:120px}.marq .lg img{max-height:96px}
+@keyframes slide{from{transform:translateX(calc(-50% - 8px))}to{transform:translateX(0)}}
+@media (max-width:700px){.marq .lg{width:130px;height:96px}.marq .lg img{max-height:76px}.marq .track{gap:10px;animation-duration:35s}@keyframes slide{from{transform:translateX(calc(-50% - 5px))}to{transform:translateX(0)}}}
+@media (prefers-reduced-motion:reduce){.marq .track{animation:none}.marq{overflow-x:auto}}
+/* compact dessert tiles + tap-to-expand (Alfred 20 Nov 21:52) */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:20px}
+.tl{all:unset;box-sizing:border-box;cursor:pointer;background:var(--pbg,#cbe9f8);border-radius:20px;padding:12px 10px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;transition:transform .15s}
+.tl:hover,.tl:focus-visible{transform:translateY(-3px);outline:2px solid var(--navy);outline-offset:2px}
+.tb{width:96px;height:96px;border-radius:50%;background:#fff;overflow:hidden;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.tb img{width:92%;height:92%;object-fit:contain;border-radius:50%}
+.tl-all{background:var(--navy)}.tl-all b,.tl-all small{color:#fff!important}.tl-all .tb img{width:100%;height:100%;object-fit:cover;border-radius:0}
+.tl b{font:600 14.5px/1.2 "Fredoka",sans-serif;color:var(--navy)}.tl small{font-size:12px;color:#46607a}
+.lb{border:0;padding:0;background:transparent;max-width:none;max-height:none;width:100vw;height:100vh;display:none;align-items:center;justify-content:center}
+.lb[open]{display:flex}.lb::backdrop{background:rgba(10,35,60,.82)}
+.lb figure{margin:0;text-align:center}.lb img{max-width:min(92vw,560px);max-height:84vh;border-radius:16px;display:block;margin:0 auto}
+.lb figcaption{color:#fff;font:600 16px "Fredoka",sans-serif;margin-top:8px}
+.lb .x{position:fixed;top:14px;right:16px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:var(--navy);font:600 28px/1 "Fredoka",sans-serif;cursor:pointer}
+.lb .nv{width:46px;height:46px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:var(--navy);font:600 30px/1 "Fredoka",sans-serif;cursor:pointer;margin:0 10px;flex:none}
+@media (max-width:700px){.tiles{grid-template-columns:repeat(3,1fr);gap:8px}.tl{padding:10px 6px}.tb{width:74px;height:74px}.tl b{font-size:12.5px}.tl small{font-size:11px}
+ .lb .nv{position:fixed;bottom:18px;margin:0}.lb .pv{left:calc(50% - 60px)}.lb .nx{left:calc(50% + 14px)}.lb img{max-height:76vh}}

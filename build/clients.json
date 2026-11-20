@@ -1,0 +1,30 @@
+{
+  "_note": "bekufrozen.com/clients/ — Alfred 20 Nov 2026: logos from the 'Trusted by' page of the CA Product Catalogue OCT 2026 (Canva DAHKwPMyH2s p13) may be used. logo = file in img/clients/. photos = real photos of our desserts at their counter (img/clients/), none yet. work = cake ad pages from Canva 'BEKU EN+BM – Ads & Posts.pdf' (DAHbMEko_sQ p2-12), files in img/work/.",
+  "clients": [
+    {"name": "Otto Space Cafe", "logo": "otto.png"},
+    {"name": "Fascination Kitchen", "logo": "fascination-kitchen.png"},
+    {"name": "Everywhere Lobster Club", "logo": "everywhere-lobster-club.png"},
+    {"name": "Kirin", "logo": "kirin.png"},
+    {"name": "Principle Café", "logo": "principle.png"},
+    {"name": "Knocknock F&B", "logo": "knocknock.png"},
+    {"name": "Tom & Danny Group", "logo": "tom-and-danny.png"},
+    {"name": "Chá Haus", "logo": "cha-haus.png"},
+    {"name": "Dior", "logo": "dior.png"},
+    {"name": "Cavern Restaurant, Mandai Wildlife Reserve", "logo": "cavern.png"},
+    {"name": "Tung Lok", "logo": "tunglok.png"},
+    {"name": "SAMA", "logo": "sama.png"},
+    {"name": "Fo Guang Shan Hsingma Si", "logo": "fo-guang-shan.png"}
+  ],
+  "work": [
+    {"file": "santa.jpg", "name": "Santa · Vanilla Strawberry", "tag": "Christmas"},
+    {"file": "gingerbread-man.jpg", "name": "Gingerbread Man · Black Forest", "tag": "Christmas"},
+    {"file": "star.jpg", "name": "Star · Blueberry Lavender", "tag": "Christmas"},
+    {"file": "pistachio-kunafa.jpg", "name": "Pistachio Kunafa", "tag": "All year"},
+    {"file": "chocolate-hazelnut.jpg", "name": "Chocolate Hazelnut", "tag": "All year"},
+    {"file": "chocolate-banana.jpg", "name": "Chocolate Banana", "tag": "All year"},
+    {"file": "oolong-pear.jpg", "name": "Oolong Pear", "tag": "All year"},
+    {"file": "raspberry-rose-lychee.jpg", "name": "Raspberry Rose Lychee", "tag": "All year"},
+    {"file": "pandan-gula-melaka.jpg", "name": "Pandan Gula Melaka", "tag": "All year"},
+    {"file": "decadent-chocolate.jpg", "name": "Decadent Chocolate", "tag": "All year"}
+  ]
+}

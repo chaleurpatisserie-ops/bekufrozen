@@ -181,7 +181,7 @@ def page(lang):
 <div class="ribbon">{e(ribbon)}</div>
 <div class="top">{SNOW}{BUNT}
 <header><nav class="wrap nav"><a href="{x['path']}" class="logo"><img src="/img/beku-logo-256.webp" alt="beku° frozen desserts" width="52" height="52"></a>
-<div class="links"><a href="#d">{e(t['nD'])}</a><a href="#h">{e(t['nH'])}</a><a href="#f">{e(t['nF'])}</a><a href="/track/">{e(t['nT'])}</a><span class="langs" role="group" aria-label="Language">{langs}</span><a class="btn sm" href="{ourl}">{e(x['orderBtn'])}</a></div></nav></header>
+<div class="links"><a href="#d">{e(t['nD'])}</a><a href="#h">{e(t['nH'])}</a><a href="#f">{e(t['nF'])}</a><a href="/clients/">{e(t.get('nC') or 'Our clients')}</a><a href="/track/">{e(t['nT'])}</a><span class="langs" role="group" aria-label="Language">{langs}</span><a class="btn sm" href="{ourl}">{e(x['orderBtn'])}</a></div></nav></header>
 <section class="wrap hero"><div class="ht">
 <span class="tag">{e(hero.get('tag', t['tag']))}</span>
 <h1><span>{e(hero.get('h1a', t['h1a']))}</span><span>{e(hero.get('h1b', t['h1b']))}</span><span>{e(hero.get('h1c', t['h1c']))}</span></h1>
@@ -332,6 +332,79 @@ os.makedirs(os.path.join(ROOT, 'intro'), exist_ok=True)
 with open(os.path.join(ROOT, 'intro', 'index.html'), 'w', encoding='utf-8') as f:
     f.write(intro_page())
 print('built', len(prods), 'products, share', share_path)
+
+
+# Our clients & our work page (Alfred 20 Nov 2026: "a page in the web for people to see our work ... some logo from our customer")
+def clients_page():
+    cj = json.load(open(os.path.join(B, 'clients.json'), encoding='utf-8'))
+    cl = cj.get('clients') or []
+    def IC(n):
+        svg = open(os.path.join(ROOT, 'img', 'brand', 'i-%s.svg' % n)).read().replace('stroke="#17558C"', 'stroke="currentColor"')
+        return svg.replace('<svg ', '<svg class="ic" aria-hidden="true" ', 1)
+    def logo(c):
+        if c.get('logo'):
+            return '<div class="lg"><img src="/img/clients/%s" alt="%s"></div>' % (e(c['logo']), e(c['name']))
+        ini = ''.join(w[0] for w in re.findall(r'[A-Za-z]+', c['name'])[:2]).upper()
+        return '<div class="lg nm"><span class="ini">%s</span><b>%s</b></div>' % (e(ini), e(c['name']))
+    logos = ''.join(logo(c) for c in cl)
+    logos_dup = logos.replace('<img ', '<img aria-hidden="true" ')  # second copy for a seamless loop
+    shots = [(c['name'], ph) for c in cl for ph in (c.get('photos') or [])]
+    counter = ''
+    if shots:
+        counter = '<section class="sec"><p class="kick">at their counters</p><h2>our desserts, served by our clients</h2><div class="shots">%s</div></section>' % ''.join(
+            '<figure><img src="/img/clients/%s" alt="beku° desserts at %s" loading="lazy"><figcaption>%s</figcaption></figure>' % (e(ph), e(n), e(n)) for n, ph in shots)
+    def pimg(n):  # the product's round photo for the tile (matched on the name before " · ")
+        k = n.split(' · ')[0].strip().lower()
+        for p in prods:
+            if p['name'].split(' · ')[0].strip().lower() == k:
+                return p['img'], p.get('bg') or '#cbe9f8'
+        return None, '#cbe9f8'
+    tiles = []
+    for i, w in enumerate(cj.get('work') or []):
+        im, bg = pimg(w['name'])
+        tiles.append('<button class="tl" type="button" data-i="%d" style="--pbg:%s"><span class="tb"><img src="%s" alt="" loading="lazy"></span><b>%s</b><small>%s</small></button>' % (
+            i + 1, e(bg), e(im or '/img/work/' + w['file']), e(w['name']), e(w['tag'])))
+    lineup_tile = '<button class="tl tl-all" type="button" data-i="0"><span class="tb"><img src="/img/work/line-up.jpg" alt="" loading="lazy"></span><b>The full line-up</b><small>all desserts</small></button>'
+    work = lineup_tile + ''.join(tiles)
+    gal = [('/img/work/line-up.jpg', 'The beku° line-up')] + [('/img/work/' + w['file'], w['name']) for w in (cj.get('work') or [])]
+    gal_js = json.dumps([[u, n] for u, n in gal], ensure_ascii=False)
+    wa_link = 'https://wa.me/%s?text=%s' % (WA_NUM, urllib.parse.quote("Hi BEKU, I saw your clients page and I'm interested in your frozen desserts for my business."))
+    return f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Our clients &amp; our work · beku° frozen desserts, Johor Bahru</title>
+<meta name="description" content="Cafés, restaurants, hotels and brands served by the Chaleur Atelier pastry team, the makers of beku° frozen petit gâteaux and bakes in Johor Bahru. Pork, lard and alcohol free.">
+<link rel="canonical" href="{SITE}/clients/"><meta property="og:title" content="beku° · Our clients &amp; our work"><meta property="og:image" content="{SITE}{share_path}">
+<link rel="icon" href="/img/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/clients/clients.css">
+</head><body>
+<header class="top"><a href="/"><img src="/img/brand/wordmark-navy.svg" alt="beku°" height="30"></a><nav><a href="/">Home</a><a href="/intro/">Introduction</a><a class="go" href="/order/">Order online</a></nav></header>
+<section class="hero"><div class="hi"><p class="kick">our clients &amp; our work</p><h1>the pastry team behind their dessert counters.</h1>
+<p class="lead">Cafés, restaurants, hotels and brands in Johor Bahru and Singapore have served desserts from our pastry team. beku° brings the same petit gâteaux to your freezer, made in Larkin and delivered frozen.</p>
+<p class="pills"><span>{IC('heart')}Pork, lard &amp; alcohol free</span><span>{IC('leaf')}No additives</span><span>{IC('chef')}Made by pastry chefs</span></p></div>
+<img class="mascot" src="/img/beku-logo-256.webp" alt="" width="120" height="120"></section>
+<section class="sec"><p class="kick">trusted by</p><h2>our clients</h2><p class="sub">Cafés, restaurants, hotels and brands our pastry team has made desserts for.</p><div class="marq" aria-label="Our clients"><div class="track">{logos}{logos_dup}</div></div></section>
+{counter}
+<section class="sec"><p class="kick">our work · product introduction</p><h2>meet the desserts</h2><p class="sub">Tap a dessert to see it whole, cut open, and what's inside. 12 pieces per carton, kept at -18°C. <a href="/intro/">Read the introduction</a> · <a href="/intro/beku-introduction.pdf" download>PDF</a></p>
+<div class="tiles">{work}</div></section>
+<dialog class="lb" id="lb"><button class="x" type="button" aria-label="Close">×</button><button class="nv pv" type="button" aria-label="Previous">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="nv nx" type="button" aria-label="Next">›</button></dialog>
+<script>(function(){{var G={gal_js},d=document.getElementById('lb'),im=d.querySelector('img'),cp=d.querySelector('figcaption'),i=0;
+function show(n){{i=(n+G.length)%G.length;im.src=G[i][0];im.alt=G[i][1];cp.textContent=G[i][1];}}
+document.querySelectorAll('.tl').forEach(function(b){{b.addEventListener('click',function(){{show(+b.dataset.i);d.showModal();try{{bkT&&bkT('click','Dessert: '+G[i][1])}}catch(e){{}}}});}});
+d.querySelector('.x').onclick=function(){{d.close()}};d.querySelector('.pv').onclick=function(){{show(i-1)}};d.querySelector('.nx').onclick=function(){{show(i+1)}};
+d.addEventListener('click',function(e){{if(e.target===d)d.close()}});
+d.addEventListener('keydown',function(e){{if(e.key==='ArrowRight')show(i+1);if(e.key==='ArrowLeft')show(i-1)}});
+var sx=0;d.addEventListener('touchstart',function(e){{sx=e.touches[0].clientX}},{{passive:true}});d.addEventListener('touchend',function(e){{var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)show(i+(dx<0?1:-1))}});}})();</script>
+<section class="cta"><div class="ci"><span class="cg">{IC('gift')}</span><div><p class="kick">your counter next?</p><h2>start with a sample box · RM50</h2><p>Any 4 pieces, free delivery in JB. The RM50 comes off your first order above RM350 within 1 month.</p></div></div>
+<p class="btns"><a class="b1" href="/order/?mode=sample">Order a sample box</a><a class="b2" href="{e(wa_link)}">{IC('chat')}WhatsApp us</a></p></section>
+<footer class="ft"><img src="/img/brand/wordmark-navy.svg" alt="beku°" height="22"><span>beku° is a brand of Chaleur Atelier F&amp;B Sdn. Bhd. · Larkin, Johor Bahru</span></footer>
+<script src="/wa.js" defer></script>
+</body></html>"""
+
+
+os.makedirs(os.path.join(ROOT, 'clients'), exist_ok=True)
+with open(os.path.join(ROOT, 'clients', 'index.html'), 'w', encoding='utf-8') as f:
+    f.write(clients_page())
 
 # Online order page + Track my order (static pages; prices load live from Bukku through the bot web app)
 oprods = [dict(id=p['id'], name=p['name'], cat=p.get('cat') or 'pg', spec=p.get('spec') or '', img=p['img'], bg=p.get('bg') or '#cbe9f8', ink=p.get('ink') or '#17558c') for p in prods]
