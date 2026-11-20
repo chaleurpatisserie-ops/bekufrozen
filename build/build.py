@@ -122,6 +122,11 @@ def orn(c, l, h, d):
     return '<span class="orn" aria-hidden="true" style="left:%s;height:%dpx;animation-delay:-%ds"><i style="background:%s"></i></span>' % (l, h, d, c)
 
 
+def QI(n):  # brand line icon, inline SVG in currentColor (quick menu, Alfred 20 Nov 22:04)
+    svg = open(os.path.join(ROOT, 'img', 'brand', 'i-%s.svg' % n)).read().replace('stroke="#17558C"', 'stroke="currentColor"')
+    return svg.replace('<svg ', '<svg class="qi" aria-hidden="true" ', 1)
+
+
 def page(lang):
     t, x = T[lang], EX[lang]
     seo = S['seo'][lang]
@@ -192,6 +197,7 @@ def page(lang):
 <div class="glance"><h2>{e(t['glance'])}</h2>{''.join(f'<div class="gr"><span>{e(g["k"])}</span><b>{e(g["v"])}</b></div>' for g in t['g'])}</div>
 <img class="dr" src="/img/BK-PG-110.webp" alt="" width="120" height="120" style="right:30px;bottom:-14px;animation-delay:-4s"></div></section></div>
 {WAVE('#cbe9f8','#fffdfa')}
+<nav class="wrap qm" aria-label="Menu"><a href="#d">{QI('heart')}<span>{e(t['nD'])}</span></a><a href="#h">{QI('carton')}<span>{e(t['nH'])}</span></a><a href="/clients/">{QI('chef')}<span>{e(t.get('nC') or 'Our clients')}</span></a><a href="#f">{QI('chat')}<span>{e(t['nF'])}</span></a><a href="/track/">{QI('truck')}<span>{e(t['nT'])}</span></a><a class="go" href="{ourl}">{QI('cart')}<span>{e(x['orderBtn'])}</span></a></nav>
 <main>
 <section id="d" class="wrap range">
 {('<div class="xmas">'+SNOW2+'<div class="xh"><div class="lim">'+e(t['xmLim'])+'</div><h2>'+e(t['xmT'])+'</h2><p>'+e(t['xmS'])+'</p></div><div class="grid">'+cat('xm')+'</div><div class="c"><a class="btn white" href="'+ourl+'">'+e(t['xmB'])+'</a></div></div>') if cat('xm') else ''}
