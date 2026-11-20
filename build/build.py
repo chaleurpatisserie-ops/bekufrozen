@@ -384,11 +384,12 @@ def clients_page():
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/clients/clients.css">
 </head><body>
-<header class="top"><a href="/"><img src="/img/brand/wordmark-navy.svg" alt="beku°" height="30"></a><nav><a href="/">Home</a><a href="/intro/">Introduction</a><a class="go" href="/order/">Order online</a></nav></header>
+<header class="top"><a href="/"><img src="/img/brand/wordmark-navy.svg" alt="beku°" height="30"></a><nav><a class="go" href="/order/">Order online</a></nav></header>
 <section class="hero"><div class="hi"><p class="kick">our clients &amp; our work</p><h1>the pastry team behind their dessert counters.</h1>
 <p class="lead">Cafés, restaurants, hotels and brands in Johor Bahru and Singapore have served desserts from our pastry team. beku° brings the same petit gâteaux to your freezer, made in Larkin and delivered frozen.</p>
 <p class="pills"><span>{IC('heart')}Pork, lard &amp; alcohol free</span><span>{IC('leaf')}No additives</span><span>{IC('chef')}Made by pastry chefs</span></p></div>
 <img class="mascot" src="/img/beku-logo-256.webp" alt="" width="120" height="120"></section>
+<nav class="qm" aria-label="Menu"><a href="/">{QI('globe')}<span>Home</span></a><a href="/#d">{QI('heart')}<span>Desserts</span></a><a href="/#h">{QI('carton')}<span>How it works</span></a><a href="/#f">{QI('chat')}<span>FAQ</span></a><a href="/track/">{QI('truck')}<span>Track order</span></a><a class="go" href="/order/">{QI('cart')}<span>Order online</span></a></nav>
 <section class="sec"><p class="kick">trusted by</p><h2>our clients</h2><p class="sub">Cafés, restaurants, hotels and brands our pastry team has made desserts for.</p><div class="marq" aria-label="Our clients"><div class="track">{logos}{logos_dup}</div></div></section>
 {counter}
 <section class="sec"><p class="kick">our work · product introduction</p><h2>meet the desserts</h2><p class="sub">Tap a dessert to see it whole, cut open, and what's inside. 12 pieces per carton, kept at -18°C. <a href="/intro/">Read the introduction</a> · <a href="/intro/beku-introduction.pdf" download>PDF</a></p>
