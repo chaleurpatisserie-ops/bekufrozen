@@ -127,6 +127,17 @@ def QI(n):  # brand line icon, inline SVG in currentColor (quick menu, Alfred 20
     return svg.replace('<svg ', '<svg class="qi" aria-hidden="true" ', 1)
 
 
+# Brand signals for Google (Alfred 21 Nov 00:21: "make sure I appear with picture when search me, in many ways")
+LD_SITE = {"@context": "https://schema.org", "@type": "WebSite", "name": "beku°", "url": SITE + "/",
+           "alternateName": ["beku", "BEKU", "beku frozen", "beku frozen desserts", "BEKU Frozen Dessert", "orderbeku", "beku JB"],
+           "publisher": {"@type": "Organization", "name": "beku°", "logo": SITE + "/img/logo-512.png"}}
+LD_EXTRA = {"logo": SITE + "/img/logo-512.png",
+            "image": [SITE + "/img/share.jpg", SITE + "/img/work/line-up.jpg", SITE + "/img/logo-512.png"],
+            "sameAs": ["https://www.instagram.com/beku_frozendessert/"],
+            "alternateName": ["beku", "BEKU", "beku frozen", "beku frozen desserts", "orderbeku"],
+            "brand": {"@type": "Brand", "name": "beku°", "logo": SITE + "/img/logo-512.png"}}
+
+
 def page(lang):
     t, x = T[lang], EX[lang]
     seo = S['seo'][lang]
@@ -162,6 +173,7 @@ def page(lang):
     if seo.get('heading') or seo.get('text'):
         seo_block = '<section id="s" class="wrap seo"><h2>%s</h2>%s<ul class="chips">%s</ul></section>\n' % (e(seo.get('heading') or ''), md(seo.get('text')), ''.join('<li>%s</li>' % e(c) for c in chips))
     sv = hashlib.md5(share_path.encode()).hexdigest()[:8]
+    ld.update(LD_EXTRA)
     return f'''<!doctype html>
 <html lang="{x['hl']}">
 <head>
@@ -181,6 +193,7 @@ def page(lang):
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
+<script type="application/ld+json">{json.dumps(LD_SITE, ensure_ascii=False)}</script>
 </head>
 <body>
 <div class="ribbon">{e(ribbon)}</div>
