@@ -342,7 +342,7 @@ function getInsights(days) {
   var cartsP = carts.filter(function (r) { return inP(r[0]) && (Number(r[5]) > 0 || /ordered|paid/.test(String(r[8]))); });
   var cartV = {}, detV = {}, ordV = {}, paidV = {};
   cartsP.forEach(function (r) { var v = String(r[1]), st = String(r[8]); cartV[v] = 1; if (/details|checkout|ordered|paid/.test(st)) detV[v] = 1; if (/ordered|paid/.test(st)) ordV[v] = 1; if (st === 'paid') paidV[v] = 1; });
-  var nV = vis.length, nD = vis.filter(function (o) { return o.dessert; }).length, nO = vis.filter(function (o) { return o.order; }).length;
+  var nV = vis.length, nD = vis.filter(function (o) { return o.dessert || o.order || cartV[o.v]; }).length, nO = vis.filter(function (o) { return o.order || cartV[o.v]; }).length;   // each step also counts people who skipped it and went further
   var funnel = [['Visited the website', nV], ['Looked at a dessert', nD], ['Opened the order page', nO], ['Put something in the cart', Object.keys(cartV).length],
     ['Filled in their details', Object.keys(detV).length], ['Placed the order', Object.keys(ordV).length], ['Paid online by card / FPX', Object.keys(paidV).length]];
   funnel = funnel.map(function (f, i) { return { step: f[0], n: f[1], ofAll: pct(f[1], nV), ofPrev: i ? pct(f[1], funnel[i - 1][1]) : 100 }; });
