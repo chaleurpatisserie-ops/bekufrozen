@@ -98,3 +98,13 @@ a{color:var(--navy)}
 .prof b{display:block;font:600 16px "Fredoka",sans-serif;color:var(--navy)}.prof small{display:block;font-size:13px;color:#46607a}
 .ft .sl a{color:var(--navy)}
 @media (max-width:760px){.cab{grid-template-columns:1fr;padding:22px 20px}}
+
+.cat .dir{background:#fff;border-left:4px solid var(--navy);padding:12px 14px;border-radius:0 14px 14px 0}
+.why{list-style:none;padding:0;margin:14px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.why li{display:flex;gap:10px;align-items:flex-start;background:var(--blue);border-radius:16px;padding:10px 12px;color:var(--navy)}
+.why li svg{flex:0 0 26px;width:26px;height:26px}.why b{display:block;font:600 15px "Fredoka",sans-serif}.why span{font-size:13px;line-height:1.35}
+.vm{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.vm>div{background:var(--navy);color:#fff;border-radius:18px;padding:14px 16px}.vm p{margin:0!important}
+.vm .vk{font:600 13px "Fredoka",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#cbe9f8;margin-bottom:6px!important}
+@media (max-width:760px){.why,.vm{grid-template-columns:1fr}}
+.calogo{display:block;width:220px;max-width:60%;height:auto;margin:0 0 14px}
