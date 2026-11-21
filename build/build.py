@@ -170,7 +170,7 @@ def page(lang, kind='home'):
     pdata = {p['id']: dict(n=p['name'], i=p['img'], bg=p.get('bg') or '#cbe9f8', ink=p.get('ink') or '#17558c', s=p.get('spec') or '', l=p['layers'], f=p['profile'], t=p['tag'], w=wa(t['waP'].replace('{n}', p['name']))) for p in items}
     sfx = '' if kind == 'home' else kind + '/'
     alt = ''.join('<link rel="alternate" hreflang="%s" href="%s%s%s">' % (EX[l]['hl'], SITE, EX[l]['path'], sfx) for l in EX) + '<link rel="alternate" hreflang="x-default" href="%s/%s">' % (SITE, sfx)
-    langs = ''.join('<a href="%s" class="lg%s" lang="%s"%s>%s</a>' % (EX[l]['path'] + sfx, ' on' if l == lang else '', EX[l]['hl'], ' aria-current="page"' if l == lang else '', lab) for l, lab in [('en', 'EN'), ('zh', '中文'), ('ms', 'BM')])
+    langs = ''.join('<a href="%s" class="lg%s" lang="%s" data-lang="%s"%s>%s</a>' % (EX[l]['path'] + sfx, ' on' if l == lang else '', EX[l]['hl'], l, ' aria-current="page"' if l == lang else '', lab) for l, lab in [('en', 'EN'), ('zh', '中文'), ('ms', 'BM')])
     ld = {"@context": "https://schema.org", "@type": "WholesaleStore", "name": "beku°", "url": SITE + x['path'], "telephone": "+" + WA_NUM, "email": EMAIL, "description": desc, "image": SITE + share_path,
           "parentOrganization": {"@type": "Organization", "name": "Chaleur Atelier F&B Sdn. Bhd.", "identifier": "202501028873"},
           "address": {"@type": "PostalAddress", "streetAddress": ADDR, "addressLocality": "Johor Bahru", "addressRegion": "Johor", "addressCountry": "MY"},
@@ -184,8 +184,8 @@ def page(lang, kind='home'):
         seo_block = '<section id="s" class="wrap seo"><h2>%s</h2>%s<ul class="chips">%s</ul></section>\n' % (e(seo.get('heading') or ''), md(seo.get('text')), ''.join('<li>%s</li>' % e(c) for c in chips))
     sv = hashlib.md5(share_path.encode()).hexdigest()[:8]
     ld.update(LD_EXTRA)
-    qm_items = [(P + 'desserts/', 'heart', t['nD'], 'desserts'), (P + 'how/', 'carton', t['nH'], 'how'), ('/about/', 'chef', nA, 'about'), ('/clients/', 'globe', t.get('nC') or 'Our clients', 'clients'),
-                ('/partners/', 'gift', nP, 'partners'), (P + 'faq/', 'chat', t['nF'], 'faq'), ('/track/', 'truck', t['nT'], 'track')]
+    qm_items = [(P + 'desserts/', 'heart', t['nD'], 'desserts'), (P + 'how/', 'carton', t['nH'], 'how'), (P + 'about/', 'chef', nA, 'about'), (P + 'clients/', 'globe', t.get('nC') or 'Our clients', 'clients'),
+                (P + 'partners/', 'gift', nP, 'partners'), (P + 'faq/', 'chat', t['nF'], 'faq'), ('/track/', 'truck', t['nT'], 'track')]
     QM = '<nav class="wrap qm qm8" aria-label="Menu">' + ''.join('<a href="%s"%s>%s<span>%s</span></a>' % (h, ' class="on" aria-current="page"' if k == kind else '', QI(ic), e(lb)) for h, ic, lb, k in qm_items) + '<a class="go" href="%s">%s<span>%s</span></a></nav>' % (ourl, QI('cart'), e(x['orderBtn']))
     if kind == 'home':
         HERO = f'''<section class="wrap hero"><div class="ht">
@@ -242,6 +242,7 @@ def page(lang, kind='home'):
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
+<script src="/lang.js"></script>
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 <script type="application/ld+json">{json.dumps(LD_SITE, ensure_ascii=False)}</script>
 </head>
@@ -249,12 +250,12 @@ def page(lang, kind='home'):
 <div class="ribbon">{e(ribbon)}</div>
 <div class="top">{SNOW}{BUNT}
 <header><nav class="wrap nav"><a href="{x['path']}" class="logo"><img src="/img/beku-logo-256.webp" alt="beku° frozen desserts" width="52" height="52"></a>
-<div class="links"><a href="{P}desserts/">{e(t['nD'])}</a><a href="{P}how/">{e(t['nH'])}</a><a href="/about/">{e(nA)}</a><a href="/clients/">{e(t.get('nC') or 'Our clients')}</a><a href="/track/">{e(t['nT'])}</a><span class="langs" role="group" aria-label="Language">{langs}</span><a class="btn sm" href="{ourl}">{e(x['orderBtn'])}</a></div></nav></header>
+<div class="links"><a href="{P}desserts/">{e(t['nD'])}</a><a href="{P}how/">{e(t['nH'])}</a><a href="{P}about/">{e(nA)}</a><a href="{P}clients/">{e(t.get('nC') or 'Our clients')}</a><a href="/track/">{e(t['nT'])}</a><span class="langs" role="group" aria-label="Language">{langs}</span><a class="btn sm" href="{ourl}">{e(x['orderBtn'])}</a></div></nav></header>
 {HERO}
 {QM}
 <main>
 {BODY}</main>
-<footer class="foot"><div class="ft">{e(t['foot'])}</div><a class="btn" href="{wa(t['wa'])}" target="_blank" rel="noopener">{e(t['fWa'])}</a><p>{e(EMAIL)} · {e(ADDR)}</p><p class="byca"><a href="/about/">by Chaleur Atelier Pâtisserie</a> · <a href="https://www.instagram.com/chaleuratelier_my/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@chaleuratelier_my" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.instagram.com/beku_frozendessert/" target="_blank" rel="noopener">beku° Instagram</a></p><p class="sm">{e(t['fLine'])} · <a href="/privacy.html">{e(x['privacy'])}</a></p></footer>
+<footer class="foot"><div class="ft">{e(t['foot'])}</div><a class="btn" href="{wa(t['wa'])}" target="_blank" rel="noopener">{e(t['fWa'])}</a><p>{e(EMAIL)} · {e(ADDR)}</p><p class="byca"><a href="{x['path']}about/">by Chaleur Atelier Pâtisserie</a> · <a href="https://www.instagram.com/chaleuratelier_my/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@chaleuratelier_my" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.instagram.com/beku_frozendessert/" target="_blank" rel="noopener">beku° Instagram</a></p><p class="sm">{e(t['fLine'])} · <a href="/privacy.html">{e(x['privacy'])}</a></p></footer>
 <dialog id="pd" aria-labelledby="pdn"><button type="button" class="x" aria-label="{e(t['close'])}">×</button><div class="ph"><img id="pdi" alt="" width="220" height="220"></div><div class="pb"><span id="pdt" class="ptag"></span><h3 id="pdn"></h3><div id="pds" class="psp"></div><p><b>{e(t['layers'])}:</b> <span id="pdl"></span></p><p><b>{e(t['flav'])}:</b> <span id="pdf"></span></p><a id="pdo" class="btn" href="{ourl}">{e(x['orderBtn'])}</a><a id="pdw" class="btn green" target="_blank" rel="noopener">{e(t['askThis'])}</a></div></dialog>
 <script>window.BEKU={json.dumps(pdata, ensure_ascii=False)};</script>
 <script src="/app.js" defer></script>
@@ -474,9 +475,6 @@ var sx=0;d.addEventListener('touchstart',function(e){{sx=e.touches[0].clientX}},
 </body></html>"""
 
 
-os.makedirs(os.path.join(ROOT, 'clients'), exist_ok=True)
-with open(os.path.join(ROOT, 'clients', 'index.html'), 'w', encoding='utf-8') as f:
-    f.write(clients_page())
 
 
 # beku° admin APP: bekufrozen.com/admin/ (Alfred 20 Nov 2026: "make it a app … allow me to log in with Google")
@@ -535,10 +533,16 @@ def partners_page():
 <script src="/wa.js" defer></script></body></html>"""
 
 
-for _n, _f in [('about', about_page), ('partners', partners_page)]:
-    os.makedirs(os.path.join(ROOT, _n), exist_ok=True)
-    with open(os.path.join(ROOT, _n, 'index.html'), 'w', encoding='utf-8') as f:
-        f.write(_f())
+from i18n_pages import localize, lang_bits
+for _n, _f in [('about', about_page), ('partners', partners_page), ('clients', clients_page)]:
+    _en = _f()
+    for _l, _pre in [('en', ''), ('zh', 'zh'), ('ms', 'ms')]:
+        _h = _en if _l == 'en' else localize(_en, _l, '/%s/' % _n)
+        _h = lang_bits(_h, '/%s/' % _n, _l)
+        _d = os.path.join(ROOT, _pre, _n) if _pre else os.path.join(ROOT, _n)
+        os.makedirs(_d, exist_ok=True)
+        with open(os.path.join(_d, 'index.html'), 'w', encoding='utf-8') as f:
+            f.write(_h)
 
 def admin_app():
     h = open(os.path.join(B, 'admin', 'Admin.html'), encoding='utf-8').read()

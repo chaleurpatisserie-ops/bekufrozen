@@ -134,3 +134,10 @@ a{color:var(--navy)}
 .qm.qm8{grid-template-columns:repeat(8,1fr)}.qm a.on{background:#fff;box-shadow:inset 0 0 0 2px var(--navy)}
 @media (max-width:860px){.qm.qm8{grid-template-columns:repeat(4,1fr);gap:8px}.qm8 a{min-height:76px;font-size:13px;padding:10px 4px;border-radius:16px}.qm8 .qi{width:24px;height:24px}}
 .sec.tagus{margin:52px max(16px,calc(50% - 580px)) 0;padding:28px 26px}
+/* language switch (Alfred 21 Nov: pick once, every page follows) */
+.top nav{display:flex;align-items:center;gap:10px}
+.lsw{display:inline-flex;background:#fff;border-radius:999px;padding:3px;box-shadow:inset 0 0 0 1.5px var(--blue)}
+.lsw a{padding:5px 10px;border-radius:999px;font:600 13px "Fredoka",sans-serif;color:var(--navy);text-decoration:none}
+.lsw a.on{background:var(--navy);color:#fff}
+.top nav .lsw a{background:transparent;color:var(--navy);padding:5px 10px;font:600 13px "Fredoka",sans-serif}
+.top nav .lsw a.on{background:var(--navy);color:#fff}
