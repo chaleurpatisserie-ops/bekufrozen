@@ -108,3 +108,29 @@ a{color:var(--navy)}
 .vm .vk{font:600 13px "Fredoka",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#cbe9f8;margin-bottom:6px!important}
 @media (max-width:760px){.why,.vm{grid-template-columns:1fr}}
 .calogo{display:block;width:220px;max-width:60%;height:auto;margin:0 0 14px}
+/* about: behind the scenes (Alfred 21 Nov) */
+.cat h1{font-size:clamp(28px,4vw,40px);margin:0;color:var(--navy)}
+.bts .story{margin-top:22px}.bts .st{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.bts .sn{flex:0 0 38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font:700 18px "Fredoka",sans-serif}
+.bts h3{margin:2px 0 2px;font:600 20px "Fredoka",sans-serif;color:var(--navy)}.bts .st p{margin:0;color:#4a5b6c}
+.ph3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ph3 figure,.dl figure{margin:0;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 2px 0 rgba(23,85,140,.08)}
+.ph3 img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
+.ph3 figcaption{padding:8px 12px;font-size:13.5px;color:var(--navy);font-weight:500}
+@media (max-width:760px){.ph3{grid-template-columns:repeat(3,72%);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}.ph3 figure{scroll-snap-align:start}}
+/* clients + partners: tag us */
+.tagus{background:var(--blue);border-radius:28px;padding:26px 24px}.tagus .btns{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 0}
+.btns .b1,.btns .b2{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:12px 18px;font:600 15px "Fredoka",sans-serif;text-decoration:none}
+.btns .b1{background:var(--navy);color:#fff}.btns .b2{background:#fff;color:var(--navy)}.btns .ic{width:20px;height:20px}
+.rules{margin:10px 0 0;padding-left:22px;line-height:1.6}.rules li{margin:4px 0}
+/* partners */
+.dl{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}.dl img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
+.dl figcaption{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:8px 10px;font-size:13px;color:var(--navy);font-weight:500}
+.dl figcaption a{background:var(--navy);color:#fff;border-radius:999px;padding:4px 10px;text-decoration:none;font-size:12px;white-space:nowrap}
+.caps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:10px}.cap{background:#fff;border-radius:16px;padding:12px 14px;margin-top:8px}
+.cap p{margin:0 0 8px;font-size:14.5px;line-height:1.5}.cp{border:0;background:var(--blue);color:var(--navy);border-radius:999px;padding:6px 14px;font:600 13px "Fredoka",sans-serif;cursor:pointer}
+.badgeb{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:10px}.badgeb img{width:200px;height:auto}
+@media (max-width:760px){.dl{grid-template-columns:repeat(2,1fr)}.caps{grid-template-columns:1fr}}
+.qm.qm8{grid-template-columns:repeat(8,1fr)}.qm a.on{background:#fff;box-shadow:inset 0 0 0 2px var(--navy)}
+@media (max-width:860px){.qm.qm8{grid-template-columns:repeat(4,1fr);gap:8px}.qm8 a{min-height:76px;font-size:13px;padding:10px 4px;border-radius:16px}.qm8 .qi{width:24px;height:24px}}
+.sec.tagus{margin:52px max(16px,calc(50% - 580px)) 0;padding:28px 26px}
