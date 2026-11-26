@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Order online · beku° frozen desserts</title>
-<meta name="description" content="Order beku° frozen desserts online for your café or restaurant in Johor Bahru. Pay by FPX, card, GrabPay or DuitNow.">
+<title>Sample box · beku° frozen desserts</title>
+<meta name="description" content="Try beku° frozen desserts: any 4 pieces for RM50, free delivery in Johor Bahru. Pay by FPX, card, GrabPay or DuitNow.">
 <link rel="canonical" href="https://bekufrozen.com/order/">
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/img/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,7 +96,7 @@ var CATS=['all','pg','xm','bk'];
 var MIN=300,FEE=20;
 function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v);}catch(e){return null}}
 var qs=new URLSearchParams(location.search);
-var st={lang:(qs.get('lang')||ls('beku_lang')||(navigator.language||'').slice(0,2)),step:'pick',mode:qs.get('mode')==='sample'?'sample':'cartons',cat:'all',qty:{},sq:{},f:{},agree:false,remember:true,pay:'stripe',menu:null,menuErr:false,busy:false,err:'',order:''};
+var st={lang:(qs.get('lang')||ls('beku_lang')||(navigator.language||'').slice(0,2)),step:'pick',mode:'sample',cat:'all',qty:{},sq:{},f:{},agree:false,remember:true,pay:'stripe',menu:null,menuErr:false,busy:false,err:'',order:''};
 if(!T[st.lang])st.lang='en';
 try{st.f=JSON.parse(ls('beku_details')||'{}')}catch(e){}
 if(qs.get('paid')){st.step='done';st.order=qs.get('paid');st.paidBy='stripe'}
@@ -143,8 +143,8 @@ function summary(c,pick){
 function render(){
   header();var app=document.getElementById('app'),c=calc(),h='';
   if(st.step==='pick'){
-    h+='<main class="main"><div class="col"><h1>'+L('title')+'</h1><p style="margin:0;font-size:16px;line-height:1.5">'+L('intro')+'</p>';
-    h+='<div class="pill" role="group" aria-label="Order type">'+[['cartons','mCtn'],['sample','mSmp']].map(function(a){return '<button type="button" data-mode="'+a[0]+'" aria-pressed="'+(st.mode===a[0])+'">'+L(a[1])+'</button>'}).join('')+'</div>';
+    h+='<main class="main"><div class="col"><h1>'+L('smpTitle')+'</h1><p style="margin:0;font-size:16px;line-height:1.5">'+L('smpSub')+'</p>';
+    if(false)h+='<div class="pill" role="group" aria-label="Order type">'+[['cartons','mCtn'],['sample','mSmp']].map(function(a){return '<button type="button" data-mode="'+a[0]+'" aria-pressed="'+(st.mode===a[0])+'">'+L(a[1])+'</button>'}).join('')+'</div>';
     if(st.mode==='cartons'){
       h+='<div class="note">'+L('creditHint')+'</div>';
       if(!st.menu)h+='<p>'+(st.menuErr?'<span class="err">'+L('loadErr')+'</span>':L('loading'))+'</p>';
@@ -153,7 +153,7 @@ function render(){
           h+='<div class="row"><div class="ph" style="background:'+esc(p.bg)+'"><img src="'+esc(p.img)+'" alt="" loading="lazy"></div><div style="flex:999 1 200px;min-width:0"><div class="nm" style="color:'+esc(p.ink)+'">'+esc(p.name)+'</div><div class="sp">'+esc(p.spec)+'</div></div>'+
           '<div style="flex:1 0 auto;display:flex;align-items:center;justify-content:flex-end;gap:14px"><div class="pr"><b>'+rm(p.price)+'</b><span>'+L('per')+'</span></div><div class="qty"><button class="q" type="button" data-dec="'+esc(p.sku)+'" aria-label="'+esc(L('dec',{n:p.name}))+'"'+(q?'':' disabled')+'>−</button><span class="qn">'+q+'</span><button class="q" type="button" data-inc="'+esc(p.sku)+'" aria-label="'+esc(L('inc',{n:p.name}))+'">+</button></div></div></div>'})}
     }else{
-      h+='<h2 style="font-size:28px">'+L('smpTitle')+'</h2><p style="margin:0;line-height:1.5">'+L('smpSub')+'</p><div class="grid">';
+      h+='<div class="grid">';
       sampleItems().forEach(function(p){var q=st.sq[p.id]||0;h+='<div class="card'+(q?' on':'')+'"><div class="ph" style="background:'+esc(p.bg)+'"><img src="'+esc(p.img)+'" alt="" loading="lazy"></div><div class="nm" style="font-size:17px;color:'+esc(p.ink)+'">'+esc(p.name)+'</div><div class="qty"><button class="q" type="button" data-sdec="'+esc(p.id)+'" aria-label="'+esc(L('dec',{n:p.name}))+'"'+(q?'':' disabled')+'>−</button><span class="qn">'+q+'</span><button class="q" type="button" data-sinc="'+esc(p.id)+'" aria-label="'+esc(L('inc',{n:p.name}))+'"'+(c.count>=4?' disabled':'')+'>+</button></div></div>'});
       h+='</div>'}
     var below=!c.sample&&c.sub<MIN,pct=c.sample?c.count*25:Math.min(100,Math.round(c.sub/MIN*100)),warn=c.sample?c.count<4:below;
