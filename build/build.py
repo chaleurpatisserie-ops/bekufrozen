@@ -139,6 +139,20 @@ LD_EXTRA = {"logo": SITE + "/img/logo-512.png",
 
 
 NAVX = {'en': ('About us', 'For partners'), 'zh': ('关于我们', '合作伙伴专区'), 'ms': ('Tentang kami', 'Untuk rakan niaga')}
+THAW = {
+ 'en': {'t': 'how to thaw', 'i': 'For our frozen petit gâteaux. Thaw in the chiller only, never at room temperature.',
+        'c': [('Carton of 12 pcs', ['Take out only the pieces you need today.', 'Thaw 3–4 hours in the chiller (0–5°C).', 'Once thawed, keep chilled and serve within 3–4 days.']),
+              ('Individually packed · coming soon', ['Thaw in its own pack, no need to unwrap.', 'Thaw 3–4 hours in the chiller (0–5°C).', 'Once thawed, keep chilled and serve within 4–5 days.'])],
+        'n': ['Do not refreeze after thawing.', 'Serving idea: serve straight from frozen, like an ice-cream dessert.', 'Our bakes (Lemon Pound, Sea-Salt Brownie) are handled differently. Ask us.']},
+ 'zh': {'t': '解冻方法', 'i': '适用于我们的冷冻法式小蛋糕。只在冷藏柜解冻，切勿室温解冻。',
+        'c': [('每箱 12 个', ['只取出当天需要的数量。', '冷藏（0–5°C）解冻 3–4 小时。', '解冻后保持冷藏，3–4 天内食用。']),
+              ('独立包装 · 即将推出', ['连包装一起解冻，无需拆开。', '冷藏（0–5°C）解冻 3–4 小时。', '解冻后保持冷藏，4–5 天内食用。'])],
+        'n': ['解冻后请勿再次冷冻。', '食用建议：也可直接冷冻食用，像冰淇淋甜点一样。', '烘焙类产品（柠檬磅蛋糕、海盐布朗尼）处理方式不同，请咨询我们。']},
+ 'ms': {'t': 'cara nyahbeku', 'i': 'Untuk petit gâteaux sejuk beku kami. Nyahbeku dalam chiller sahaja, bukan pada suhu bilik.',
+        'c': [('Karton 12 biji', ['Keluarkan yang perlu untuk hari ini sahaja.', 'Nyahbeku 3–4 jam dalam chiller (0–5°C).', 'Selepas nyahbeku, simpan sejuk dan hidang dalam 3–4 hari.']),
+              ('Bungkusan individu · akan datang', ['Nyahbeku terus dalam bungkusan, tak perlu dibuka.', 'Nyahbeku 3–4 jam dalam chiller (0–5°C).', 'Selepas nyahbeku, simpan sejuk dan hidang dalam 4–5 hari.'])],
+        'n': ['Jangan bekukan semula selepas nyahbeku.', 'Cadangan hidangan: hidang terus sejuk beku, seperti pencuci mulut aiskrim.', 'Produk bakes kami (Lemon Pound, Sea-Salt Brownie) dikendalikan berbeza. Tanya kami.']},
+}
 SUBP = {'desserts': 'nD', 'how': 'nH', 'faq': 'nF'}
 
 
@@ -210,6 +224,11 @@ def page(lang, kind='home'):
 <section id="h" class="how">{SNOW2}<div class="wrap"><h2>{e(t['how'])}</h2><div class="steps">{''.join(f'<div><div class="n">{s["n"]}</div><h3>{e(s["t"])}</h3><p>{e(s["d"])}</p></div>' for s in t['steps'])}</div><p class="strip">{e(t['strip'])}</p></div></section>
 {WAVE('#17558c','#cbe9f8')}
 '''
+    th = THAW[lang]
+    THAWS = ('<section id="thaw" class="thaw"><div class="wrap"><h2>' + e(th['t']) + '</h2><p class="ti">' + e(th['i']) + '</p><div class="tc">'
+             + ''.join('<div class="tcard"><h3>' + e(h) + '</h3><ol>' + ''.join('<li>' + e(x) + '</li>' for x in li) + '</ol></div>' for h, li in th['c'])
+             + '</div><ul class="tn">' + ''.join('<li>' + e(x) + '</li>' for x in th['n']) + '</ul></div></section>')
+
     FAQ = f'''<section id="f" class="faq"><div class="wrap narrow"><h2>{e(t['faqT'])}</h2>{''.join(f'<details><summary>{e(q["q"])}<span class="pl" aria-hidden="true">+</span></summary><p>{e(q["a"])}</p></details>' for q in t['faq'])}</div></section>
 {WAVE('#cbe9f8','#fffdfa',True)}
 '''
@@ -221,7 +240,7 @@ def page(lang, kind='home'):
     elif kind == 'desserts':
         BODY = RNG
     elif kind == 'how':
-        BODY = HOW
+        BODY = HOW + THAWS
     else:
         BODY = FAQ
     return f'''<!doctype html>

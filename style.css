@@ -64,3 +64,6 @@ dialog{border:0;padding:0;border-radius:32px;max-width:520px;width:calc(100% - 3
 .pt{padding-top:4px}.pt h1{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.pt .bk{color:#17558c;font-weight:600;text-decoration:none;font-size:14px}
 .more{margin:4px auto 30px}
 @media (max-width:860px){.qm.qm8{grid-template-columns:repeat(4,1fr)}.qm8 a{min-height:76px;font-size:13px;padding:10px 4px}.qm8 .qi{width:24px;height:24px}}
+.thaw{background:#cbe9f8;padding:36px 0 44px}.thaw h2{color:#17558c;font-size:44px;text-align:center;margin-bottom:6px}.thaw .ti{text-align:center;color:#17558c;margin:0 auto 22px;max-width:640px}
+.thaw .tc{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}.tcard{background:#fff;border-radius:20px;padding:20px 22px;box-shadow:0 6px 18px rgba(23,85,140,.08)}.tcard h3{color:#17558c;font-size:22px;margin:0 0 10px}.tcard ol{margin:0;padding-left:20px;color:#17558c;line-height:1.6}
+.thaw .tn{list-style:none;padding:0;margin:20px auto 0;max-width:640px;color:#17558c;line-height:1.7}.thaw .tn li:before{content:"✓ ";font-weight:700}

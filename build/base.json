@@ -5,7 +5,8 @@
    "nD": "Desserts",
    "nH": "How it works",
    "nF": "FAQ",
-   "nT": "Track order", "nC": "Our clients",
+   "nT": "Track order",
+   "nC": "Our clients",
    "orderNow": "Order now",
    "tag": "christmas is coming · stock up your counter",
    "h1a": "wholesale frozen",
@@ -86,6 +87,10 @@
      "a": "No. Thaw in the chiller, plate and serve."
     },
     {
+     "q": "How do I thaw?",
+     "a": "In the chiller only (0–5°C), 3–4 hours. Once thawed, serve within 3–4 days (carton of 12) or 4–5 days (individually packed). Do not refreeze."
+    },
+    {
      "q": "How long do they keep?",
      "a": "6–9 months frozen at -18°C. Thaw only what you need."
     },
@@ -127,7 +132,8 @@
    "nD": "甜点",
    "nH": "如何运作",
    "nF": "常见问题",
-   "nT": "追踪订单", "nC": "我们的客户",
+   "nT": "追踪订单",
+   "nC": "我们的客户",
    "orderNow": "立即下单",
    "tag": "圣诞将至 · 为您的柜台备货",
    "h1a": "冷冻甜点批发，",
@@ -208,6 +214,10 @@
      "a": "不需要。冷藏解冻、装盘即可上桌。"
     },
     {
+     "q": "如何解冻？",
+     "a": "只在冷藏柜（0–5°C）解冻 3–4 小时。解冻后，每箱 12 个的请在 3–4 天内食用，独立包装的 4–5 天内食用。请勿再次冷冻。"
+    },
+    {
      "q": "可以保存多久？",
      "a": "-18°C 冷冻可保存 6–9 个月，用多少解冻多少。"
     },
@@ -249,7 +259,8 @@
    "nD": "Pencuci mulut",
    "nH": "Cara ia berfungsi",
    "nF": "Soalan",
-   "nT": "Jejak order", "nC": "Pelanggan kami",
+   "nT": "Jejak order",
+   "nC": "Pelanggan kami",
    "orderNow": "Order sekarang",
    "tag": "krismas semakin dekat · penuhkan kaunter anda",
    "h1a": "pencuci mulut sejuk beku",
@@ -328,6 +339,10 @@
     {
      "q": "Perlu chef pastri?",
      "a": "Tidak. Nyahbeku dalam chiller, hidang dan jual."
+    },
+    {
+     "q": "Bagaimana nak nyahbeku?",
+     "a": "Dalam chiller sahaja (0–5°C), 3–4 jam. Selepas nyahbeku, hidang dalam 3–4 hari (karton 12 biji) atau 4–5 hari (bungkusan individu). Jangan bekukan semula."
     },
     {
      "q": "Tahan berapa lama?",
