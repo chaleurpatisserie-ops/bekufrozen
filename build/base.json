@@ -13,7 +13,7 @@
    "h1b": "desserts, explained",
    "h1c": "simply.",
    "sub": "Everything a café, restaurant or hotel in JB needs to know before ordering: the range, how it works, and the common questions.",
-   "bOrder": "Order online",
+   "bOrder": "Order on WhatsApp",
    "bSample": "Sample box · RM50",
    "bWa": "Ask on WhatsApp",
    "glance": "at a glance",
@@ -65,8 +65,8 @@
     },
     {
      "n": 2,
-     "t": "order online",
-     "d": "Pick cartons, enter company and SSM details, pay by FPX, card, GrabPay or DuitNow QR."
+     "t": "order on WhatsApp",
+     "d": "Tell us the cartons you need on WhatsApp. We confirm your order and send the invoice."
     },
     {
      "n": 3,
@@ -112,7 +112,7 @@
     },
     {
      "q": "How do I pay?",
-     "a": "Online by FPX, card, GrabPay, Google Pay or Apple Pay, or by DuitNow QR on WhatsApp."
+     "a": "Sample box: online by FPX, card, GrabPay, Google Pay or Apple Pay, or DuitNow QR on WhatsApp. Carton orders: on WhatsApp, we send the invoice with the payment details."
     },
     {
      "q": "Are they pork, lard and alcohol free?",
@@ -144,7 +144,7 @@
    "h1b": "一看就懂。",
    "h1c": "",
    "sub": "新山的咖啡馆、餐厅和酒店在下单前需要知道的一切：产品、流程和常见问题。",
-   "bOrder": "在线下单",
+   "bOrder": "在 WhatsApp 下单",
    "bSample": "样品盒 · RM50",
    "bWa": "WhatsApp 咨询",
    "glance": "一览",
@@ -196,8 +196,8 @@
     },
     {
      "n": 2,
-     "t": "在线下单",
-     "d": "选择箱数，填写公司与 SSM 资料，用 FPX、信用卡、GrabPay 或 DuitNow QR 付款。"
+     "t": "在 WhatsApp 下单",
+     "d": "在 WhatsApp 告诉我们需要的箱数，我们确认订单并发送发票。"
     },
     {
      "n": 3,
@@ -243,7 +243,7 @@
     },
     {
      "q": "怎么付款？",
-     "a": "在线用 FPX、信用卡、GrabPay、Google Pay 或 Apple Pay，或在 WhatsApp 用 DuitNow QR。"
+     "a": "样品盒：在线用 FPX、信用卡、GrabPay、Google Pay 或 Apple Pay，或在 WhatsApp 用 DuitNow QR。整箱订单：在 WhatsApp 下单，我们发送附付款资料的发票。"
     },
     {
      "q": "不含猪肉、猪油和酒精吗？",
@@ -275,7 +275,7 @@
    "h1b": "borong, diterangkan",
    "h1c": "dengan mudah.",
    "sub": "Semua yang kafe, restoran atau hotel di JB perlu tahu sebelum order: produk, cara ia berfungsi dan soalan lazim.",
-   "bOrder": "Order dalam talian",
+   "bOrder": "Order di WhatsApp",
    "bSample": "Kotak sampel · RM50",
    "bWa": "Tanya di WhatsApp",
    "glance": "sekilas pandang",
@@ -327,8 +327,8 @@
     },
     {
      "n": 2,
-     "t": "order dalam talian",
-     "d": "Pilih karton, isi butiran syarikat dan SSM, bayar dengan FPX, kad, GrabPay atau DuitNow QR."
+     "t": "order di WhatsApp",
+     "d": "Beritahu kami karton yang anda perlukan di WhatsApp. Kami sahkan order anda dan hantar invois."
     },
     {
      "n": 3,
@@ -374,7 +374,7 @@
     },
     {
      "q": "Bagaimana bayar?",
-     "a": "Dalam talian dengan FPX, kad, GrabPay, Google Pay atau Apple Pay, atau DuitNow QR di WhatsApp."
+     "a": "Kotak sampel: dalam talian dengan FPX, kad, GrabPay, Google Pay atau Apple Pay, atau DuitNow QR di WhatsApp. Order karton: di WhatsApp, kami hantar invois bersama butiran bayaran."
     },
     {
      "q": "Tanpa khinzir, lemak khinzir dan alkohol?",
@@ -400,27 +400,27 @@
    "hl": "en",
    "orderWa": "Hi BEKU, I found you on your website and I'd like to place an order for my business.",
    "sampleWa": "Hi BEKU, I found you on your website and I'd like to order a sample box (any 4 pieces, RM50).",
-   "orderBtn": "Order online",
+   "orderBtn": "Order on WhatsApp",
    "privacy": "Privacy policy",
-   "soon": "Order online in minutes · pay by FPX, card or DuitNow QR · delivered in the Johor Bahru area."
+   "soon": "Start with a sample box online · order cartons on WhatsApp · delivered in the Johor Bahru area."
   },
   "zh": {
    "path": "/zh/",
    "hl": "zh-Hans",
    "orderWa": "你好 BEKU，我在你们的网站上看到你们，想为我的生意下单。",
    "sampleWa": "你好 BEKU，我在你们的网站上看到你们，想订一个样品盒（任选 4 个，RM50）。",
-   "orderBtn": "在线下单",
+   "orderBtn": "在 WhatsApp 下单",
    "privacy": "隐私政策",
-   "soon": "几分钟内在线下单 · 支持 FPX、信用卡或 DuitNow QR 付款 · 新山地区配送。"
+   "soon": "先在线订样品盒 · 整箱在 WhatsApp 下单 · 新山地区配送。"
   },
   "ms": {
    "path": "/ms/",
    "hl": "ms",
    "orderWa": "Hi BEKU, saya jumpa anda di laman web dan ingin membuat order untuk perniagaan saya.",
    "sampleWa": "Hi BEKU, saya jumpa anda di laman web dan ingin order kotak sampel (mana-mana 4 biji, RM50).",
-   "orderBtn": "Order dalam talian",
+   "orderBtn": "Order di WhatsApp",
    "privacy": "Dasar privasi",
-   "soon": "Order dalam talian dalam beberapa minit · bayar melalui FPX, kad atau DuitNow QR · penghantaran di kawasan Johor Bahru."
+   "soon": "Mulakan dengan kotak sampel dalam talian · order karton di WhatsApp · penghantaran di kawasan Johor Bahru."
   }
  }
 }

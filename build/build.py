@@ -191,7 +191,8 @@ def page(lang, kind='home'):
           "areaServed": "Johor Bahru", "keywords": seo.get('keywords') or '', "alternateName": ["beku frozen desserts"],
           "knowsAbout": [p['name'] for p in items]}
     owa, swa = wa(x['orderWa']), wa(x['sampleWa'])
-    ourl = '/order/' + ('' if lang == 'en' else '?lang=' + lang)   # online order page (Alfred 18 Nov 19:26: homepage order buttons -> Order online)
+    surl = '/order/' + ('' if lang == 'en' else '?lang=' + lang)   # sample box page (Alfred 26 Nov 15:02: online ordering removed, only sample box stays online)
+    ourl = owa   # carton orders go to WhatsApp
     chips = [c.strip() for c in (seo.get('chips') or '').split(',') if c.strip()]
     seo_block = ''
     if seo.get('heading') or seo.get('text'):
@@ -200,13 +201,13 @@ def page(lang, kind='home'):
     ld.update(LD_EXTRA)
     qm_items = [(P + 'desserts/', 'heart', t['nD'], 'desserts'), (P + 'how/', 'carton', t['nH'], 'how'), (P + 'about/', 'chef', nA, 'about'), (P + 'clients/', 'globe', t.get('nC') or 'Our clients', 'clients'),
                 (P + 'partners/', 'gift', nP, 'partners'), (P + 'faq/', 'chat', t['nF'], 'faq'), ('/track/', 'truck', t['nT'], 'track')]
-    QM = '<nav class="wrap qm qm8" aria-label="Menu">' + ''.join('<a href="%s"%s>%s<span>%s</span></a>' % (h, ' class="on" aria-current="page"' if k == kind else '', QI(ic), e(lb)) for h, ic, lb, k in qm_items) + '<a class="go" href="%s">%s<span>%s</span></a></nav>' % (ourl, QI('cart'), e(x['orderBtn']))
+    QM = '<nav class="wrap qm qm8" aria-label="Menu">' + ''.join('<a href="%s"%s>%s<span>%s</span></a>' % (h, ' class="on" aria-current="page"' if k == kind else '', QI(ic), e(lb)) for h, ic, lb, k in qm_items) + '<a class="go" href="%s">%s<span>%s</span></a></nav>' % (surl, QI('gift'), e(t['bSample']))
     if kind == 'home':
         HERO = f'''<section class="wrap hero"><div class="ht">
 <span class="tag">{e(hero.get('tag', t['tag']))}</span>
 <h1><span>{e(hero.get('h1a', t['h1a']))}</span><span>{e(hero.get('h1b', t['h1b']))}</span><span>{e(hero.get('h1c', t['h1c']))}</span></h1>
 <p class="sub">{e(hero.get('sub', t['sub']))}</p>
-<div class="btns"><a class="btn" href="{ourl}">{e(x['orderBtn'])}</a><a class="btn light" href="{swa}" target="_blank" rel="noopener">{e(t['bSample'])}</a></div>
+<div class="btns"><a class="btn" href="{surl}">{e(t['bSample'])}</a><a class="btn light" href="{owa}" target="_blank" rel="noopener">{e(x['orderBtn'])}</a></div>
 <p class="soon">{e(x['soon'])}</p></div>
 <div class="hv"><img class="dr" src="/img/BK-PG-109.webp" alt="" width="130" height="130" style="left:-10px;top:-6px">{orn('#d6404a','30%',34,0)}{orn('#2f7d4f','55%',54,1)}{orn('#fff0a0','78%',24,2)}<img class="dr" src="/img/BK-PG-108.webp" alt="" width="130" height="130" style="right:-6px;top:-10px;animation-delay:-2s">
 <div class="glance"><h2>{e(t['glance'])}</h2>{''.join(f'<div class="gr"><span>{e(g["k"])}</span><b>{e(g["v"])}</b></div>' for g in t['g'])}</div>
@@ -218,7 +219,7 @@ def page(lang, kind='home'):
 <div class="sh"><h2>{e(t['range'])}</h2><span>{e(t['tap'])}</span></div>
 {('<h3>'+e(t['catPg'])+'</h3><div class="grid">'+cat('pg')+'</div>') if cat('pg') else ''}
 {('<h3>'+e(t['catBk'])+'</h3><div class="grid">'+cat('bk')+'</div>') if cat('bk') else ''}
-<div class="c"><a class="btn" href="{ourl}">{e(x['orderBtn'])}</a></div></section>
+<div class="c"><a class="btn" href="{ourl}" target="_blank" rel="noopener">{e(x['orderBtn'])}</a></div></section>
 '''
     HOW = f'''{WAVE('#fffdfa','#17558c',True)}
 <section id="h" class="how">{SNOW2}<div class="wrap"><h2>{e(t['how'])}</h2><div class="steps">{''.join(f'<div><div class="n">{s["n"]}</div><h3>{e(s["t"])}</h3><p>{e(s["d"])}</p></div>' for s in t['steps'])}</div><p class="strip">{e(t['strip'])}</p></div></section>
@@ -269,13 +270,13 @@ def page(lang, kind='home'):
 <div class="ribbon">{e(ribbon)}</div>
 <div class="top">{SNOW}{BUNT}
 <header><nav class="wrap nav"><a href="{x['path']}" class="logo"><img src="/img/beku-logo-256.webp" alt="beku° frozen desserts" width="52" height="52"></a>
-<div class="links"><a href="{P}desserts/">{e(t['nD'])}</a><a href="{P}how/">{e(t['nH'])}</a><a href="{P}about/">{e(nA)}</a><a href="{P}clients/">{e(t.get('nC') or 'Our clients')}</a><a href="/track/">{e(t['nT'])}</a><span class="langs" role="group" aria-label="Language">{langs}</span><a class="btn sm" href="{ourl}">{e(x['orderBtn'])}</a></div></nav></header>
+<div class="links"><a href="{P}desserts/">{e(t['nD'])}</a><a href="{P}how/">{e(t['nH'])}</a><a href="{P}about/">{e(nA)}</a><a href="{P}clients/">{e(t.get('nC') or 'Our clients')}</a><a href="/track/">{e(t['nT'])}</a><span class="langs" role="group" aria-label="Language">{langs}</span><a class="btn sm" href="{surl}">{e(t['bSample'])}</a></div></nav></header>
 {HERO}
 {QM}
 <main>
 {BODY}</main>
 <footer class="foot"><div class="ft">{e(t['foot'])}</div><a class="btn" href="{wa(t['wa'])}" target="_blank" rel="noopener">{e(t['fWa'])}</a><p>{e(EMAIL)} · {e(ADDR)}</p><p class="byca"><a href="{x['path']}about/">by Chaleur Atelier Pâtisserie</a> · <a href="https://www.instagram.com/chaleuratelier_my/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@chaleuratelier_my" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.instagram.com/beku_frozendessert/" target="_blank" rel="noopener">beku° Instagram</a></p><p class="sm">{e(t['fLine'])} · <a href="/privacy.html">{e(x['privacy'])}</a></p></footer>
-<dialog id="pd" aria-labelledby="pdn"><button type="button" class="x" aria-label="{e(t['close'])}">×</button><div class="ph"><img id="pdi" alt="" width="220" height="220"></div><div class="pb"><span id="pdt" class="ptag"></span><h3 id="pdn"></h3><div id="pds" class="psp"></div><p><b>{e(t['layers'])}:</b> <span id="pdl"></span></p><p><b>{e(t['flav'])}:</b> <span id="pdf"></span></p><a id="pdo" class="btn" href="{ourl}">{e(x['orderBtn'])}</a><a id="pdw" class="btn green" target="_blank" rel="noopener">{e(t['askThis'])}</a></div></dialog>
+<dialog id="pd" aria-labelledby="pdn"><button type="button" class="x" aria-label="{e(t['close'])}">×</button><div class="ph"><img id="pdi" alt="" width="220" height="220"></div><div class="pb"><span id="pdt" class="ptag"></span><h3 id="pdn"></h3><div id="pds" class="psp"></div><p><b>{e(t['layers'])}:</b> <span id="pdl"></span></p><p><b>{e(t['flav'])}:</b> <span id="pdf"></span></p><a id="pdo" class="btn" href="{surl}">{e(t['bSample'])}</a><a id="pdw" class="btn green" target="_blank" rel="noopener">{e(t['askThis'])}</a></div></dialog>
 <script>window.BEKU={json.dumps(pdata, ensure_ascii=False)};</script>
 <script src="/app.js" defer></script>
 <script src="/wa.js" defer></script>
@@ -327,11 +328,11 @@ def intro_page():
            ('carton', 'Easy portions', '12 pieces per carton for petit gâteaux. Take out only what you sell.'),
            ('truck', 'Local &amp; reliable', 'Made in Larkin and delivered frozen by car across the JB area.')]
     steps = [('gift', 'Try a sample box · RM50', 'Any 4 pieces for RM50, free delivery. Taste them at your counter; the RM50 comes off your first order above RM350 within 1 month.'),
-             ('cart', 'Order online', 'Choose cartons at bekufrozen.com/order, enter your company and SSM details and pay online, or order on WhatsApp.'),
+             ('chat', 'Order on WhatsApp', 'Tell us the cartons you need on WhatsApp. We confirm your order and send the invoice.'),
              ('chef', 'We make &amp; pack', 'Stock ships first, the rest is made fresh. Usually ready in 3–5 working days.'),
              ('truck', 'Delivered frozen', 'By car across the JB area, straight into your freezer. Invoice on WhatsApp.')]
     tips = [('thermo', 'Keep frozen at -18°C. Thaw in the chiller before serving.'), ('calendar', 'Delivery dates: Monday to Friday, across the Johor Bahru area.'),
-            ('cart', 'Pay online by FPX, card, GrabPay or DuitNow QR. Invoice and receipt on WhatsApp.'),
+            ('cart', 'Sample box: pay online by FPX, card, GrabPay or DuitNow QR. Carton orders: invoice and payment details on WhatsApp.'),
             ('globe', 'Track every order at <a href="%s">bekufrozen.com/track</a>.' % U('/track/'))]
     n = [0]
     def foot():
@@ -373,10 +374,9 @@ def intro_page():
     pages.append(f"""<section class="pg contact"><div class="dots"></div><div class="in">
 <img class="mascot sm" src="/img/beku-logo-256.webp" alt="">
 <p class="kick">let's talk</p><h2>stay cool, chef.<br>start with a sample box.</h2>
-<p class="big">See the full range, order online or ask us anything. We reply on WhatsApp.</p>
+<p class="big">See the full range, order a sample box or ask us anything. We reply on WhatsApp.</p>
 <div class="cta">
 <a class="b" href="{U('/')}">{IC('globe')}<small>Website</small>bekufrozen.com</a>
-<a class="b" href="{U('/order/')}">{IC('cart')}<small>Order online</small>bekufrozen.com/order</a>
 <a class="b wa" href="{wa_link}">{IC('chat')}<small>WhatsApp</small>{phone}</a>
 <a class="b" href="mailto:{e(EMAIL)}">{IC('mail')}<small>Email</small>{e(EMAIL)}</a></div>
 <a class="smp" href="{U('/order/?mode=sample')}"><span class="sp1">{IC('gift')}</span><span class="sp2"><small>sample box</small><b>any 4 pieces · RM50</b><em>Free delivery, paid first. Order above RM350 within 1 month and the RM50 comes off that order.</em></span><span class="sp3">order a sample box →</span></a>
@@ -411,7 +411,7 @@ print('built', len(prods), 'products, share', share_path)
 def QM_EN(kind):
     items = [('/desserts/', 'heart', 'Desserts', 'desserts'), ('/how/', 'carton', 'How it works', 'how'), ('/about/', 'chef', 'About us', 'about'), ('/clients/', 'globe', 'Our clients', 'clients'),
              ('/partners/', 'gift', 'For partners', 'partners'), ('/faq/', 'chat', 'FAQ', 'faq'), ('/track/', 'truck', 'Track order', 'track')]
-    return '<nav class="qm qm8" aria-label="Menu">' + ''.join('<a href="%s"%s>%s<span>%s</span></a>' % (h, ' class="on" aria-current="page"' if k == kind else '', QI(ic), lb) for h, ic, lb, k in items) + '<a class="go" href="/order/">%s<span>Order online</span></a></nav>' % QI('cart')
+    return '<nav class="qm qm8" aria-label="Menu">' + ''.join('<a href="%s"%s>%s<span>%s</span></a>' % (h, ' class="on" aria-current="page"' if k == kind else '', QI(ic), lb) for h, ic, lb, k in items) + '<a class="go" href="/order/">%s<span>Sample box · RM50</span></a></nav>' % QI('gift')
 
 
 def SUB_HEAD(title, desc, path, css='/clients/clients.css'):
@@ -423,7 +423,7 @@ def SUB_HEAD(title, desc, path, css='/clients/clients.css'):
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{css}">
 </head><body>
-<header class="top"><a href="/"><img src="/img/brand/wordmark-navy.svg" alt="beku°" height="30"></a><nav><a class="go" href="/order/">Order online</a></nav></header>
+<header class="top"><a href="/"><img src="/img/brand/wordmark-navy.svg" alt="beku°" height="30"></a><nav><a class="go" href="/order/">Sample box · RM50</a></nav></header>
 """
 
 
@@ -470,7 +470,7 @@ def clients_page():
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/clients/clients.css">
 </head><body>
-<header class="top"><a href="/"><img src="/img/brand/wordmark-navy.svg" alt="beku°" height="30"></a><nav><a class="go" href="/order/">Order online</a></nav></header>
+<header class="top"><a href="/"><img src="/img/brand/wordmark-navy.svg" alt="beku°" height="30"></a><nav><a class="go" href="/order/">Sample box · RM50</a></nav></header>
 <section class="hero"><div class="hi"><p class="kick">our clients &amp; our work</p><h1>the pastry team behind their dessert counters.</h1>
 <p class="lead">Cafés, restaurants, hotels and brands in Johor Bahru and Singapore have served desserts from our pastry team. beku° brings the same petit gâteaux to your freezer, made in Larkin and delivered frozen.</p>
 <p class="pills"><span>{IC('heart')}Pork, lard &amp; alcohol free</span><span>{IC('leaf')}No additives</span><span>{IC('chef')}Made by pastry chefs</span></p></div>

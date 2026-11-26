@@ -24,6 +24,7 @@ T = [
     ('An expert in dessert production and in the frozen dessert chain, from the kitchen to your freezer. Chef Alfred builds every beku° recipe on natural ingredients with no additives, so each dessert freezes well and tastes the way it should after thawing.', '甜点生产与冷冻甜点供应链专家，从厨房到您的冷冻柜全程把关。Alfred 主厨的每一款 beku° 配方都以天然原料为基础、无添加，让甜点冷冻得好，解冻后依然是应有的味道。', 'Pakar dalam pengeluaran pencuci mulut dan rantaian pencuci mulut sejuk beku, dari dapur ke peti sejuk beku anda. Cef Alfred membina setiap resipi beku° dengan bahan semula jadi tanpa bahan tambahan, supaya setiap pencuci mulut beku dengan baik dan rasanya tetap seperti sepatutnya selepas nyahbeku.'),
     # menu + header
     ('Order online', '在线下单', 'Pesan dalam talian'),
+    ('Sample box · RM50', '样品盒 · RM50', 'Kotak sampel · RM50'),
     ('>Desserts<', '>甜点<', '>Pencuci mulut<'),
     ('>How it works<', '>如何运作<', '>Cara ia berfungsi<'),
     ('>About us<', '>关于我们<', '>Tentang kami<'),
