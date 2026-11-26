@@ -10,6 +10,18 @@ LANGS = {'zh': {'hl': 'zh-Hans', 'pre': '/zh'}, 'ms': {'hl': 'ms', 'pre': '/ms'}
 
 # (English, 中文, BM). Longest first is applied automatically.
 T = [
+    # About: ingredients + chef (Alfred 26 Nov 14:37)
+    ("what goes in, and what doesn't", '用料讲究，不加多余', 'apa yang kami guna, dan apa yang tidak'),
+    ('real ingredients, kept by the cold', '真材实料，靠冷冻保鲜', 'bahan sebenar, dijaga oleh suhu sejuk'),
+    ('Our desserts keep because of the science behind freezing, not because of preservatives. We freeze them properly, so they hold their taste and texture until you thaw them.', '我们的甜点能保存，靠的是冷冻背后的科学，而不是防腐剂。正确冷冻，让味道和口感一直保持到您解冻的那一刻。', 'Pencuci mulut kami tahan lama kerana sains di sebalik pembekuan, bukan kerana pengawet. Kami membekukannya dengan betul supaya rasa dan teksturnya kekal sehingga anda nyahbeku.'),
+    ('<b>Premium &amp; imported ingredients</b>chosen for taste, not for cost', '<b>优质进口原料</b>为味道而选，不为省成本', '<b>Bahan premium &amp; import</b>dipilih untuk rasa, bukan kos'),
+    ('<b>Natural, no additives</b>nothing added to stretch the shelf life', '<b>天然，无添加</b>不靠添加物延长保质期', '<b>Semula jadi, tanpa bahan tambahan</b>tiada apa ditambah untuk panjangkan hayat'),
+    ('<b>No preservatives</b>freezing keeps them, not chemicals', '<b>无防腐剂</b>靠冷冻保存，不靠化学品', '<b>Tanpa pengawet</b>dijaga oleh pembekuan, bukan bahan kimia'),
+    ('<b>Pork, lard &amp; alcohol free</b>every dessert, every carton', '<b>不含猪肉、猪油和酒精</b>每一款、每一箱', '<b>Tanpa khinzir, lemak khinzir &amp; alkohol</b>setiap pencuci mulut, setiap karton'),
+    ('<b>Made in Malaysia</b>in our kitchen in Johor Bahru', '<b>马来西亚制造</b>在我们新山的厨房制作', '<b>Buatan Malaysia</b>di dapur kami di Johor Bahru'),
+    ('meet our chef', '认识我们的主厨', 'kenali cef kami'),
+    ('Director &amp; Executive Chef, Chaleur Atelier F&amp;B', 'Chaleur Atelier F&amp;B 董事兼行政总厨', 'Pengarah &amp; Cef Eksekutif, Chaleur Atelier F&amp;B'),
+    ('An expert in dessert production and in the frozen dessert chain, from the kitchen to your freezer. Chef Alfred builds every beku° recipe on natural ingredients with no additives, so each dessert freezes well and tastes the way it should after thawing.', '甜点生产与冷冻甜点供应链专家，从厨房到您的冷冻柜全程把关。Alfred 主厨的每一款 beku° 配方都以天然原料为基础、无添加，让甜点冷冻得好，解冻后依然是应有的味道。', 'Pakar dalam pengeluaran pencuci mulut dan rantaian pencuci mulut sejuk beku, dari dapur ke peti sejuk beku anda. Cef Alfred membina setiap resipi beku° dengan bahan semula jadi tanpa bahan tambahan, supaya setiap pencuci mulut beku dengan baik dan rasanya tetap seperti sepatutnya selepas nyahbeku.'),
     # menu + header
     ('Order online', '在线下单', 'Pesan dalam talian'),
     ('>Desserts<', '>甜点<', '>Pencuci mulut<'),

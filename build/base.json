@@ -79,7 +79,7 @@
      "d": "By car across the JB area. Invoice on WhatsApp."
     }
    ],
-   "strip": "no pork · no lard · no alcohol · made in Larkin, JB",
+   "strip": "no pork · no lard · no alcohol · no preservatives · made in Johor Bahru, Malaysia",
    "faqT": "common questions",
    "faq": [
     {
@@ -89,6 +89,10 @@
     {
      "q": "How do I thaw?",
      "a": "In the chiller only (0–5°C), 3–4 hours. Once thawed, serve within 3–4 days (carton of 12) or 4–5 days (individually packed). Do not refreeze."
+    },
+    {
+     "q": "Do you use preservatives?",
+     "a": "No. We use premium and imported ingredients, natural with no additives and no preservatives. The desserts keep because they are properly frozen, not because of chemicals. Made in Johor Bahru, Malaysia."
     },
     {
      "q": "How long do they keep?",
@@ -206,7 +210,7 @@
      "d": "汽车配送至新山地区，发票通过 WhatsApp 发送。"
     }
    ],
-   "strip": "不含猪肉 · 不含猪油 · 不含酒精 · 新山 Larkin 制作",
+   "strip": "不含猪肉 · 不含猪油 · 不含酒精 · 不含防腐剂 · 马来西亚新山制作",
    "faqT": "常见问题",
    "faq": [
     {
@@ -216,6 +220,10 @@
     {
      "q": "如何解冻？",
      "a": "只在冷藏柜（0–5°C）解冻 3–4 小时。解冻后，每箱 12 个的请在 3–4 天内食用，独立包装的 4–5 天内食用。请勿再次冷冻。"
+    },
+    {
+     "q": "有添加防腐剂吗？",
+     "a": "没有。我们使用优质及进口原料，天然、无添加、无防腐剂。甜点能保存靠的是正确的冷冻技术，而不是化学添加物。马来西亚新山制作。"
     },
     {
      "q": "可以保存多久？",
@@ -333,7 +341,7 @@
      "d": "Dengan kereta ke seluruh kawasan JB. Invois di WhatsApp."
     }
    ],
-   "strip": "tanpa khinzir · tanpa lemak khinzir · tanpa alkohol · dibuat di Larkin, JB",
+   "strip": "tanpa khinzir · tanpa lemak khinzir · tanpa alkohol · tanpa pengawet · dibuat di Johor Bahru, Malaysia",
    "faqT": "soalan lazim",
    "faq": [
     {
@@ -343,6 +351,10 @@
     {
      "q": "Bagaimana nak nyahbeku?",
      "a": "Dalam chiller sahaja (0–5°C), 3–4 jam. Selepas nyahbeku, hidang dalam 3–4 hari (karton 12 biji) atau 4–5 hari (bungkusan individu). Jangan bekukan semula."
+    },
+    {
+     "q": "Ada bahan pengawet?",
+     "a": "Tiada. Kami guna bahan premium dan import, semula jadi tanpa bahan tambahan dan tanpa pengawet. Pencuci mulut kami tahan lama kerana dibekukan dengan betul, bukan kerana bahan kimia. Dibuat di Johor Bahru, Malaysia."
     },
     {
      "q": "Tahan berapa lama?",
