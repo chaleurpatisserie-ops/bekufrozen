@@ -12,7 +12,7 @@
    "h1a": "wholesale frozen",
    "h1b": "desserts, explained",
    "h1c": "simply.",
-   "sub": "Everything a café, restaurant or hotel in JB needs to know before ordering: the range, how it works, and the common questions.",
+   "sub": "Everything a café, restaurant or hotel in Johor and Melaka needs to know before ordering: the range, how it works, and the common questions.",
    "bOrder": "Order on WhatsApp",
    "bSample": "Sample box · RM50",
    "bWa": "Ask on WhatsApp",
@@ -40,7 +40,7 @@
     },
     {
      "k": "Delivery",
-     "v": "JB area, frozen, by car"
+     "v": "All of Johor, up to Melaka · frozen, by car"
     },
     {
      "k": "Payment",
@@ -76,7 +76,7 @@
     {
      "n": 4,
      "t": "delivered frozen",
-     "d": "By car across the JB area. Invoice on WhatsApp."
+     "d": "By car across Johor and up to Melaka. Invoice on WhatsApp."
     }
    ],
    "strip": "no pork · no lard · no alcohol · no preservatives · made in Johor Bahru, Malaysia",
@@ -108,7 +108,7 @@
     },
     {
      "q": "Where do you deliver?",
-     "a": "Anywhere in the Johor Bahru area, by car, frozen."
+     "a": "Anywhere in Johor and up to Melaka, by car, frozen. For delivery outside Johor Bahru, ask us on WhatsApp for the fee and minimum order."
     },
     {
      "q": "How do I pay?",
@@ -143,7 +143,7 @@
    "h1a": "冷冻甜点批发，",
    "h1b": "一看就懂。",
    "h1c": "",
-   "sub": "新山的咖啡馆、餐厅和酒店在下单前需要知道的一切：产品、流程和常见问题。",
+   "sub": "柔佛和马六甲的咖啡馆、餐厅和酒店在下单前需要知道的一切：产品、流程和常见问题。",
    "bOrder": "在 WhatsApp 下单",
    "bSample": "样品盒 · RM50",
    "bWa": "WhatsApp 咨询",
@@ -171,7 +171,7 @@
     },
     {
      "k": "配送",
-     "v": "新山地区，汽车冷冻配送"
+     "v": "柔佛全州至马六甲 · 汽车冷冻配送"
     },
     {
      "k": "付款",
@@ -207,7 +207,7 @@
     {
      "n": 4,
      "t": "冷冻配送",
-     "d": "汽车配送至新山地区，发票通过 WhatsApp 发送。"
+     "d": "汽车配送至柔佛全州及马六甲，发票通过 WhatsApp 发送。"
     }
    ],
    "strip": "不含猪肉 · 不含猪油 · 不含酒精 · 不含防腐剂 · 马来西亚新山制作",
@@ -239,7 +239,7 @@
     },
     {
      "q": "配送到哪里？",
-     "a": "新山地区，汽车冷冻配送。"
+     "a": "柔佛全州至马六甲，汽车冷冻配送。新山以外地区的运费和最低订量，请在 WhatsApp 询问我们。"
     },
     {
      "q": "怎么付款？",
@@ -274,7 +274,7 @@
    "h1a": "pencuci mulut sejuk beku",
    "h1b": "borong, diterangkan",
    "h1c": "dengan mudah.",
-   "sub": "Semua yang kafe, restoran atau hotel di JB perlu tahu sebelum order: produk, cara ia berfungsi dan soalan lazim.",
+   "sub": "Semua yang kafe, restoran atau hotel di Johor dan Melaka perlu tahu sebelum order: produk, cara ia berfungsi dan soalan lazim.",
    "bOrder": "Order di WhatsApp",
    "bSample": "Kotak sampel · RM50",
    "bWa": "Tanya di WhatsApp",
@@ -302,7 +302,7 @@
     },
     {
      "k": "Penghantaran",
-     "v": "Kawasan JB, beku, dengan kereta"
+     "v": "Seluruh Johor hingga Melaka · beku, dengan kereta"
     },
     {
      "k": "Bayaran",
@@ -338,7 +338,7 @@
     {
      "n": 4,
      "t": "dihantar beku",
-     "d": "Dengan kereta ke seluruh kawasan JB. Invois di WhatsApp."
+     "d": "Dengan kereta ke seluruh Johor hingga Melaka. Invois di WhatsApp."
     }
    ],
    "strip": "tanpa khinzir · tanpa lemak khinzir · tanpa alkohol · tanpa pengawet · dibuat di Johor Bahru, Malaysia",
@@ -370,7 +370,7 @@
     },
     {
      "q": "Hantar ke mana?",
-     "a": "Seluruh kawasan Johor Bahru, dengan kereta, beku."
+     "a": "Seluruh Johor hingga Melaka, dengan kereta, beku. Untuk penghantaran di luar Johor Bahru, tanya kami di WhatsApp tentang caj dan order minimum."
     },
     {
      "q": "Bagaimana bayar?",
@@ -402,7 +402,7 @@
    "sampleWa": "Hi BEKU, I found you on your website and I'd like to order a sample box (any 4 pieces, RM50).",
    "orderBtn": "Order on WhatsApp",
    "privacy": "Privacy policy",
-   "soon": "Start with a sample box online · order cartons on WhatsApp · delivered in the Johor Bahru area."
+   "soon": "Start with a sample box online · order cartons on WhatsApp · delivered across Johor and up to Melaka."
   },
   "zh": {
    "path": "/zh/",
@@ -411,7 +411,7 @@
    "sampleWa": "你好 BEKU，我在你们的网站上看到你们，想订一个样品盒（任选 4 个，RM50）。",
    "orderBtn": "在 WhatsApp 下单",
    "privacy": "隐私政策",
-   "soon": "先在线订样品盒 · 整箱在 WhatsApp 下单 · 新山地区配送。"
+   "soon": "先在线订样品盒 · 整箱在 WhatsApp 下单 · 配送至柔佛全州及马六甲。"
   },
   "ms": {
    "path": "/ms/",
@@ -420,7 +420,7 @@
    "sampleWa": "Hi BEKU, saya jumpa anda di laman web dan ingin order kotak sampel (mana-mana 4 biji, RM50).",
    "orderBtn": "Order di WhatsApp",
    "privacy": "Dasar privasi",
-   "soon": "Mulakan dengan kotak sampel dalam talian · order karton di WhatsApp · penghantaran di kawasan Johor Bahru."
+   "soon": "Mulakan dengan kotak sampel dalam talian · order karton di WhatsApp · penghantaran ke seluruh Johor hingga Melaka."
   }
  }
 }

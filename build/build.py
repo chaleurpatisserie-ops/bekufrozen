@@ -188,7 +188,7 @@ def page(lang, kind='home'):
     ld = {"@context": "https://schema.org", "@type": "WholesaleStore", "name": "beku°", "url": SITE + x['path'], "telephone": "+" + WA_NUM, "email": EMAIL, "description": desc, "image": SITE + share_path,
           "parentOrganization": {"@type": "Organization", "name": "Chaleur Atelier F&B Sdn. Bhd.", "identifier": "202501028873"},
           "address": {"@type": "PostalAddress", "streetAddress": ADDR, "addressLocality": "Johor Bahru", "addressRegion": "Johor", "addressCountry": "MY"},
-          "areaServed": "Johor Bahru", "keywords": seo.get('keywords') or '', "alternateName": ["beku frozen desserts"],
+          "areaServed": ["Johor", "Melaka"], "keywords": seo.get('keywords') or '', "alternateName": ["beku frozen desserts"],
           "knowsAbout": [p['name'] for p in items]}
     owa, swa = wa(x['orderWa']), wa(x['sampleWa'])
     surl = '/order/' + ('' if lang == 'en' else '?lang=' + lang)   # sample box page (Alfred 26 Nov 15:02: online ordering removed, only sample box stays online)
@@ -322,16 +322,16 @@ def intro_page():
     U = lambda path: SITE + path + ('&' if '?' in path else '?') + 'utm_source=intro'
     wa_link = 'https://wa.me/%s?text=%s' % (WA_NUM, urllib.parse.quote("Hi BEKU, I read your introduction and I'm interested in your frozen desserts for my business."))
     phone = '+%s %s-%s %s' % (WA_NUM[:2], WA_NUM[2:4], WA_NUM[4:7], WA_NUM[7:])
-    promises = [('heart', 'Pork, lard &amp; alcohol free'), ('leaf', 'No additives'), ('chef', 'Made in Johor Bahru, Malaysia'), ('truck', 'Delivered frozen across JB')]
+    promises = [('heart', 'Pork, lard &amp; alcohol free'), ('leaf', 'No additives'), ('chef', 'Made in Johor Bahru, Malaysia'), ('truck', 'Delivered frozen across Johor &amp; Melaka')]
     why = [('chef', 'Made by pastry chefs', 'Recipes developed and made by the Chaleur Atelier pastry team.'),
            ('freezer', 'Long freezer life', '6–9 months at -18°C, so you can stock up and waste less.'),
            ('carton', 'Easy portions', '12 pieces per carton for petit gâteaux. Take out only what you sell.'),
-           ('truck', 'Local &amp; reliable', 'Made in Larkin and delivered frozen by car across the JB area.')]
+           ('truck', 'Local &amp; reliable', 'Made in Larkin and delivered frozen by car across Johor and up to Melaka.')]
     steps = [('gift', 'Try a sample box · RM50', 'Any 4 pieces for RM50, free delivery. Taste them at your counter; the RM50 comes off your first order above RM350 within 1 month.'),
              ('chat', 'Order on WhatsApp', 'Tell us the cartons you need on WhatsApp. We confirm your order and send the invoice.'),
              ('chef', 'We make &amp; pack', 'Stock ships first, the rest is made fresh. Usually ready in 3–5 working days.'),
-             ('truck', 'Delivered frozen', 'By car across the JB area, straight into your freezer. Invoice on WhatsApp.')]
-    tips = [('thermo', 'Keep frozen at -18°C. Thaw in the chiller before serving.'), ('calendar', 'Delivery dates: Monday to Friday, across the Johor Bahru area.'),
+             ('truck', 'Delivered frozen', 'By car across Johor and up to Melaka, straight into your freezer. Invoice on WhatsApp.')]
+    tips = [('thermo', 'Keep frozen at -18°C. Thaw in the chiller before serving.'), ('calendar', 'Delivery dates: Monday to Friday, across Johor and up to Melaka.'),
             ('cart', 'Sample box: pay online by FPX, card, GrabPay or DuitNow QR. Carton orders: invoice and payment details on WhatsApp.'),
             ('globe', 'Track every order at <a href="%s">bekufrozen.com/track</a>.' % U('/track/'))]
     n = [0]
@@ -343,7 +343,7 @@ def intro_page():
 <img class="mascot" src="/img/beku-logo-256.webp" alt="beku° carton mascot">
 <h1><img class="wm" src="/img/brand/wordmark-navy.svg" alt="beku°"><img class="wm wm-l" src="/img/brand/wordmark-milk.svg" alt=""></h1>
 <p class="tagl">your dessert menu, on standby.</p>
-<p class="lead">Frozen petit gâteaux &amp; bakes for cafés, restaurants and hotels in Johor Bahru.</p>
+<p class="lead">Frozen petit gâteaux &amp; bakes for cafés, restaurants and hotels in Johor and Melaka.</p>
 <div class="fan">{cover_imgs}</div>
 <a class="sbadge" href="{U('/order/?mode=sample')}"><small>sample box</small>RM50<i>any 4 pcs</i></a>
 <div class="cvb">{TEMP}<span class="pill">{IC('heart')}pork, lard &amp; alcohol free</span><span class="pill">{IC('leaf')}no additives</span></div>
@@ -351,7 +351,7 @@ def intro_page():
 <p class="url"><a href="{U('/')}">{IC('globe')}bekufrozen.com</a></p></div></section>""")
     pages.append(f"""<section class="pg about"><div class="in">
 <p class="kick">about us</p><h2>café-quality desserts, ready when you are.</h2>
-<p class="big">beku° is the frozen wholesale line of Chaleur Atelier F&amp;B Sdn. Bhd., the team behind Chaleur Atelier Pâtisserie in Larkin, Johor Bahru. We make modern French petit gâteaux and bakes in our own kitchen, freeze them at their best and deliver them across JB.</p>
+<p class="big">beku° is the frozen wholesale line of Chaleur Atelier F&amp;B Sdn. Bhd., the team behind Chaleur Atelier Pâtisserie in Larkin, Johor Bahru. We make modern French petit gâteaux and bakes in our own kitchen, freeze them at their best and deliver them across Johor and up to Melaka.</p>
 <p>For a café, restaurant or hotel that means a full dessert counter without a pastry kitchen: keep cartons in your freezer, take out what you need, thaw and serve. Every piece looks and tastes the same as the last.</p>
 <div class="prom">{''.join('<span>%s%s</span>' % (IC(i), x) for i, x in promises)}</div>
 <div class="why">{''.join('<div>%s<b>%s</b><p>%s</p></div>' % (IC(i), a, b) for i, a, b in why)}</div>
